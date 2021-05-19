@@ -62,6 +62,16 @@ identify what offsets are *not* working correctly and need updating.
 Note: There are some offsets hardcoded into the program, it is possible those hardcoded offsets CAN change and cause
 your issues.
 
+### cAn i GeT bAnNeD?!
+TL;DR: Yes. You _can_ get banned, such is the risk of cheating.
+
+Longer version: As is, this code purely utilizes a read-only state for the computers memory. With hundreds of hours utilizing these same read-only permissions, I have never been
+banned, nor concerned for being banned. Does that guarentee you won't be? No. Does that guarentee you won't change something (like trying to write memory) that will cause you to 
+get banned? No. If you arent sure what something does, or why something is done a certain way, do some research on the potential impact of changing it before actually changing it. 
+
+### Can you help me implement X feature?
+No. I learned utilizing already posted questions/comments easily found online, you can as well. This framework is meant for people who want to put in the work and learn something, not recieve a hand-out.
+
 ### How it works
 When running `main.py`, an `SoTMemoryReader` object is created (found in `SoTHack.py`). That object creates a 
 `ReadMemory` object (found in `MemoryHelper.py`) which is used to perform our requisite memory calls.

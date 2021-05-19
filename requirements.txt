@@ -1,0 +1,9 @@
+ctypes
+ctypes.wintypes
+psutil
+struct
+binascii
+pygame
+win32api
+win32con
+win32gui

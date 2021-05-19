@@ -1,2 +1,111 @@
-# SoT-ESP-Framework
-Open Source Sea of Thieves Python-based ESP-hack framework
+# Doug's Python SoT ESP Framework
+Hello all! This is a framework to develop an SoT ESP Hack, all utilizing Python 3.7.9. This is a trimmed down version 
+of a personal creation I utilize actively. This is a great foundation for someone who is looking to get started in 
+ESP hacks for Sea of Thieves, and should be loaded with comments to help you grasp the "how" and "why" of basic 
+memory editing and data display with Python.
+
+This hack has the following implemented: 
+- Get the location of ships in render distance and display them on screen
+- Display a list of all players on the server
+
+This is intentionally left as a framework and not a full-featured hack for a few reasons:
+1. I already did the hard work of converting C functions to Python for you
+2. I don't believe a fully-functioning hand-out would help progress the skill level of programmers
+3. Much of the code is very well documented to help you understand the "how" of the hacks inner workings; as a 
+   result many resources on hacking forums will give you guidelines for implementing new functionality; I did it myself, 
+   you can to
+4. I have undergone 3 or 4 major interations of this same code. **I am still learning** and re-writing functionality all 
+   the time; a smaller code base is much more simple to maintain
+   
+I do ask that if you decided to take this into your own personal development, encourage others to think for themselves a
+bit as well and try to maintain a "documenation-focesed" mindset as I have. I request that you do not use this 
+framework for any commercial purposes (selling "your" version which is based on this framework) without contacting me and
+recieving my approval prior.
+
+### Why Python?!
+Python is at its root a more user-friendly (IMO) version of C. Hypothetically, we can perform any C action using python,
+but make it more readible and beginner-friendly. I am also much more comfortable developing in Python and saw this as
+an opportunity to challenge myself.
+
+### Prerequisites
+In theory, all you need to get started in using this hack is Python 3.7.9, and to install the requirement found in the 
+requirements.txt. The base framework relies on a 2560x1440 main monitor. You MAY need to make some minor changes in
+the code to accomidate your specefic display configuration. I personally run all of my Python from PyCharm, and 
+start/stop the code execution through the built-in Run and Stop functionality. You may choose to implement proper 
+"closing" functionality using PyGame. 
+
+***As a test of faith, to get this code fully-functional you must modify one line of code and remove another entirely.
+This is a VERY small countermeasure to ensure this framework is actually used as intended.***
+
+### How to execute
+At the time of writting, the script is built for a version of SoT with ~5 weeks left in Season 2 and given you have the
+necessary pre-requisites, should execute with no major issues. Simply run `main.py` once you are in-game.
+
+### How to update for new SoT Versions
+If there has been a game version update:
+   1. Load into a game server
+   2. Open Cheat Engine 
+   3. Open the `SoTGame.exe` process in Cheat Engine
+   4. Change your "value type" to an "Array of byte"
+   5. One-by-one enter the patterns found at the top of `SoTHack.py` (uWorld, gName, gObject) 
+   6. Hit scan. Upon scanning, you should get one or two results, he top result is the one we want
+   7. Extend the "Address" column to see all the data. Anything after "SoTGame.exe+" is our base offset
+   8. Update the relevant BASE offsets in `SoTHack.py` at the top
+
+If after performing those updates the hack is still not working, you may also need to update offsets found in the 
+`offsets.json` file. If so, update the offsets according to the latest SDK ([this repo](https://github.com/pubgsdk/SoT-SDK) has been my go-to, with a custom 
+script to read data out of the files automatically).
+
+Running the script in Debug mode (set `debug`=`True` in `main.py` and utilize PyCharms Debug feature), may help you 
+identify what offsets are *not* working correctly and need updating.
+
+Note: There are some offsets hardcoded into the program, it is possible those hardcoded offsets CAN change and cause
+your issues.
+
+### How it works
+When running `main.py`, an `SoTMemoryReader` object is created (found in `SoTHack.py`). That object creates a 
+`ReadMemory` object (found in `MemoryHelper.py`) which is used to perform our requisite memory calls.
+
+The `SoTMemoryReader` object gets data about the game world, but has a main game loop function called `read_actors`.
+This method is responsible for determining how many actors there are, and reading data about all of those actors. The
+actor data is stored in our class variables for that "run" of the hack and then parsed and diplayed using PyGame. The
+`PyGameHelper.py` file contains a `PyGameHelper` object which initializes some PyGame info at start-up. We then utilize
+that object to display items to our screen. 
+
+Largely speaking, if you want to see the flow of the code, start at `main.py` and work your way down into the objects
+and other files.
+
+One thing worth mentioning is that this code simply scans every actor every iteration of the script. This is *not 
+necessarily* the most performance-efficient and may cause you to get sub-optimal framerates in-game. **YOU** may 
+work on alternative implementations to improve speed. Below is a list of suggestions:
+1. Only re-pull data for moving objects (Or update static objects information less frequently)
+2. Build in "buffer frames" to pygame where there is a cache of display-objects to utilize
+
+### Structs
+Instead of rebuilding structures similarly to how you would in C or C++, I utilize something fairly frequently in my
+code that may not be very clear called `struct`. This is a Python-native import which allows us to more easily convert
+hex data to a list of information.
+
+Generally, I read a number of bytes at a memory location given what I want to grab, then I use `struct` to parse the
+bytes into specific data. For example, if I know at `actor_address+0xAC0` there is a TArray, and I know TArrays are 
+always 16 bytes (8 for the address of the array, 4 for the (int) current length of the array, and 4 for the (int) max 
+length of the array), I can read 16 bytes at that address, then unpack that data into a list using a format of `<Qii`.
+This will return me a list which looks like: `[memory_address(unsigned long long), current_length(int), 
+max_length(int)]`. I can then pull the appropriate data out of that list as necessary
+
+This is an alternative to reading the unsigned long long, then reading the first int, then reading the second int. 
+While much more efficient than that alternative, this *may* not be as efficient as recreating the objects in their 
+entirety.
+
+Note: [See other `Structs` format information here](https://docs.python.org/3/library/struct.html#format-characters)
+
+### Providing updates to this code base
+If you are interested in helping maintain this code base, first off, thank you! My only asks are as follows:
+1. Document your additions/changes in accordance with what exists
+2. Keep the framework a framework, do not add new features outside of those listed in the "TODO" section
+3. Create "Issues" if something strikes you as incorrect or needing improvement. Also consider looking at issues for
+opportunities to contribute
+   
+### TODO
+- Implement an "auto-scanning" function for finding the base (uWorld, gName, gObject) offsets
+- (Possibly) Recreating objects in their entirety in accordance with the SDK and compare to current speed

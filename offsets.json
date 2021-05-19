@@ -1,0 +1,9 @@
+{
+  "AActor.actorId": 24,
+  "AActor.rootComponent": 368,
+  "APlayerState.PlayerName": 1080,
+  "UGameInstance.LocalPlayers": 56,
+  "ULocalPlayer.PlayerController": 1064,
+  "UWorld.OwningGameInstance": 448,
+  "UWorld.PersistentLevel": 48
+}

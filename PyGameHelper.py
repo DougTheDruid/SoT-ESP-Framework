@@ -1,3 +1,9 @@
+"""
+@Author https://github.com/DougTheDruid
+@Source https://github.com/DougTheDruid/SoT-ESP-Framework
+"""
+
+
 import pygame
 from ctypes import windll
 import win32api

@@ -1,3 +1,9 @@
+"""
+@Author https://github.com/DougTheDruid
+@Source https://github.com/DougTheDruid/SoT-ESP-Framework
+"""
+
+
 from SoTHack import SoTMemoryReader
 import pygame
 from PyGameHelper import PyGameHelper, fuchsia

@@ -1,3 +1,9 @@
+"""
+@Author https://github.com/DougTheDruid
+@Source https://github.com/DougTheDruid/SoT-ESP-Framework
+"""
+
+
 import struct
 from MemoryHelper import ReadMemory
 from Mapping import *

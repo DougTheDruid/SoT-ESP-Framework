@@ -2,7 +2,8 @@
 Hello all! This is a framework to develop an SoT ESP Hack, all utilizing Python 3.7.9. This is a trimmed down version 
 of a personal creation I utilize actively. This is a great foundation for someone who is looking to get started in 
 ESP hacks for Sea of Thieves, and should be loaded with comments to help you grasp the "how" and "why" of basic 
-memory editing and data display with Python.
+memory editing and data display with Python. While this is intended for use within Sea of Thieves specifically, there is a lot
+of resources utilized which could be useful in memory reading/editing for almost any game/program :D
 
 This hack has the following implemented: 
 - Get the location of ships in render distance and display them on screen
@@ -39,7 +40,7 @@ This is a VERY small countermeasure to ensure this framework is actually used as
 
 ### How to execute
 At the time of writting, the script is built for a version of SoT with ~5 weeks left in Season 2 and given you have the
-necessary pre-requisites, should execute with no major issues. Simply run `main.py` once you are in-game.
+necessary pre-requisites, should execute with no major issues. Simply run `main.py` once you are in a server.
 
 ### How to update for new SoT Versions
 If there has been a game version update:
@@ -70,7 +71,8 @@ banned, nor concerned for being banned. Does that guarentee you won't be? No. Do
 get banned? No. If you arent sure what something does, or why something is done a certain way, do some research on the potential impact of changing it before actually changing it. 
 
 ### Can you help me implement X feature?
-No. I learned utilizing already posted questions/comments easily found online, you can as well. This framework is meant for people who want to put in the work and learn something, not recieve a hand-out.
+No. I learned utilizing already posted questions/comments easily found online, you can as well. This framework is meant for people who want to put in the work and learn something, 
+not recieve a hand-out. However you may wish to join our programming community discord server here: https://discord.gg/2rRvQjhg7n. 
 
 ### How it works
 When running `main.py`, an `SoTMemoryReader` object is created (found in `SoTHack.py`). That object creates a 

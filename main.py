@@ -1,7 +1,7 @@
 """
 @Author https://github.com/DougTheDruid
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
-For community support, please join our Discord: https://discord.gg/2rRvQjhg7n
+For community support, please contact me on Discord: DougTheDruid#2784
 """
 
 

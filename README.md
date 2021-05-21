@@ -72,7 +72,7 @@ get banned? No. If you arent sure what something does, or why something is done 
 
 ### Can you help me implement X feature?
 No. I learned utilizing already posted questions/comments easily found online, you can as well. This framework is meant for people who want to put in the work and learn something, 
-not recieve a hand-out. However you may wish to join our programming community discord server here: https://discord.gg/2rRvQjhg7n. 
+not recieve a hand-out. For community support, please contact me on Discord: DougTheDruid#2784
 
 ### How it works
 When running `main.py`, an `SoTMemoryReader` object is created (found in `SoTHack.py`). That object creates a 

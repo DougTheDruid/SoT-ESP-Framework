@@ -23,6 +23,10 @@ bit as well and try to maintain a "documenation-focesed" mindset as I have. I re
 framework for any commercial purposes (selling "your" version which is based on this framework) without contacting me and
 recieving my approval prior.
 
+### What version of the game does this work with?
+**Currently, this hack only works with the Microsoft version of the game.** I am currently working through debugging
+the issues plagueing the Steam version, but at the time of writting, I expect that to take a number of days.
+
 ### Why Python?!
 Python is at its root a more user-friendly (IMO) version of C. Hypothetically, we can perform any C action using python,
 but make it more readible and beginner-friendly. I am also much more comfortable developing in Python and saw this as
@@ -72,7 +76,8 @@ get banned? No. If you arent sure what something does, or why something is done 
 
 ### Can you help me implement X feature?
 No. I learned utilizing already posted questions/comments easily found online, you can as well. This framework is meant for people who want to put in the work and learn something, 
-not recieve a hand-out. For community support, please contact me on Discord: DougTheDruid#2784
+not recieve a hand-out. You also may be able to see the FAQ.md for some useful information.
+For community support, please contact me on Discord: DougTheDruid#2784
 
 ### How it works
 When running `main.py`, an `SoTMemoryReader` object is created (found in `SoTHack.py`). That object creates a 

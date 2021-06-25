@@ -13,13 +13,13 @@ from Ship import Ship
 
 
 UWORLD_PATTERN = "48 8B 05 ? ? ? ? 48 8B 88 ? ? ? ? 48 85 C9 74 06 48 8B 49 70"
-UWORLDBASE = 0x6D956B
-
-GNAME_PATTERN = "48 8B 1D ? ? ? ? 48 85 ? 75 3A"
-GNAMEBASE = 0x14EE398
+UWORLDBASE = 0x6E607B
 
 GOBJECT_PATTERN = "48 8B 15 ? ? ? ? 3B 42 1C"
-GOBJECTBASE = 0x1576DBD
+GOBJECTBASE = 0x1587E0B
+
+GNAME_PATTERN = "48 8B 1D ? ? ? ? 48 85 ? 75 3A"
+GNAMEBASE = 0x14FF068
 
 
 class SoTMemoryReader:
@@ -160,7 +160,7 @@ class SoTMemoryReader:
             # players camera object, namely coordinates and camera information.
             # Use that data and set self.my_coordinates to the camera's coords
             if raw_name == "BP_AthenaPlayerCameraManager_C":
-                self.my_coords = self._coord_builder(actor_address + 0x4b0,
+                self.my_coords = self._coord_builder(actor_address + 0x450,
                                                      0x0, fov=True)
                 continue
 

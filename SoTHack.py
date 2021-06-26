@@ -12,24 +12,24 @@ from Helpers import *
 from Ship import Ship
 
 
-STEAM_VERSION = True
+STEAM_VERSION = False
 
 UWORLD_PATTERN = "48 8B 05 ? ? ? ? 48 8B 88 ? ? ? ? 48 85 C9 74 06 48 8B 49 70"
 GOBJECT_PATTERN = "48 8B 15 ? ? ? ? 3B 42 1C"
 
-if not STEAM_VERSION:
-    UWORLDBASE = 0x6E5D8B
-    GOBJECTBASE = 0x1587D7B
-
-    GNAME_PATTERN = "48 8B 1D ? ? ? ? 48 85 ? 75 3A"
-    GNAMEBASE = 0x14FEFD8
-
-else:
+if STEAM_VERSION:
     UWORLDBASE = 0x6E64DB
     GOBJECTBASE = 0x15D021B
 
     GNAME_PATTERN_STEAM = "48 8B 1D ? ? ? ? 48 85 DB 75 ? B9 08 04 00 00"
     GNAMEBASE = 0x153CF6A
+
+else:
+    UWORLDBASE = 0x6E5D8B
+    GOBJECTBASE = 0x1587D7B
+
+    GNAME_PATTERN = "48 8B 1D ? ? ? ? 48 85 ? 75 3A"
+    GNAMEBASE = 0x14FEFD8
 
 
 class SoTMemoryReader:

@@ -5,12 +5,9 @@ change that position in the main.py file. There are more features mentioned in t
 to get there also mentioned in the readme.md (Prerequisites section)
 
 Check the following:
-1. Currently, this only works for the Microsoft version of the game, is that what you are using?
+1. By default, it works for the Microsoft version of the game, there is a variable to toggle if you are using Steam. 
+   Does this apply to you?
 2. Validate you have a pygame window that is opening and there are no errors in the python window
 3. Have you made sure all of your window sizes have been updated according to the readme?
 4. Have you corrected the tests of faith mentioned in the readme.md (Prerequisites section)?
 5. Are you running in windowed mode?
-
-### Which version of the game does this work with?
-Currently, this only works for the Microsoft version of the game. Check back for Steam version compatability in a number
-of days.

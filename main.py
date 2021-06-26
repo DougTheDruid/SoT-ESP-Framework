@@ -1,7 +1,6 @@
 """
 @Author https://github.com/DougTheDruid
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
-------!!Currently only working for Microsoft Version of the game!!------
 For community support, please contact me on Discord: DougTheDruid#2784
 """
 

@@ -23,9 +23,10 @@ bit as well and try to maintain a "documenation-focesed" mindset as I have. I re
 framework for any commercial purposes (selling "your" version which is based on this framework) without contacting me and
 recieving my approval prior.
 
-### What version of the game does this work with?
-**Currently, this hack only works with the Microsoft version of the game.** I am currently working through debugging
-the issues plagueing the Steam version, but at the time of writting, I expect that to take a number of days.
+### What version(s) of the game does this work with?
+This hack will work with both versions of the game (Microsoft & Steam), and by default is configured to work for the 
+Microsoft version. If you are using the Steam version, you will need to change the appropriate variable at the top
+of SoTHack.py
 
 ### Why Python?!
 Python is at its root a more user-friendly (IMO) version of C. Hypothetically, we can perform any C action using python,

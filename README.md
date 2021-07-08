@@ -35,8 +35,8 @@ an opportunity to challenge myself.
 
 ### Prerequisites
 In theory, all you need to get started in using this hack is Python 3.7.9, and to install the requirement found in the 
-requirements.txt. The base framework relies on a 2560x1440 main monitor. You MAY need to make some minor changes in
-the code to accomidate your specefic display configuration. I personally run all of my Python from PyCharm, and 
+requirements.txt. The base framework relies on a 4k main monitor. You MAY need to make some minor changes in
+the code to accomidate your display configuration (helpers.py, top of file). I personally run all of my Python from PyCharm, and 
 start/stop the code execution through the built-in Run and Stop functionality. You may choose to implement proper 
 "closing" functionality using PyGame. 
 
@@ -53,10 +53,10 @@ If there has been a game version update:
    2. Open Cheat Engine 
    3. Open the `SoTGame.exe` process in Cheat Engine
    4. Change your "value type" to an "Array of byte"
-   5. One-by-one enter the patterns found at the top of `SoTHack.py` (uWorld, gName, gObject) 
+   5. One-by-one enter the patterns found at the top of `sot_hack.py` (uWorld, gName, gObject) 
    6. Hit scan. Upon scanning, you should get one or two results, he top result is the one we want
    7. Extend the "Address" column to see all the data. Anything after "SoTGame.exe+" is our base offset
-   8. Update the relevant BASE offsets in `SoTHack.py` at the top
+   8. Update the relevant BASE offsets in `sot_hack.py` at the top
 
 If after performing those updates the hack is still not working, you may also need to update offsets found in the 
 `offsets.json` file. If so, update the offsets according to the latest SDK ([this repo](https://github.com/pubgsdk/SoT-SDK) has been my go-to, with a custom 
@@ -81,13 +81,13 @@ not recieve a hand-out. You also may be able to see the FAQ.md for some useful i
 For community support, please contact me on Discord: DougTheDruid#2784
 
 ### How it works
-When running `main.py`, an `SoTMemoryReader` object is created (found in `SoTHack.py`). That object creates a 
-`ReadMemory` object (found in `MemoryHelper.py`) which is used to perform our requisite memory calls.
+When running `main.py`, an `SoTMemoryReader` object is created (found in `sot_hack.py`). That object creates a 
+`ReadMemory` object (found in `memory_helper.py`) which is used to perform our requisite memory calls.
 
 The `SoTMemoryReader` object gets data about the game world, but has a main game loop function called `read_actors`.
 This method is responsible for determining how many actors there are, and reading data about all of those actors. The
 actor data is stored in our class variables for that "run" of the hack and then parsed and diplayed using PyGame. The
-`PyGameHelper.py` file contains a `PyGameHelper` object which initializes some PyGame info at start-up. We then utilize
+`pygame_helper.py` file contains a `PyGameHelper` object which initializes some PyGame info at start-up. We then utilize
 that object to display items to our screen. 
 
 Largely speaking, if you want to see the flow of the code, start at `main.py` and work your way down into the objects
@@ -120,8 +120,9 @@ Note: [See other `Structs` format information here](https://docs.python.org/3/li
 ### Providing updates to this code base
 If you are interested in helping maintain this code base, first off, thank you! My only asks are as follows:
 1. Document your additions/changes in accordance with what exists
-2. Keep the framework a framework, do not add new features outside of those listed in the "TODO" section
-3. Create "Issues" if something strikes you as incorrect or needing improvement. Also consider looking at issues for
+2. Utilize Pylint and the provided pylintrc file to ensure your code is 10/10 compliant prior to submittion of a PR
+3. Keep the framework a framework, do not add new features outside of those listed in the "TODO" section
+4. Create "Issues" if something strikes you as incorrect or needing improvement. Also consider looking at issues for
 opportunities to contribute
    
 ### TODO

@@ -5,11 +5,13 @@ For community support, please contact me on Discord: DougTheDruid#2784
 """
 
 
-from SoTHack import SoTMemoryReader
 import pygame
-from PyGameHelper import PyGameHelper, fuchsia
+from sot_hack import SoTMemoryReader
+from helpers import SCREEN
+from pygame_helper import PyGameHelper, fuchsia
 
 DEBUG = False
+
 
 if __name__ == '__main__':
     # Initialize our SoT Hack object, and do a first run of reading actors
@@ -30,7 +32,7 @@ if __name__ == '__main__':
 
         if not DEBUG:
             for event in pygame.event.get():
-                if event.type == pygame.QUIT:
+                if event.type == pygame.QUIT:  # pylint: disable=no-member
                     done = True
 
         if not DEBUG:
@@ -53,13 +55,15 @@ if __name__ == '__main__':
                 count = len(smr.server_players)
                 player_total = pgh.my_font.render(f"Count: {count}", False,
                                                   (109, 89, 148))
-                pgh.screen.blit(player_total, (2300, 100-25))
-                if False:
+                pgh.screen.blit(player_total, (int(SCREEN["x"]*.90),
+                                               int(SCREEN["y"]*.07)-25))
+                if False:  # pylint: disable=using-constant-test
                     for player in range(0, count):
                         player_text = pgh.my_font.render(
                             f"{smr.server_players[player]}",
                             False, (109, 89, 148)
                         )
-                        pgh.screen.blit(player_text, (2300, 100+(player*25)))
+                        pgh.screen.blit(player_text, ((int(SCREEN["x"] * .90),
+                                                       int(SCREEN["y"] * .07) + (player*25))))
 
             pygame.display.update()

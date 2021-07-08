@@ -4,11 +4,11 @@
 """
 
 
+from string import printable
 import ctypes
 import ctypes.wintypes
-import psutil
 import struct
-from string import printable
+import psutil
 
 
 MAX_PATH = 260
@@ -19,10 +19,13 @@ PROCESS_QUERY_INFORMATION = 0x0400
 PROCESS_VM_READ = 0x0010
 
 
-# ModuleEntry32, CreateToolhelp32Snapshot, and Module32First are ctypes which 
-# helps us identify the base address for the game in memory. We then use 
+# ModuleEntry32, CreateToolhelp32Snapshot, and Module32First are ctypes which
+# helps us identify the base address for the game in memory. We then use
 # that base address to build off of
 class MODULEENTRY32(ctypes.Structure):
+    """
+    Windows C-type ModuleEntry32 object used to interact with our game process
+    """
     _fields_ = [('dwSize', ctypes.c_ulong),
                 ('th32ModuleID', ctypes.c_ulong),
                 ('th32ProcessID', ctypes.c_ulong),
@@ -63,12 +66,12 @@ class ReadMemory:
         """
         Gets the process ID for the executable, then a handle for that process,
         then we get the base memory address for our process using the handle.
-        
+
         With the base memory address known, we can then perform our standard
         memory calls (read_int, etc) to get data from memory.
-        
+
         :param exe_name: The executable name of the program we want to read
-        memory from 
+        memory from
         """
         self.exe = exe_name
         self.pid = self._get_process_id()
@@ -82,7 +85,7 @@ class ReadMemory:
         for proc in psutil.process_iter():
             if self.exe in proc.name():
                 return proc.pid
-        raise Exception(f"Cannot find executable with provided name: {self.exe}")
+        raise Exception(f"Cannot find executable with name: {self.exe}")
 
     def _get_process_handle(self):
         """
@@ -92,35 +95,39 @@ class ReadMemory:
         executable), used to make memory calls
         """
         try:
-            return ctypes.windll.kernel32.OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, False, self.pid)
+            return ctypes.windll.kernel32.OpenProcess(PROCESS_QUERY_INFORMATION
+                                                      | PROCESS_VM_READ,
+                                                      False, self.pid)
         except Exception as e:
-            raise Exception(f"Cannot create handle for pid {self.pid}: Error: {e}")
+            raise Exception(f"Cannot create handle for pid {self.pid}: "
+                            f"Error: {str(e)}")
 
     def _get_base_address(self):
         """
         Using the global ctype constructors, determine the base address
-        of the process ID we are working with. In something like cheat engine, 
-        this is the equivilent of the "SoTGame.exe" portions in 
+        of the process ID we are working with. In something like cheat engine,
+        this is the equivilent of the "SoTGame.exe" portions in
         "SoTGame.exe"+0x15298A
         :return: the base memory address for the process
         """
         h_module_snap = ctypes.c_void_p(0)
-        me32 = MODULEENTRY32()
-        me32.dwSize = ctypes.sizeof(MODULEENTRY32)
-        h_module_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, self.pid)
-        ret = Module32First(h_module_snap, ctypes.byref(me32))
+        me_32 = MODULEENTRY32()
+        me_32.dwSize = ctypes.sizeof(MODULEENTRY32)  # pylint: disable=invalid-name, attribute-defined-outside-init)
+        h_module_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE |
+                                                 TH32CS_SNAPMODULE32, self.pid)
+        ret = Module32First(h_module_snap, ctypes.byref(me_32))
 
         if ret == 0:
             print('Error on Thread32First')
             return False
 
-        ret = Module32First(h_module_snap, ctypes.pointer(me32))
+        ret = Module32First(h_module_snap, ctypes.pointer(me_32))
         if ret == 0:
             print('ListProcessModules() Error on Module32First')
 
-        return me32.modBaseAddr
+        return me_32.modBaseAddr
 
-    def read_bytes(self, address:int, byte:int) -> bytes:
+    def read_bytes(self, address: int, byte: int) -> bytes:
         """
         Read a number of bytes at a specific address
         :param address: address at which to read a number of bytes
@@ -131,7 +138,8 @@ class ReadMemory:
         buff = ctypes.create_string_buffer(byte)
         bytes_read = ctypes.c_size_t()
         ctypes.windll.kernel32.SetLastError(0)
-        ReadProcessMemory(self.handle, ctypes.c_void_p(address), ctypes.byref(buff), byte, ctypes.byref(bytes_read))
+        ReadProcessMemory(self.handle, ctypes.c_void_p(address),
+                          ctypes.byref(buff), byte, ctypes.byref(bytes_read))
         error_code = ctypes.windll.kernel32.GetLastError()
         if error_code:
             print("Error")
@@ -180,7 +188,7 @@ class ReadMemory:
         read_bytes = struct.unpack('<Q', read_bytes)[0]
         return read_bytes
 
-    def read_string(self, address: int, byte=50) -> int:
+    def read_string(self, address: int, byte: int = 50) -> int:
         """
         Read a number of bytes and convert that to a string up until the first
         occurance of no data. Useful in getting raw names
@@ -193,7 +201,7 @@ class ReadMemory:
         i = buff.find(b'\x00')
         return str("".join(map(chr, buff[:i])))
 
-    def read_name_string(self, address: int, byte=32) -> int:
+    def read_name_string(self, address: int, byte: int = 32) -> int:
         """
         Used to convert bytes that represent a players name to a string. Player
         names always are seperated by at least 3 null characters

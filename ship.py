@@ -4,14 +4,18 @@
 """
 
 
-from Helpers import *
-from Mapping import ships
-from DisplayObject import DisplayObject
+from helpers import DEFAULT_FONT, calculate_distance, object_to_screen
+from mapping import ships
+from display_object import DisplayObject
 
 ships_color = (100, 0, 0)  # The color we want the indicator circle to be
 
 
 class Ship(DisplayObject):
+    """
+    Class to generate information for a ship object in memory
+    """
+
     def __init__(self, memory_reader, address, my_coords, raw_name):
         """
         Upon initialization of this class, we immediately initialize the
@@ -22,7 +26,7 @@ class Ship(DisplayObject):
         :param memory_reader: The SoT MemoryHelper Object we use to read memory
         :param address: The address in which the AActor begins
         :param my_coords: a dictionary of the local players coordinates
-        :param raw_name: The raw actor name used to translate w/ Mapping.py
+        :param raw_name: The raw actor name used to translate w/ mapping.py
         """
         super().__init__(memory_reader)
         self.rm = memory_reader

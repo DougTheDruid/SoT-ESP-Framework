@@ -6,33 +6,35 @@ For community support, please contact me on Discord: DougTheDruid#2784
 
 
 import struct
-from MemoryHelper import ReadMemory
-from Mapping import *
-from Helpers import *
-from Ship import Ship
+from memory_helper import ReadMemory
+from mapping import ship_keys
+from helpers import OFFSETS, CONFIG
+from ship import Ship
 
 
 STEAM_VERSION = False
 
 UWORLD_PATTERN = "48 8B 05 ? ? ? ? 48 8B 88 ? ? ? ? 48 85 C9 74 06 48 8B 49 70"
-GOBJECT_PATTERN = "48 8B 15 ? ? ? ? 3B 42 1C"
+GOBJECT_PATTERN = "89 0D ? ? ? ? 48 8B DF 48 89 5C 24"
+GNAME_PATTERN_STEAM = "48 8B 1D ? ? ? ? 48 85 DB 75 ? B9 08 04 00 00"
 
 if STEAM_VERSION:
     UWORLDBASE = 0x6E685B
-    GOBJECTBASE = 0x15D117B
-
-    GNAME_PATTERN_STEAM = "48 8B 1D ? ? ? ? 48 85 DB 75 ? B9 08 04 00 00"
+    GOBJECTBASE = 0x16324E4
     GNAMEBASE = 0x153DECA
 
 else:
     UWORLDBASE = 0x6E5F5B
-    GOBJECTBASE = 0x1588A3B
-
-    GNAME_PATTERN = "48 8B 1D ? ? ? ? 48 85 ? 75 3A"
+    GOBJECTBASE = 0x15E9CB4
     GNAMEBASE = 0x14FFC98
 
 
 class SoTMemoryReader:
+    """
+    Wrapper class to handle reading data from the game, parsing what is
+    important, and returning it to be shown by pygame
+    """
+
     def __init__(self):
         """
         Upon initialization of this object, we want to find the base address
@@ -47,33 +49,34 @@ class SoTMemoryReader:
         basic information
         """
         self.rm = ReadMemory("SoTGame.exe")
-        self.base = self.rm.base_address
+        base_address = self.rm.base_address
 
-        u_world_offset = self.rm.read_ulong(self.base + UWORLDBASE + 3)
-        self.u_world = self.base + UWORLDBASE + u_world_offset + 7
-        self.world_address = self.rm.read_ptr(self.u_world)
+        u_world_offset = self.rm.read_ulong(base_address + UWORLDBASE + 3)
+        u_world = base_address + UWORLDBASE + u_world_offset + 7
+        self.world_address = self.rm.read_ptr(u_world)
 
-        g_name_offset = self.rm.read_ulong(self.base + GNAMEBASE + 3)
-        self.g_name = self.rm.read_ptr(self.base + GNAMEBASE
+        g_name_offset = self.rm.read_ulong(base_address + GNAMEBASE + 3)
+        self.g_name = self.rm.read_ptr(base_address + GNAMEBASE
                                        + g_name_offset + 7)
-        self.u_local_player = self._load_local_player()
-        g_objects_offset = self.rm.read_ulong(self.base + GOBJECTBASE + 3)
-        self.g_objects = self.rm.read_ptr(self.base + GOBJECTBASE
-                                          + g_objects_offset + 7)
+
+        g_objects_offset = self.rm.read_ulong(base_address + GOBJECTBASE + 2)
+        g_objects = base_address + GOBJECTBASE + g_objects_offset + 22
+        self.g_objects = self.rm.read_ptr(g_objects)
 
         self.u_level = self.rm.read_ptr(self.world_address +
                                         OFFSETS.get('UWorld.PersistentLevel'))
 
-        self.player_controller = self.rm.read_ptr(
-            self.u_local_player + OFFSETS.get('ULocalPlayer.PlayerController')
-        )
+        u_local_player = self._load_local_player()
 
-        self.my_coords = self._coord_builder(self.u_local_player)
+        # self.player_controller = self.rm.read_ptr(
+        #     u_local_player + OFFSETS.get('ULocalPlayer.PlayerController')
+        # )
+
+        self.my_coords = self._coord_builder(u_local_player)
         self.my_coords['fov'] = 90
 
         self.actor_name_map = {}
         self.server_players = []
-        self.player_name_cache = {}
         self.run_info = []
 
     def _load_local_player(self) -> int:
@@ -174,13 +177,13 @@ class SoTMemoryReader:
                                                      0x0, fov=True)
                 continue
 
-            # If we have Ship ESP enabled in Helpers.py, and the name of the
-            # actor is in our Mapping.py ship_keys object, interpret the actor
+            # If we have Ship ESP enabled in helpers.py, and the name of the
+            # actor is in our mapping.py ship_keys object, interpret the actor
             # as a ship
             if CONFIG.get('SHIPS_ENABLED') and raw_name in ship_keys:
                 self.read_ships(actor_address, raw_name)
 
-            # If we have the world players enabled in Helpers.py, and the name
+            # If we have the world players enabled in helpers.py, and the name
             # of the actor is AthenaPlayerState, we interpret the actor as a
             # player on the server.
             # NOTE: This will NOT give us information on nearby players for the

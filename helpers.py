@@ -14,9 +14,17 @@ CONFIG = {
     "SHIPS_ENABLED": False,
 }
 
+# Information on your monitor height and width. Used here and
+# in main.py to display data to the screen
+SCREEN = {
+    "x": 3840,
+    "y": 2160
+}
+
+
 # Font renderer used for objects such as Ships
 pygame.font.init()
-DEFAULT_FONT = pygame.font.SysFont('Microsoft Sans Serif', 15)
+DEFAULT_FONT = pygame.font.SysFont("Microsoft Sans Serif", 15)
 
 
 with open("offsets.json") as infile:
@@ -33,7 +41,8 @@ def dot(array_1: list, array_2: list) -> float:
     if array_2[0] == 0 and array_2[1] == 0 and array_2[2] == 0:
         return 0.0
 
-    return array_1[0] * array_2[0] + array_1[1] * array_2[1] + array_1[2] * array_2[2]
+    return array_1[0] * array_2[0] + array_1[1] \
+           * array_2[1] + array_1[2] * array_2[2]
 
 
 def object_to_screen(player: dict, actor: dict) -> tuple:
@@ -59,23 +68,30 @@ def object_to_screen(player: dict, actor: dict) -> tuple:
         v_axis_y = (temp[1][0], temp[1][1], temp[1][2])
         v_axis_z = (temp[2][0], temp[2][1], temp[2][2])
 
-        v_delta = (actor.get('x') - player.get("x"), actor.get('y') - player.get("y"), actor.get('z') - player.get("z"))
-        v_transformed = [dot(v_delta, v_axis_y), dot(v_delta, v_axis_z), dot(v_delta, v_axis_x)]
+        v_delta = (actor.get("x") - player.get("x"),
+                   actor.get("y") - player.get("y"),
+                   actor.get("z") - player.get("z"))
+        v_transformed = [dot(v_delta, v_axis_y),
+                         dot(v_delta, v_axis_z),
+                         dot(v_delta, v_axis_x)]
 
         if v_transformed[2] < 1.0:
             v_transformed[2] = 1.0
 
-        fov = player.get('fov')
-        screen_center_x = 2560 / 2
-        screen_center_y = 1440 / 2
+        fov = player.get("fov")
+        screen_center_x = SCREEN.get("x") / 2
+        screen_center_y = SCREEN.get("y") / 2
 
         tmp_fov = math.tan(fov * math.pi / 360)
 
-        x = screen_center_x + v_transformed[0] * (screen_center_x / tmp_fov) / v_transformed[2]
-        if x > 2560 or x < 0:
+        x = screen_center_x + v_transformed[0] * (screen_center_x / tmp_fov) \
+            / v_transformed[2]
+        if x > SCREEN.get("x") or x < 0:
             return False
-        y = screen_center_y - v_transformed[1] * (screen_center_x / math.tan(fov * math.pi / 360)) / v_transformed[2]
-        if y > 1440 or y < 0:
+        y = screen_center_y - v_transformed[1] * \
+            (screen_center_x / math.tan(fov * math.pi / 360)) \
+            / v_transformed[2]
+        if y > SCREEN.get("y") or y < 0:
             return False
 
         return x, y
@@ -120,7 +136,8 @@ def make_v_matrix(rot: dict) -> list:
     return matrix
 
 
-def calculate_distance(obj_to: dict, obj_from: dict, round_to=0) -> float:
+def calculate_distance(obj_to: dict, obj_from: dict,
+                       round_to: int = 0) -> float:
     """
     Determines the distances From one object To another in meters, rounding
     to whatever degree of precision you request
@@ -130,6 +147,7 @@ def calculate_distance(obj_to: dict, obj_from: dict, round_to=0) -> float:
     :param round_to: How precise to be in the return
     :return: the distance in meters from obj_from to obj_to
     """
-    return round(math.sqrt(math.pow((obj_to.get('x') - obj_from.get('x')), 2) +
-                           math.pow((obj_to.get('y') - obj_from.get('y')), 2) +
-                           math.pow((obj_to.get('z') - obj_from.get('z')), 2)), round_to)
+    return round(math.sqrt(math.pow((obj_to.get("x") - obj_from.get("x")), 2) +
+                           math.pow((obj_to.get("y") - obj_from.get("y")), 2) +
+                           math.pow((obj_to.get("z") - obj_from.get("z")), 2)),
+                 round_to)

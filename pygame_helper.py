@@ -45,8 +45,11 @@ class PyGameHelper:
         # using the fucsia color, and makes it so it cannot move.
         hwnd = pygame.display.get_wm_info()["window"]
         win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE,
-                               win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE)
-                               | win32con.WS_EX_LAYERED)
+                       win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE) |
+                       win32con.WS_EX_TRANSPARENT |
+                       win32con.WS_EX_COMPOSITED |
+                       win32con.WS_EX_LAYERED |
+                       win32con.WS_EX_TOPMOST)
         win32gui.SetLayeredWindowAttributes(hwnd, win32api.RGB(*fuchsia), 0,
                                             win32con.LWA_COLORKEY)
 

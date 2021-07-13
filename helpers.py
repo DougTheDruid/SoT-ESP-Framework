@@ -7,6 +7,7 @@
 import math
 import json
 import pygame
+from win32api import GetSystemMetrics
 
 # True=Enabled & False=Disabled for each of the config items
 CONFIG = {
@@ -15,10 +16,11 @@ CONFIG = {
 }
 
 # Information on your monitor height and width. Used here and
-# in main.py to display data to the screen
+# in main.py to display data to the screen. May need to manually override if
+# wonky
 SCREEN = {
-    "x": 3840,
-    "y": 2160
+    "x": GetSystemMetrics(0),
+    "y": GetSystemMetrics(1)
 }
 
 

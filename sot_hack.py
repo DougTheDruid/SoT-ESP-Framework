@@ -32,7 +32,7 @@ else:
 class SoTMemoryReader:
     """
     Wrapper class to handle reading data from the game, parsing what is
-    important, and returning it to be shown by pygame
+    important, and returning it to be shown by pyglet
     """
 
     def __init__(self):

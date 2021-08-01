@@ -38,7 +38,7 @@ In theory, all you need to get started in using this hack is Python 3.7.9, and t
 requirements.txt. The base framework relies on a 4k main monitor. You MAY need to make some minor changes in
 the code to accomidate your display configuration (helpers.py, top of file). I personally run all of my Python from PyCharm, and 
 start/stop the code execution through the built-in Run and Stop functionality. You may choose to implement proper 
-"closing" functionality using PyGame. 
+"closing" functionality using pyglet. 
 
 ***As a test of faith, to get this code fully-functional you must modify one line of code and remove another entirely.
 This is a VERY small countermeasure to ensure this framework is actually used as intended.***
@@ -82,22 +82,19 @@ For community support, please contact me on Discord: DougTheDruid#2784
 
 ### How it works
 When running `main.py`, an `SoTMemoryReader` object is created (found in `sot_hack.py`). That object creates a 
-`ReadMemory` object (found in `memory_helper.py`) which is used to perform our requisite memory calls.
+`ReadMemory` object (found in `memory_helper.py`) which is used to perform our requisite memory calls. We also create
+a Pyglet window to display our data, and give Pyglet a set of instructions to run certain
+update methods every so often (or every frame).
 
 The `SoTMemoryReader` object gets data about the game world, but has a main game loop function called `read_actors`.
-This method is responsible for determining how many actors there are, and reading data about all of those actors. The
-actor data is stored in our class variables for that "run" of the hack and then parsed and diplayed using PyGame. The
-`pygame_helper.py` file contains a `PyGameHelper` object which initializes some PyGame info at start-up. We then utilize
-that object to display items to our screen. 
+This method is responsible for determining how many actors there are, and reading data about all of those actors. For 
+Actors we are interested in knowing more about, we create a relevant class-object to track their information. We also
+use that object to build display information for Pyglet to utilize. 
 
 Largely speaking, if you want to see the flow of the code, start at `main.py` and work your way down into the objects
 and other files.
 
-One thing worth mentioning is that this code simply scans every actor every iteration of the script. This is *not 
-necessarily* the most performance-efficient and may cause you to get sub-optimal framerates in-game. **YOU** may 
-work on alternative implementations to improve speed. Below is a list of suggestions:
-1. Only re-pull data for moving objects (Or update static objects information less frequently)
-2. Build in "buffer frames" to pygame where there is a cache of display-objects to utilize
+*This is an early build using Pyglet and probably isn't super optimized.*
 
 ### Structs
 Instead of rebuilding structures similarly to how you would in C or C++, I utilize something fairly frequently in my

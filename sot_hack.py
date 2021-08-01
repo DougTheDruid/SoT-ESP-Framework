@@ -66,18 +66,17 @@ class SoTMemoryReader:
         self.u_level = self.rm.read_ptr(self.world_address +
                                         OFFSETS.get('UWorld.PersistentLevel'))
 
-        u_local_player = self._load_local_player()
+        self.u_local_player = self._load_local_player()
+        self.player_controller = self.rm.read_ptr(
+            self.u_local_player + OFFSETS.get('ULocalPlayer.PlayerController')
+        )
 
-        # self.player_controller = self.rm.read_ptr(
-        #     u_local_player + OFFSETS.get('ULocalPlayer.PlayerController')
-        # )
-
-        self.my_coords = self._coord_builder(u_local_player)
+        self.my_coords = self._coord_builder(self.u_local_player)
         self.my_coords['fov'] = 90
 
         self.actor_name_map = {}
         self.server_players = []
-        self.run_info = []
+        self.display_objects = []
 
     def _load_local_player(self) -> int:
         """
@@ -93,6 +92,18 @@ class SoTMemoryReader:
             game_instance + OFFSETS.get('UGameInstance.LocalPlayers')
         )
         return self.rm.read_ptr(local_player)
+
+    def update_my_coords(self):
+        """
+        Function to update the players coordinates and camera information
+        storing that new info back into the my_coords field. Necesarry as
+        we dont always run a full scan and we need a way to update ourselves
+        """
+        manager = self.rm.read_ptr(
+            self.player_controller + OFFSETS.get('APlayerController.CameraManager')
+        )
+        self.my_coords = self._coord_builder(
+            manager, OFFSETS.get('APlayerCameraManager.CameraCache') + OFFSETS.get('FCameraCacheEntry.FMinimalViewInfo'), fov=True)
 
     def _coord_builder(self, actor_address: int, offset=0x78, camera=True,
                        fov=False) -> dict:
@@ -138,11 +149,18 @@ class SoTMemoryReader:
 
     def read_actors(self):
         """
-        Main game loop. Is responsible for determining how many actors to scan
-        and calling assisting functions to interpret data about said actors.
-        Stores all relevent information in class variables
+        Represents a full scan of every actor within our render distance.
+        Will create an object for each type of object we are interested in,
+        and store it in a class variable (display_objects).
+        Then our main game loop updates those objects
         """
-        self.run_info = []
+        for display_ob in self.display_objects:
+            try:
+                display_ob.text_render.delete()
+            except:
+                continue
+        self.display_objects = []
+        self.update_my_coords()
 
         actor_raw = self.rm.read_bytes(self.u_level + 0xa0, 0xC)
         actor_data = struct.unpack("<Qi", actor_raw)
@@ -169,19 +187,16 @@ class SoTMemoryReader:
             if not raw_name:
                 continue
 
-            # AthenaPlayerCameraManager contains information on the local
-            # players camera object, namely coordinates and camera information.
-            # Use that data and set self.my_coordinates to the camera's coords
-            if raw_name == "BP_AthenaPlayerCameraManager_C":
-                self.my_coords = self._coord_builder(actor_address + 0x450,
-                                                     0x0, fov=True)
-                continue
-
             # If we have Ship ESP enabled in helpers.py, and the name of the
             # actor is in our mapping.py ship_keys object, interpret the actor
             # as a ship
-            if CONFIG.get('SHIPS_ENABLED') and raw_name in ship_keys:
-                self.read_ships(actor_address, raw_name)
+            elif CONFIG.get('SHIPS_ENABLED') and raw_name in ship_keys:
+                ship = Ship(self.rm, actor_id, actor_address, self.my_coords,
+                            raw_name)
+                if "Near" not in ship.name and ship.distance < 1720:
+                    continue
+                else:
+                    self.display_objects.append(ship)
 
             # If we have the world players enabled in helpers.py, and the name
             # of the actor is AthenaPlayerState, we interpret the actor as a
@@ -190,19 +205,6 @@ class SoTMemoryReader:
             # sake of ESP
             elif CONFIG.get('WORLD_PLAYERS_ENABLED') and "AthenaPlayerState" in raw_name:
                 self.read_world_players(actor_address)
-
-    def read_ships(self, actor_address, raw_name):
-        """
-        Generates a "Ship" object to collect the relevant information about
-        a ship actor, then appends a summarized version of that info to
-        the self.run_info
-        :param actor_address: The memory address which the actor begins at
-        :param raw_name: The raw name of the actor
-        """
-        ship = Ship(self.rm, actor_address, self.my_coords, raw_name)
-        ship_info = ship.get_ship_info()
-        if ship_info:
-            self.run_info.append(ship_info)
 
     def read_world_players(self, actor_address):
         """

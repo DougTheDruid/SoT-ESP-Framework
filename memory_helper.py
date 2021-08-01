@@ -137,13 +137,9 @@ class ReadMemory:
             raise TypeError('Address must be int: {}'.format(address))
         buff = ctypes.create_string_buffer(byte)
         bytes_read = ctypes.c_size_t()
-        ctypes.windll.kernel32.SetLastError(0)
+        ctypes.windll.kernel32.SetLastError()
         ReadProcessMemory(self.handle, ctypes.c_void_p(address),
                           ctypes.byref(buff), byte, ctypes.byref(bytes_read))
-        error_code = ctypes.windll.kernel32.GetLastError()
-        if error_code:
-            print("Error")
-            ctypes.windll.kernel32.SetLastError(0)
         raw = buff.raw
         return raw
 

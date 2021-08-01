@@ -3,7 +3,6 @@
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 """
 
-
 import struct
 from helpers import OFFSETS
 from memory_helper import ReadMemory
@@ -24,6 +23,18 @@ class DisplayObject:
         read memory data from the game
         """
         self.m_r = memory_reader
+
+    def _get_actor_id(self, address):
+        """
+        Function to get the AActor's ID, used to validate the ID hasnt chaned
+        while running a "quick" scan
+        :param address: the base address for a given AActor
+        :rtype: int
+        :return: The AActors ID
+        """
+        return self.m_r.read_int(
+            address + OFFSETS.get('AActor.actorId')
+        )
 
     def _get_root_comp_address(self, address: int) -> int:
         """
@@ -52,3 +63,6 @@ class DisplayObject:
         coordinate_dict = {"x": unpacked[0] / 100, "y": unpacked[1] / 100,
                            "z": unpacked[2] / 100}
         return coordinate_dict
+
+    def update(self, my_coords):
+        pass

@@ -3,11 +3,10 @@
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 """
 
-
 import math
 import json
-import pygame
-from win32api import GetSystemMetrics
+import win32gui
+from pyglet.graphics import Batch
 
 # True=Enabled & False=Disabled for each of the config items
 CONFIG = {
@@ -15,18 +14,18 @@ CONFIG = {
     "SHIPS_ENABLED": False,
 }
 
+TEXT_OFFSET_X = 13
+TEXT_OFFSET_Y = -5
+
 # Information on your monitor height and width. Used here and
 # in main.py to display data to the screen. May need to manually override if
 # wonky
-SCREEN = {
-    "x": GetSystemMetrics(0),
-    "y": GetSystemMetrics(1)
-}
+window = win32gui.FindWindow(None, "Sea of Thieves")
+SOT_WINDOW = win32gui.GetWindowRect(window)
+SOT_WINDOW_H = SOT_WINDOW[3]-SOT_WINDOW[1]
+SOT_WINDOW_W = SOT_WINDOW[2]-SOT_WINDOW[0]
 
-
-# Font renderer used for objects such as Ships
-pygame.font.init()
-DEFAULT_FONT = pygame.font.SysFont("Microsoft Sans Serif", 15)
+main_batch = Batch()
 
 
 with open("offsets.json") as infile:
@@ -81,22 +80,22 @@ def object_to_screen(player: dict, actor: dict) -> tuple:
             v_transformed[2] = 1.0
 
         fov = player.get("fov")
-        screen_center_x = SCREEN.get("x") / 2
-        screen_center_y = SCREEN.get("y") / 2
+        screen_center_x = SOT_WINDOW_W / 2
+        screen_center_y = SOT_WINDOW_H / 2
 
         tmp_fov = math.tan(fov * math.pi / 360)
 
         x = screen_center_x + v_transformed[0] * (screen_center_x / tmp_fov) \
             / v_transformed[2]
-        if x > SCREEN.get("x") or x < 0:
+        if x > SOT_WINDOW_W or x < 0:
             return False
         y = screen_center_y - v_transformed[1] * \
             (screen_center_x / math.tan(fov * math.pi / 360)) \
             / v_transformed[2]
-        if y > SCREEN.get("y") or y < 0:
+        if y > SOT_WINDOW_H or y < 0:
             return False
 
-        return x, y
+        return x, SOT_WINDOW_H - y
     except Exception as e:
         print(f"Couldnt gen screen coordinates for {actor}: {e}")
 
@@ -138,18 +137,15 @@ def make_v_matrix(rot: dict) -> list:
     return matrix
 
 
-def calculate_distance(obj_to: dict, obj_from: dict,
-                       round_to: int = 0) -> float:
+def calculate_distance(obj_to: dict, obj_from: dict) -> float:
     """
     Determines the distances From one object To another in meters, rounding
     to whatever degree of precision you request
 
     :param obj_to: A coordinate dict for the object we are going "to"
     :param obj_from: A coordinate dict for the object we are going "from"
-    :param round_to: How precise to be in the return
     :return: the distance in meters from obj_from to obj_to
     """
-    return round(math.sqrt(math.pow((obj_to.get("x") - obj_from.get("x")), 2) +
-                           math.pow((obj_to.get("y") - obj_from.get("y")), 2) +
-                           math.pow((obj_to.get("z") - obj_from.get("z")), 2)),
-                 round_to)
+    return int(math.sqrt(math.pow((obj_to.get("x") - obj_from.get("x")), 2) +
+                         math.pow((obj_to.get("y") - obj_from.get("y")), 2) +
+                         math.pow((obj_to.get("z") - obj_from.get("z")), 2)))

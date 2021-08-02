@@ -6,7 +6,6 @@ For community support, please contact me on Discord: DougTheDruid#2784
 
 from sot_hack import SoTMemoryReader
 import pyglet
-from pyglet import shapes
 from pyglet.text import Label
 import win32api
 import win32con

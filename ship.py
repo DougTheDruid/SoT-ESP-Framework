@@ -74,7 +74,7 @@ class Ship(DisplayObject):
         Function to build our display text string. Seperated out in the event
         you add more information about a ship that you need to customize
         the display for (% sunk, holes, etc)
-        :type: str
+        :type: Label
         :return: What text we want displayed next to the ship
         """
         if self.screen_coords:

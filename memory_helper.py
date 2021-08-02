@@ -197,7 +197,7 @@ class ReadMemory:
         i = buff.find(b'\x00')
         return str("".join(map(chr, buff[:i])))
 
-    def read_name_string(self, address: int, byte: int = 32) -> int:
+    def read_name_string(self, address: int, byte: int = 32) -> str:
         """
         Used to convert bytes that represent a players name to a string. Player
         names always are seperated by at least 3 null characters

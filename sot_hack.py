@@ -218,5 +218,7 @@ class SoTMemoryReader:
         )
         player_name = self.rm.read_name_string(player_name_location)
 
-        if player_name and player_name not in self.server_players:
+        if player_name \
+                and player_name not in self.server_players \
+                and player_name.replace(" ", "-") not in self.server_players:
             self.server_players.append(player_name)

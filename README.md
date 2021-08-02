@@ -96,6 +96,14 @@ and other files.
 
 *This is an early build using Pyglet and probably isn't super optimized.*
 
+### Pyglet Todo
+   1. In `ship.py`, for some reason I was unable to use `.visibile = False` for the text similarly to the circle visiblity.
+      So I ended up setting the text-size to 0. How do we make this better?
+   2. Currently we are replacing spaces in play names with `-`'s, this has to do with the multiline functionality
+      specified for `player_list` creation in `main.py`. Can you make a specific doc format to get around this weirdness?
+   3. Gummy set the window attibutes to LWA_Alpha vs ColorKey, then set the DirectX alpha flags to do the transparency. 
+      Can something similar with with this & OpenGL (which pyglet uses)?
+
 ### Structs
 Instead of rebuilding structures similarly to how you would in C or C++, I utilize something fairly frequently in my
 code that may not be very clear called `struct`. This is a Python-native import which allows us to more easily convert

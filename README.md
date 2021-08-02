@@ -103,6 +103,7 @@ and other files.
       specified for `player_list` creation in `main.py`. Can you make a specific doc format to get around this weirdness?
    3. Gummy set the window attibutes to LWA_Alpha vs ColorKey, then set the DirectX alpha flags to do the transparency. 
       Can something similar with with this & OpenGL (which pyglet uses)?
+   4. Add typehints & update docstrings for new stuff
 
 ### Structs
 Instead of rebuilding structures similarly to how you would in C or C++, I utilize something fairly frequently in my

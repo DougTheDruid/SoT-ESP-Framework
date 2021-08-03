@@ -4,11 +4,12 @@
 """
 
 import struct
+import abc
 from helpers import OFFSETS
 from memory_helper import ReadMemory
 
 
-class DisplayObject:
+class DisplayObject(metaclass=abc.ABCMeta):
     """
     Class responsible for the base functionality of pulling data from
     our memory objects. These are typically identical regardless of the actor
@@ -64,5 +65,8 @@ class DisplayObject:
                            "z": unpacked[2] / 100}
         return coordinate_dict
 
+    @abc.abstractmethod
     def update(self, my_coords):
-        pass
+        """
+
+        """

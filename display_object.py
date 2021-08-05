@@ -19,7 +19,7 @@ class DisplayObject:
     def __init__(self, memory_reader: ReadMemory):
         """
         Parent class to objects like Ship's. Helpful as the methods found here
-        would be considered "common" and reduces redundent code.
+        would be considered "common" and reduces redundant code.
         :param memory_reader: The SoT MemoryHelper object we are utilizing to
         read memory data from the game
         """
@@ -43,7 +43,7 @@ class DisplayObject:
         :param int offset: Offset from root component to beginning of coords,
         Often determined manually with Cheat Engine
         :rtype: dict
-        :return: A dictionary contianing the coordinate information
+        :return: A dictionary containing the coordinate information
         for a specific actor
         """
         actor_bytes = self.m_r.read_bytes(root_comp_ptr + offset, 24)

@@ -207,7 +207,7 @@ class SoTMemoryReader:
     def read_world_players(self, actor_address):
         """
         Reads information about an AthenaPlayerState actor (a server-level
-        player object), to obtain into on who is on the server. Append the user
+        player object), to obtain info on who is on the server. Append the user
         to the list of players on the server for a given run
         :param actor_address: The memory address which the actor begins at
         """

@@ -4,38 +4,37 @@
 For community support, please contact me on Discord: DougTheDruid#2784
 """
 
-from sot_hack import SoTMemoryReader
 import pyglet
 from pyglet.text import Label
 import win32api
 import win32con
 import win32gui
 from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch
+from sot_hack import SoTMemoryReader
 
-NOSIZE = 1
-
-# See explination in Main
+# See explination in Main, toggle for a non-graphical debug
 DEBUG = False
 
-# Stores our display objects, making them non-localized so Pyglet can see them
-cache = []
-
-# Creating a Pyglet clock and Batch to more efficiently draw
+# Pyglet clock used to track time via FPS
 clock = pyglet.clock.Clock()
 
 
 def set_window_info():
+    """
+    Sets windows attributes for a global hwnd (window ID). Responsible
+    for transparency, topmost, and covering our SoT window.
+    """
     # Setting attribs. for our window to support transparency and click-through
     win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE,
                            win32con.WS_EX_TRANSPARENT |
                            win32con.WS_EX_LAYERED |
                            win32con.WS_EX_TOPMOST)
 
-    # Move the window to cover SoT
+    # Move the window to cover SoT & keep it on top always
     win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, SOT_WINDOW[0],
-                          SOT_WINDOW[1], 0, 0, NOSIZE)
+                          SOT_WINDOW[1], 0, 0, win32con.SWP_NOSIZE)
 
-    # Set window transparency color
+    # Set (0, 0, 0) to our alpha color. Not the best, but works for now
     win32gui.SetLayeredWindowAttributes(hwnd, win32api.RGB(0, 0, 0), 255,
                                         win32con.LWA_COLORKEY)
 
@@ -44,28 +43,22 @@ def update_all(_):
     """
     Triggers an entire read_actors call in our SoT Memory Reader. Will
     re-populate all of the display objects if something entered the screen
-    or render distance. Not actually responisble for displaying anything to
-    the screen
+    or render distance.
     """
     smr.read_actors()
 
 
 def load_graphics(_):
     """
-    Our main graphical loop which updates all of our "interesting" items
+    Our main graphical loop which updates all of our "interesting" items.
+    During a "full run" (update_all()), a list of the objects near us and we
+    care about is generated. Each of those objects has a ".update()" method
+    we use to re-poll data for that item (required per display_object.py)
     """
-    global cache
-
-    # Responsible for cleaning up old "Label" objects which we created
-    # Necessary until we determine a better path forward
-    for cached_item in cache:
-        try:
-            cached_item.delete()
-        except:
-            continue
-
     # Update our players coordinate information
     smr.update_my_coords()
+
+    # Initialize a list of items which are no longer valid in this loop
     to_remove = []
 
     # For each actor that is stored from the most recent run of read_actors
@@ -73,7 +66,7 @@ def load_graphics(_):
         # Call the update function within the actor object
         actor.update(smr.my_coords)
 
-        # If the actor isnt the actor we expect (per update()), remove it
+        # If the actor isnt the actor we expect (per update()), prepare to nuke
         if actor.to_delete:
             to_remove.append(actor)
 
@@ -96,15 +89,19 @@ if __name__ == '__main__':
     # Create a borderless window with Pyglet at the same size as our SoT Window
     window = pyglet.window.Window(SOT_WINDOW_W, SOT_WINDOW_H,
                                   vsync=False, style='borderless')
-    hwnd = window._hwnd
+    hwnd = window._hwnd  # pylint: disable=protected-access
 
     # Update the window we created to be transparent, have click-through
     # capabilities, etc.
     set_window_info()
 
-    # The event which our window uses to determine what to draw to the screen
     @window.event
     def on_draw():
+        """
+        The event which our window uses to determine what to draw on the
+        screen. First clears the screen, then updates our player count, then
+        draws both our batch (think of a canvas) & fps display
+        """
         window.clear()
         player_count.text = f"Player Count: {len(smr.server_players)}"
         main_batch.draw()
@@ -114,7 +111,8 @@ if __name__ == '__main__':
     pyglet.clock.schedule_interval(update_all, 5)
 
     # We schedule an basic graphics load which is responsible for drawing
-    # our interesting information to the screen
+    # our interesting information to the screen. Can limit FPS by using
+    # pyglet.clock.schedule_interval(load_graphics, 1/<desired_fps>)
     pyglet.clock.schedule(load_graphics)
 
     # Adds an FPS counter at the botton left corner of our pyglet window
@@ -126,11 +124,12 @@ if __name__ == '__main__':
                          x=SOT_WINDOW_W * 0.85,
                          y=SOT_WINDOW_H * 0.9, batch=main_batch)
 
-    if False:
+    # The label for showing all players on the server under the count
+    if False:  # pylint: disable=using-constant-test
         player_list = Label("\n".join(smr.server_players), x=SOT_WINDOW_W * 0.85,
                             y=(SOT_WINDOW_H-25) * 0.9, batch=main_batch, width=32,
                             multiline=True)
 
-    # Runs our application and starts to use our scheduled events to
-    # build/show data
+    # Runs our application and starts to use our scheduled events to show data
     pyglet.app.run()
+    # Note - ***Nothing past here will execute as .run() is a loop***

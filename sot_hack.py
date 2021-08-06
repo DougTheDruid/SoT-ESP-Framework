@@ -4,7 +4,6 @@
 For community support, please contact me on Discord: DougTheDruid#2784
 """
 
-
 import struct
 from memory_helper import ReadMemory
 from mapping import ship_keys
@@ -103,7 +102,10 @@ class SoTMemoryReader:
             self.player_controller + OFFSETS.get('APlayerController.CameraManager')
         )
         self.my_coords = self._coord_builder(
-            manager, OFFSETS.get('APlayerCameraManager.CameraCache') + OFFSETS.get('FCameraCacheEntry.FMinimalViewInfo'), fov=True)
+            manager,
+            OFFSETS.get('APlayerCameraManager.CameraCache')
+            + OFFSETS.get('FCameraCacheEntry.FMinimalViewInfo'),
+            fov=True)
 
     def _coord_builder(self, actor_address: int, offset=0x78, camera=True,
                        fov=False) -> dict:
@@ -190,13 +192,13 @@ class SoTMemoryReader:
             # If we have Ship ESP enabled in helpers.py, and the name of the
             # actor is in our mapping.py ship_keys object, interpret the actor
             # as a ship
-            elif CONFIG.get('SHIPS_ENABLED') and raw_name in ship_keys:
+            if CONFIG.get('SHIPS_ENABLED') and raw_name in ship_keys:
                 ship = Ship(self.rm, actor_id, actor_address, self.my_coords,
                             raw_name)
-                if "Near" not in ship.name and ship.distance < 1720:
-                    continue
-                else:
-                    self.display_objects.append(ship)
+                # if "Near" not in ship.name and ship.distance < 1720:
+                #     continue
+                # else:
+                self.display_objects.append(ship)
 
             # If we have the world players enabled in helpers.py, and the name
             # of the actor is AthenaPlayerState, we interpret the actor as a

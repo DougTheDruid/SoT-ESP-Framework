@@ -3,7 +3,6 @@
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 """
 
-
 from string import printable
 import ctypes
 import ctypes.wintypes
@@ -51,7 +50,9 @@ CloseHandle.argtypes = [ctypes.c_void_p]
 CloseHandle.rettype = ctypes.c_int
 
 # ReadProcessMemory is also a cytpe, but will perform the actual memory reading
-ReadProcessMemory = ctypes.WinDLL('kernel32', use_last_error=True).ReadProcessMemory
+ReadProcessMemory = ctypes.WinDLL(
+    'kernel32', use_last_error=True
+).ReadProcessMemory
 ReadProcessMemory.argtypes = [ctypes.wintypes.HANDLE, ctypes.wintypes.LPCVOID,
                               ctypes.wintypes.LPVOID, ctypes.c_size_t,
                               ctypes.POINTER(ctypes.c_size_t)]

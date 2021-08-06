@@ -14,30 +14,35 @@ CONFIG = {
     "SHIPS_ENABLED": False,
 }
 
+# Offset values for the text labels from the circles we draw to the screen
 TEXT_OFFSET_X = 13
 TEXT_OFFSET_Y = -5
 
-# Information on your monitor height and width. Used here and
-# in main.py to display data to the screen. May need to manually override if
-# wonky
+# Information on SoT height and width. Used here and in main.py to display
+# data to the screen. May need to manually override if wonky
 window = win32gui.FindWindow(None, "Sea of Thieves")
-SOT_WINDOW = win32gui.GetWindowRect(window)
+SOT_WINDOW = win32gui.GetWindowRect(window)  # (x1, y1, x2, y2)
 SOT_WINDOW_H = SOT_WINDOW[3]-SOT_WINDOW[1]
 SOT_WINDOW_W = SOT_WINDOW[2]-SOT_WINDOW[0]
 
+# Creates a pyglet "Batch" that we draw our information to. Effectively serves
+# as a piece of paper, so we save render cost because its 2D
 main_batch = Batch()
 
-
+# Load our offset json file
 with open("offsets.json") as infile:
     OFFSETS = json.load(infile)
 
 
 def dot(array_1: list, array_2: list) -> float:
     """
-    Python-converted version of Gummy's External SoT v2 vMatrix Dot method:
-    https://tinyurl.com/hcpafjs
-
+    Python-converted version of Gummy's External SoT v2 vMatrix Dot method (No
+    Longer Avail). Takes two lists and multiplies the same index across both
+    lists, and adds them together. (Need Source)
+    :param list array_1: Presumably some array about our player position
+    :param list array_2: Presumably some array about the dest actor position
     :rtype: float
+    :return: The result of a math equation between those two arrays
     """
     if array_2[0] == 0 and array_2[1] == 0 and array_2[2] == 0:
         return 0.0
@@ -52,7 +57,7 @@ def object_to_screen(player: dict, actor: dict) -> tuple:
     an object should be displayed. Assumes your screen is 2560x1440
 
     Python-converted version of Gummy's External SoT v2 WorldToScreen method:
-    https://tinyurl.com/3bef29jd
+    (No Longer Avail; Need Source)
 
     :param player: The player coordinate dictionary
     :param actor: An actor coordinate dictionary
@@ -105,11 +110,11 @@ def make_v_matrix(rot: dict) -> list:
     Builds data around how the camera is currently rotated.
 
     Python-converted version of Gummy's External SoT v2 Matrix method:
-    https://tinyurl.com/3bt9brm3
+    (No Longer Avail; Need Source)
 
     :param rot: The player objects camera rotation information
     :rtype: list
-    :return:
+    :return: A list of lists containing data about the rotation of our actor
     """
     rad_pitch = (rot[0] * math.pi / 180)
     rad_yaw = (rot[1] * math.pi / 180)
@@ -137,15 +142,19 @@ def make_v_matrix(rot: dict) -> list:
     return matrix
 
 
-def calculate_distance(obj_to: dict, obj_from: dict) -> float:
+def calculate_distance(obj_to: dict, obj_from: dict) -> int:
     """
     Determines the distances From one object To another in meters, rounding
     to whatever degree of precision you request
+    (**2 == ^2)
+
+    Note: Can convert the int() to a round() if you want more precision
 
     :param obj_to: A coordinate dict for the object we are going "to"
     :param obj_from: A coordinate dict for the object we are going "from"
+    :rtype: int
     :return: the distance in meters from obj_from to obj_to
     """
-    return int(math.sqrt(math.pow((obj_to.get("x") - obj_from.get("x")), 2) +
-                         math.pow((obj_to.get("y") - obj_from.get("y")), 2) +
-                         math.pow((obj_to.get("z") - obj_from.get("z")), 2)))
+    return int(math.sqrt((obj_to.get("x") - obj_from.get("x"))**2 +
+                         (obj_to.get("y") - obj_from.get("y"))**2 +
+                         (obj_to.get("z") - obj_from.get("z"))**2))

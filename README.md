@@ -1,12 +1,13 @@
 # Doug's Python SoT ESP Framework
-Hello all! This is a framework to develop an SoT ESP Hack, all utilizing Python 3.7.9. This is a trimmed down version 
+Hello all! This is a framework to develop an SoT ESP Hack, all utilizing Python. This is a trimmed down version 
 of a personal creation I utilize actively. This is a great foundation for someone who is looking to get started in 
-ESP hacks for Sea of Thieves, and should be loaded with comments to help you grasp the "how" and "why" of basic 
+ESP hacks for Sea of Thieves and maybe even other UE4 games! The code should be loaded with comments to help you grasp the "how" and "why" of basic 
 memory editing and data display with Python. While this is intended for use within Sea of Thieves specifically, there is a lot
-of resources utilized which could be useful in memory reading/editing for almost any game/program :D
+of resources utilized which could be useful in memory reading/editing for almost any game/program.
 
-This hack has the following implemented: 
+This hack has the following implemented:
 - Get the location of ships in render distance and display them on screen
+- Display a count of the players on the server
 - Display a list of all players on the server
 
 This is intentionally left as a framework and not a full-featured hack for a few reasons:
@@ -15,7 +16,7 @@ This is intentionally left as a framework and not a full-featured hack for a few
 3. Much of the code is very well documented to help you understand the "how" of the hacks inner workings; as a 
    result many resources on hacking forums will give you guidelines for implementing new functionality; I did it myself, 
    you can to
-4. I have undergone 3 or 4 major interations of this same code. **I am still learning** and re-writing functionality all 
+4. I have undergone 5 or 6 major interations of this same code. **I am still learning** and re-writing functionality all 
    the time; a smaller code base is much more simple to maintain
    
 I do ask that if you decided to take this into your own personal development, encourage others to think for themselves a
@@ -29,22 +30,22 @@ Microsoft version. If you are using the Steam version, you will need to change t
 of SoTHack.py
 
 ### Why Python?!
-Python is at its root a more user-friendly (IMO) version of C. Hypothetically, we can perform any C action using python,
+Python is at its more user-friendly version of C. Hypothetically, we can perform any C action using python,
 but make it more readible and beginner-friendly. I am also much more comfortable developing in Python and saw this as
 an opportunity to challenge myself.
 
 ### Prerequisites
-In theory, all you need to get started in using this hack is Python 3.7.9, and to install the requirement found in the 
-requirements.txt. The base framework relies on a 4k main monitor. You MAY need to make some minor changes in
-the code to accomidate your display configuration (helpers.py, top of file). I personally run all of my Python from PyCharm, and 
-start/stop the code execution through the built-in Run and Stop functionality. You may choose to implement proper 
-"closing" functionality using pyglet. 
+In theory, all you need to get started in using this hack is Python 3.7.9 (have also verified in 3.9.6), and to install 
+the requirement found in the requirements.txt. The base framework should automatically create an overlay over your SoT window, 
+regardless of size. You MAY need to make some minor changes in the code to accomidate your display configuration 
+(helpers.py, top of file). I personally run all of my Python from PyCharm, and start/stop the code execution 
+through the built-in Run and Stop functionality. You may choose to implement proper "closing" functionality using pyglet. 
 
 ***As a test of faith, to get this code fully-functional you must modify one line of code and remove another entirely.
 This is a VERY small countermeasure to ensure this framework is actually used as intended.***
 
 ### How to execute
-At the time of writting, the script is built for a version of SoT with ~5 weeks left in Season 2 and given you have the
+At the time of writting, the script is built for a version of SoT with ~6 weeks left in Season 3 and given you have the
 necessary pre-requisites, should execute with no major issues. Simply run `main.py` once you are in a server.
 
 ### How to update for new SoT Versions
@@ -71,12 +72,12 @@ your issues.
 ### cAn i GeT bAnNeD?!
 TL;DR: Yes. You _can_ get banned, such is the risk of cheating.
 
-Longer version: As is, this code purely utilizes a read-only state for the computers memory. With hundreds of hours utilizing these same read-only permissions, I have never been
+Longer version: As is, this code purely utilizes a read-only state for the computer's memory. With hundreds of hours utilizing these same read-only permissions, I have never been
 banned, nor concerned for being banned. Does that guarentee you won't be? No. Does that guarentee you won't change something (like trying to write memory) that will cause you to 
-get banned? No. If you arent sure what something does, or why something is done a certain way, do some research on the potential impact of changing it before actually changing it. 
+get banned? No. If you aren't sure what something does, or why something is done a certain way, do some research on the potential impact of changing it before actually changing it. 
 
 ### Can you help me implement X feature?
-No. I learned utilizing already posted questions/comments easily found online, you can as well. This framework is meant for people who want to put in the work and learn something, 
+No. I learned to utilize already posted questions/comments easily found online, you can as well. This framework is meant for people who want to put in the work and learn something, 
 not recieve a hand-out. You also may be able to see the FAQ.md for some useful information.
 For community support, please contact me on Discord: DougTheDruid#2784
 
@@ -88,22 +89,19 @@ update methods every so often (or every frame).
 
 The `SoTMemoryReader` object gets data about the game world, but has a main game loop function called `read_actors`.
 This method is responsible for determining how many actors there are, and reading data about all of those actors. For 
-Actors we are interested in knowing more about, we create a relevant class-object to track their information. We also
+actors we are interested in knowing more about, we create a relevant class-object to track their information. We also
 use that object to build display information for Pyglet to utilize. 
 
 Largely speaking, if you want to see the flow of the code, start at `main.py` and work your way down into the objects
 and other files.
 
-*This is an early build using Pyglet and probably isn't super optimized.*
+*This is an early build using Pyglet and I am still working to optimize some of the code*
 
 ### Pyglet Todo
-   1. In `ship.py`, for some reason I was unable to use `.visibile = False` for the text similarly to the circle visiblity.
-      So I ended up setting the text-size to 0. How do we make this better?
-   2. Currently we are replacing spaces in play names with `-`'s, this has to do with the multiline functionality
+   1. Currently we are replacing spaces in play names with `-`'s, this has to do with the multiline functionality
       specified for `player_list` creation in `main.py`. Can you make a specific doc format to get around this weirdness?
-   3. Gummy set the window attibutes to LWA_Alpha vs ColorKey, then set the DirectX alpha flags to do the transparency. 
+   2. Gummy set the window attibutes to LWA_Alpha vs ColorKey, then set the DirectX alpha flags to do the transparency. 
       Can something similar with with this & OpenGL (which pyglet uses)?
-   4. Add typehints & update docstrings for new stuff
 
 ### Structs
 Instead of rebuilding structures similarly to how you would in C or C++, I utilize something fairly frequently in my
@@ -127,7 +125,7 @@ Note: [See other `Structs` format information here](https://docs.python.org/3/li
 If you are interested in helping maintain this code base, first off, thank you! My only asks are as follows:
 1. Document your additions/changes in accordance with what exists
 2. Utilize Pylint and the provided pylintrc file to ensure your code is 10/10 compliant prior to submittion of a PR
-3. Keep the framework a framework, do not add new features outside of those listed in the "TODO" section
+3. Keep the framework a framework, do not add new features outside those listed in the "TODO" section
 4. Create "Issues" if something strikes you as incorrect or needing improvement. Also consider looking at issues for
 opportunities to contribute
    

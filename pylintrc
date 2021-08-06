@@ -55,7 +55,9 @@ disable=broad-except,
         suppressed-message,
         logging-format-interpolation,
         global-statement,
-        logging-fstring-interpolation
+        logging-fstring-interpolation,
+        too-many-instance-attributes,
+        bare-except
 
 
 [DESIGN]

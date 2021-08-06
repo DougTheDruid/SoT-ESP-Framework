@@ -11,40 +11,41 @@ from memory_helper import ReadMemory
 
 class DisplayObject(metaclass=abc.ABCMeta):
     """
-    Class responsible for the base functionality of pulling data from
-    our memory objects. These are typically identical regardless of the actor
-    type we are looking at
+    Parent class to objects like Ship's. Responsible for the base functionality
+    of pulling data from our memory objects. These are typically identical
+    regardless of the actor type we are looking at; as such would be
+    considered "common" and reduces redundant code.
     """
 
     def __init__(self, memory_reader: ReadMemory):
         """
-        Parent class to objects like Ship's. Helpful as the methods found here
-        would be considered "common" and reduces redundent code.
+        Some of our DisplayObject calls need to make memory reads, so we will
+        ser out memory reader as a class variable.
         :param memory_reader: The SoT MemoryHelper object we are utilizing to
         read memory data from the game
         """
-        self.m_r = memory_reader
+        self.rm = memory_reader
 
-    def _get_actor_id(self, address):
+    def _get_actor_id(self, address: int) -> int:
         """
         Function to get the AActor's ID, used to validate the ID hasnt chaned
         while running a "quick" scan
-        :param address: the base address for a given AActor
+        :param int address: the base address for a given AActor
         :rtype: int
         :return: The AActors ID
         """
-        return self.m_r.read_int(
+        return self.rm.read_int(
             address + OFFSETS.get('AActor.actorId')
         )
 
     def _get_root_comp_address(self, address: int) -> int:
         """
         Function to get an AActor's root component memory address
-        :param address: the base address for a given AActor
+        :param int address: the base address for a given AActor
         :rtype: int
         :return: the address of an AActors root component
         """
-        return self.m_r.read_ptr(
+        return self.rm.read_ptr(
             address + OFFSETS.get("AActor.rootComponent")
         )
 
@@ -55,10 +56,10 @@ class DisplayObject(metaclass=abc.ABCMeta):
         :param int offset: Offset from root component to beginning of coords,
         Often determined manually with Cheat Engine
         :rtype: dict
-        :return: A dictionary contianing the coordinate information
+        :return: A dictionary containing the coordinate information
         for a specific actor
         """
-        actor_bytes = self.m_r.read_bytes(root_comp_ptr + offset, 24)
+        actor_bytes = self.rm.read_bytes(root_comp_ptr + offset, 24)
         unpacked = struct.unpack("<ffffff", actor_bytes)
 
         coordinate_dict = {"x": unpacked[0] / 100, "y": unpacked[1] / 100,
@@ -68,5 +69,6 @@ class DisplayObject(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def update(self, my_coords):
         """
-
+        Required implementation method that we can call to update
+        the objects data in a quick fashion vs scanning every actor.
         """

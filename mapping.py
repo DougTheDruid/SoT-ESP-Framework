@@ -12,6 +12,7 @@ ships = {
     "BP_SmallShipNetProxy_C": {
         "Name": "Sloop",
     },
+
     "BP_MediumShipTemplate_C": {
         "Name": "Brig (Near)",
     },

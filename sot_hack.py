@@ -140,7 +140,7 @@ class SoTMemoryReader:
         """
         Main game loop. Is responsible for determining how many actors to scan
         and calling assisting functions to interpret data about said actors.
-        Stores all relevent information in class variables
+        Stores all relevant information in class variables
         """
         self.run_info = []
 

@@ -15,13 +15,13 @@ This is intentionally left as a framework and not a full-featured hack for a few
 3. Much of the code is very well documented to help you understand the "how" of the hacks inner workings; as a 
    result many resources on hacking forums will give you guidelines for implementing new functionality; I did it myself, 
    you can to
-4. I have undergone 3 or 4 major interations of this same code. **I am still learning** and re-writing functionality all 
+4. I have undergone 3 or 4 major iterations of this same code. **I am still learning** and re-writing functionality all 
    the time; a smaller code base is much more simple to maintain
    
 I do ask that if you decided to take this into your own personal development, encourage others to think for themselves a
-bit as well and try to maintain a "documenation-focesed" mindset as I have. I request that you do not use this 
+bit as well and try to maintain a "documentation-focused" mindset as I have. I request that you do not use this 
 framework for any commercial purposes (selling "your" version which is based on this framework) without contacting me and
-recieving my approval prior.
+receiving my approval prior.
 
 ### What version(s) of the game does this work with?
 This hack will work with both versions of the game (Microsoft & Steam), and by default is configured to work for the 
@@ -30,13 +30,13 @@ of SoTHack.py
 
 ### Why Python?!
 Python is at its root a more user-friendly (IMO) version of C. Hypothetically, we can perform any C action using python,
-but make it more readible and beginner-friendly. I am also much more comfortable developing in Python and saw this as
+but make it more readable and beginner-friendly. I am also much more comfortable developing in Python and saw this as
 an opportunity to challenge myself.
 
 ### Prerequisites
 In theory, all you need to get started in using this hack is Python 3.7.9, and to install the requirement found in the 
 requirements.txt. The base framework relies on a 4k main monitor. You MAY need to make some minor changes in
-the code to accomidate your display configuration (helpers.py, top of file). I personally run all of my Python from PyCharm, and 
+the code to accommodate your display configuration (helpers.py, top of file). I personally run all of my Python from PyCharm, and 
 start/stop the code execution through the built-in Run and Stop functionality. You may choose to implement proper 
 "closing" functionality using PyGame. 
 
@@ -44,7 +44,7 @@ start/stop the code execution through the built-in Run and Stop functionality. Y
 This is a VERY small countermeasure to ensure this framework is actually used as intended.***
 
 ### How to execute
-At the time of writting, the script is built for a version of SoT with ~5 weeks left in Season 2 and given you have the
+At the time of writing, the script is built for a version of SoT with ~5 weeks left in Season 2 and given you have the
 necessary pre-requisites, should execute with no major issues. Simply run `main.py` once you are in a server.
 
 ### How to update for new SoT Versions
@@ -71,13 +71,13 @@ your issues.
 ### cAn i GeT bAnNeD?!
 TL;DR: Yes. You _can_ get banned, such is the risk of cheating.
 
-Longer version: As is, this code purely utilizes a read-only state for the computers memory. With hundreds of hours utilizing these same read-only permissions, I have never been
-banned, nor concerned for being banned. Does that guarentee you won't be? No. Does that guarentee you won't change something (like trying to write memory) that will cause you to 
-get banned? No. If you arent sure what something does, or why something is done a certain way, do some research on the potential impact of changing it before actually changing it. 
+Longer version: As is, this code purely utilizes a read-only state for the computer memory. With hundreds of hours utilizing these same read-only permissions, I have never been
+banned, nor concerned for being banned. Does that guarantee you won't be? No. Does that guarantee you won't change something (like trying to write memory) that will cause you to 
+get banned? No. If you aren't sure what something does, or why something is done a certain way, do some research on the potential impact of changing it before actually changing it. 
 
 ### Can you help me implement X feature?
-No. I learned utilizing already posted questions/comments easily found online, you can as well. This framework is meant for people who want to put in the work and learn something, 
-not recieve a hand-out. You also may be able to see the FAQ.md for some useful information.
+No. I learned by utilizing already posted questions/comments easily found online, you can as well. This framework is meant for people who want to put in the work and learn something, 
+not receiving a hand-out. You also may be able to see the FAQ.md for some useful information.
 For community support, please contact me on Discord: DougTheDruid#2784
 
 ### How it works
@@ -86,7 +86,7 @@ When running `main.py`, an `SoTMemoryReader` object is created (found in `sot_ha
 
 The `SoTMemoryReader` object gets data about the game world, but has a main game loop function called `read_actors`.
 This method is responsible for determining how many actors there are, and reading data about all of those actors. The
-actor data is stored in our class variables for that "run" of the hack and then parsed and diplayed using PyGame. The
+actor data is stored in our class variables for that "run" of the hack and then parsed and displayed using PyGame. The
 `pygame_helper.py` file contains a `PyGameHelper` object which initializes some PyGame info at start-up. We then utilize
 that object to display items to our screen. 
 
@@ -94,7 +94,7 @@ Largely speaking, if you want to see the flow of the code, start at `main.py` an
 and other files.
 
 One thing worth mentioning is that this code simply scans every actor every iteration of the script. This is *not 
-necessarily* the most performance-efficient and may cause you to get sub-optimal framerates in-game. **YOU** may 
+necessarily* the most performance-efficient and may cause you to get sub-optimal frame rate in-game. **YOU** may 
 work on alternative implementations to improve speed. Below is a list of suggestions:
 1. Only re-pull data for moving objects (Or update static objects information less frequently)
 2. Build in "buffer frames" to pygame where there is a cache of display-objects to utilize
@@ -120,8 +120,8 @@ Note: [See other `Structs` format information here](https://docs.python.org/3/li
 ### Providing updates to this code base
 If you are interested in helping maintain this code base, first off, thank you! My only asks are as follows:
 1. Document your additions/changes in accordance with what exists
-2. Utilize Pylint and the provided pylintrc file to ensure your code is 10/10 compliant prior to submittion of a PR
-3. Keep the framework a framework, do not add new features outside of those listed in the "TODO" section
+2. Utilize Pylint and the provided pylintrc file to ensure your code is 10/10 compliant prior to submitting of a PR
+3. Keep the framework a framework, do not add new features outside those listed in the "TODO" section
 4. Create "Issues" if something strikes you as incorrect or needing improvement. Also consider looking at issues for
 opportunities to contribute
    

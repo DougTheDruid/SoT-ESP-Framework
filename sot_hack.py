@@ -104,7 +104,7 @@ class SoTMemoryReader:
         :param bool camera: If you want the camera info as well
         :param bool fov: If you want the FoV info as well
         :rtype: dict
-        :return: A dictionary contianing the coordinate information
+        :return: A dictionary containing the coordinate information
         for a specific actor
         """
         if fov:

@@ -28,7 +28,7 @@ class DisplayObject(metaclass=abc.ABCMeta):
 
     def _get_actor_id(self, address: int) -> int:
         """
-        Function to get the AActor's ID, used to validate the ID hasnt chaned
+        Function to get the AActor's ID, used to validate the ID hasn't changed
         while running a "quick" scan
         :param int address: the base address for a given AActor
         :rtype: int

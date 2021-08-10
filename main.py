@@ -12,7 +12,7 @@ import win32gui
 from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch
 from sot_hack import SoTMemoryReader
 
-# See explination in Main, toggle for a non-graphical debug
+# See explanation in Main, toggle for a non-graphical debug
 DEBUG = False
 
 # Pyglet clock used to track time via FPS
@@ -24,7 +24,8 @@ def set_window_info():
     Sets windows attributes for a global hwnd (window ID). Responsible
     for transparency, topmost, and covering our SoT window.
     """
-    # Setting attribs. for our window to support transparency and click-through
+    # Setting attributes for our window to support transparency and
+    # click-through
     win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE,
                            win32con.WS_EX_TRANSPARENT |
                            win32con.WS_EX_LAYERED |
@@ -66,7 +67,7 @@ def load_graphics(_):
         # Call the update function within the actor object
         actor.update(smr.my_coords)
 
-        # If the actor isnt the actor we expect (per update()), prepare to nuke
+        # If the actor isn't the actor we expect (per .update), prepare to nuke
         if actor.to_delete:
             to_remove.append(actor)
 
@@ -80,7 +81,7 @@ if __name__ == '__main__':
     smr = SoTMemoryReader()
     smr.read_actors()
 
-    # Custom Debug mode for using a literaly python interpretter debugger
+    # Custom Debug mode for using a literally python interpreter debugger
     # to validate our fields.
     if DEBUG:
         while True:
@@ -115,7 +116,7 @@ if __name__ == '__main__':
     # pyglet.clock.schedule_interval(load_graphics, 1/<desired_fps>)
     pyglet.clock.schedule(load_graphics)
 
-    # Adds an FPS counter at the botton left corner of our pyglet window
+    # Adds an FPS counter at the bottom left corner of our pyglet window
     # Note: May not translate to actual FPS, but rather FPS of the program
     fps_display = pyglet.window.FPSDisplay(window)
 
@@ -127,8 +128,10 @@ if __name__ == '__main__':
     # The label for showing all players on the server under the count
     if False:  # pylint: disable=using-constant-test
         player_list = Label("\n".join(smr.server_players), x=SOT_WINDOW_W * 0.85,
-                            y=(SOT_WINDOW_H-25) * 0.9, batch=main_batch, width=32,
+                            y=(SOT_WINDOW_H-25) * 0.9, batch=main_batch, width=300,
                             multiline=True)
+        # Note: The width of 300 is the max pixel width of a single line
+        # before auto-wrapping the text to the next line
 
     # Runs our application and starts to use our scheduled events to show data
     pyglet.app.run()

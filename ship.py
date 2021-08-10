@@ -42,12 +42,13 @@ class Ship(DisplayObject):
         # Initialize our super-class
         super().__init__(memory_reader)
 
-        # Generate our Ship's info
         self.actor_id = actor_id
         self.address = address
         self.actor_root_comp_ptr = self._get_root_comp_address(address)
         self.my_coords = my_coords
         self.raw_name = raw_name
+
+        # Generate our Ship's info
         self.name = ships.get(self.raw_name).get("Name")
         self.coords = self._coord_builder(self.actor_root_comp_ptr,
                                           COORD_OFFSET)
@@ -80,7 +81,7 @@ class Ship(DisplayObject):
 
     def _built_text_string(self) -> str:
         """
-        Generates a string used for rendering. Seperate function in the event
+        Generates a string used for rendering. Separate function in the event
         you need to add more data (Sunk %, hole count, etc)
         """
         return f"{self.name} - {self.distance}m"
@@ -110,12 +111,12 @@ class Ship(DisplayObject):
         object, to be called when seeking to perform an update on the
         Actor without doing a full-scan of all actors in the game.
 
-        1. Determinine if the actor is what we expect it to be
+        1. Determine if the actor is what we expect it to be
         2. See if any data has changed
         3. Update the data if something has changed
 
         In theory if all data is the same, we could *not* update our Label's
-        text, therefor saving resources. Not implemented, but a possibility
+        text, therefore saving resources. Not implemented, but a possibility
         """
         if self._get_actor_id(self.address) != self.actor_id:
             self.to_delete = True
@@ -130,7 +131,7 @@ class Ship(DisplayObject):
 
         if self.screen_coords:
             # Ships have two actors dependant on distance. This switches them
-            # seemlessly at 1750m
+            # seamlessly at 1750m
             if "Near" in self.name and new_distance > 1750:
                 self.group.visible = False
             elif "Near" not in self.name and new_distance < 1750:
@@ -150,5 +151,5 @@ class Ship(DisplayObject):
             self.text_render.text = self.text_str
 
         else:
-            # if it isnt on our screen, set it to invisible to save resources
+            # if it isn't on our screen, set it to invisible to save resources
             self.group.visible = False

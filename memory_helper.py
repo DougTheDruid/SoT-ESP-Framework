@@ -8,7 +8,7 @@ import ctypes
 import ctypes.wintypes
 import struct
 import psutil
-
+import win32api
 
 MAX_PATH = 260
 MAX_MODULE_NAME32 = 255
@@ -107,10 +107,17 @@ class ReadMemory:
         """
         Using the global ctype constructors, determine the base address
         of the process ID we are working with. In something like cheat engine,
-        this is the equivilent of the "SoTGame.exe" portions in
+        this is the equivalent of the "SoTGame.exe" portions in
         "SoTGame.exe"+0x15298A
         :return: the base memory address for the process
         """
+        # info = ctypes.windll.kernel32.GetModuleHandleA("SoTGame.exe")
+        win32api.Enum
+        print(ctypes.windll.kernel32.GetModuleHandleA(self.exe))
+        # win32api.GetModuleHandle()
+        # handle = win32api.GetModuleHandle(None)
+        # return handle
+        # print(handle)
         h_module_snap = ctypes.c_void_p(0)
         me_32 = MODULEENTRY32()
         me_32.dwSize = ctypes.sizeof(MODULEENTRY32)  # pylint: disable=invalid-name, attribute-defined-outside-init)
@@ -138,7 +145,7 @@ class ReadMemory:
             raise TypeError('Address must be int: {}'.format(address))
         buff = ctypes.create_string_buffer(byte)
         bytes_read = ctypes.c_size_t()
-        ctypes.windll.kernel32.SetLastError()
+        # ctypes.windll.kernel32.SetLastError()
         ReadProcessMemory(self.handle, ctypes.c_void_p(address),
                           ctypes.byref(buff), byte, ctypes.byref(bytes_read))
         raw = buff.raw
@@ -188,7 +195,7 @@ class ReadMemory:
     def read_string(self, address: int, byte: int = 50) -> int:
         """
         Read a number of bytes and convert that to a string up until the first
-        occurance of no data. Useful in getting raw names
+        occurrence of no data. Useful in getting raw names
         :param address: address at which to read a number of bytes
         :param byte: count of bytes to read, optional as we assume a 50
         byte name
@@ -201,7 +208,7 @@ class ReadMemory:
     def read_name_string(self, address: int, byte: int = 32) -> str:
         """
         Used to convert bytes that represent a players name to a string. Player
-        names always are seperated by at least 3 null characters
+        names always are separated by at least 3 null characters
         :param address: address at which to read a number of bytes
         :param byte: count of bytes to read, optional as we assume a 32
         byte name

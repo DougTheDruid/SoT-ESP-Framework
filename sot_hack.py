@@ -95,7 +95,7 @@ class SoTMemoryReader:
     def update_my_coords(self):
         """
         Function to update the players coordinates and camera information
-        storing that new info back into the my_coords field. Necesarry as
+        storing that new info back into the my_coords field. Necessary as
         we dont always run a full scan and we need a way to update ourselves
         """
         manager = self.rm.read_ptr(
@@ -117,7 +117,7 @@ class SoTMemoryReader:
         :param bool camera: If you want the camera info as well
         :param bool fov: If you want the FoV info as well
         :rtype: dict
-        :return: A dictionary contianing the coordinate information
+        :return: A dictionary containing the coordinate information
         for a specific actor
         """
         if fov:
@@ -156,6 +156,7 @@ class SoTMemoryReader:
         and store it in a class variable (display_objects).
         Then our main game loop updates those objects
         """
+        # On a full run, start by cleaning up all the existing text renders
         for display_ob in self.display_objects:
             try:
                 display_ob.text_render.delete()
@@ -176,6 +177,9 @@ class SoTMemoryReader:
             actor_id = self.rm.read_int(
                 actor_address + OFFSETS.get('AActor.actorId')
             )
+
+            # We save a mapping of actor id to actor name for the sake of
+            # saving memory calls
             if actor_id not in self.actor_name_map and actor_id != 0:
                 try:
                     raw_name = self._read_name(actor_id)
@@ -220,7 +224,5 @@ class SoTMemoryReader:
         )
         player_name = self.rm.read_name_string(player_name_location)
 
-        if player_name \
-                and player_name not in self.server_players \
-                and player_name.replace(" ", "-") not in self.server_players:
+        if player_name and player_name not in self.server_players:
             self.server_players.append(player_name)

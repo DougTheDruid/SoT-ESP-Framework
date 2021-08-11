@@ -8,7 +8,7 @@ import ctypes
 import ctypes.wintypes
 import struct
 import psutil
-import win32api
+
 
 MAX_PATH = 260
 MAX_MODULE_NAME32 = 255
@@ -111,13 +111,6 @@ class ReadMemory:
         "SoTGame.exe"+0x15298A
         :return: the base memory address for the process
         """
-        # info = ctypes.windll.kernel32.GetModuleHandleA("SoTGame.exe")
-        win32api.Enum
-        print(ctypes.windll.kernel32.GetModuleHandleA(self.exe))
-        # win32api.GetModuleHandle()
-        # handle = win32api.GetModuleHandle(None)
-        # return handle
-        # print(handle)
         h_module_snap = ctypes.c_void_p(0)
         me_32 = MODULEENTRY32()
         me_32.dwSize = ctypes.sizeof(MODULEENTRY32)  # pylint: disable=invalid-name, attribute-defined-outside-init)

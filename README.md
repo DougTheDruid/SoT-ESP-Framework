@@ -41,8 +41,8 @@ regardless of size. You MAY need to make some minor changes in the code to accom
 (helpers.py, top of file). I personally run all of my Python from PyCharm, and start/stop the code execution 
 through the built-in Run and Stop functionality. You may choose to implement proper "closing" functionality using pyglet. 
 
-***As a test of faith, to get this code fully-functional you must modify one line of code and remove another entirely.
-This is a VERY small countermeasure to ensure this framework is actually used as intended.***
+***As a test of faith, to get this code fully-functional you must modify one line of code, remove another entirely, 
+and uncomment a third line. This is a VERY small countermeasure to ensure this framework is actually used as intended.***
 
 ### How to execute
 At the time of writing, the script is built for a version of SoT with ~6 weeks left in Season 3 and given you have the
@@ -96,12 +96,6 @@ Largely speaking, if you want to see the flow of the code, start at `main.py` an
 and other files.
 
 *This is an early build using Pyglet, I am still working to optimize some code*
-
-### Pyglet Todo
-   1. Currently, we are replacing spaces in play names with `-`'s, this has to do with the multiline functionality
-      specified for `player_list` creation in `main.py`. Can you make a specific doc format to get around this weirdness?
-   2. Gummy set the window attributes to LWA_Alpha vs ColorKey, then set the DirectX alpha flags to do the transparency. 
-      Can something similar with this & OpenGL (which pyglet uses)?
 
 ### Structs
 Instead of rebuilding structures similarly to how you would in C or C++, I utilize something fairly frequently in my

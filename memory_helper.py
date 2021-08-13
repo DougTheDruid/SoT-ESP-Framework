@@ -42,12 +42,19 @@ CreateToolhelp32Snapshot.reltype = ctypes.c_long
 CreateToolhelp32Snapshot.argtypes = [ctypes.c_ulong, ctypes.c_ulong]
 
 Module32First = ctypes.windll.kernel32.Module32First
-Module32First.argtypes = [ctypes.c_void_p, ctypes.POINTER(MODULEENTRY32) ]
+Module32First.argtypes = [ctypes.c_void_p, ctypes.POINTER(MODULEENTRY32)]
 Module32First.rettype = ctypes.c_int
+
+Module32Next = ctypes. windll.kernel32.Module32Next
+Module32Next.argtypes = [ctypes. c_void_p, ctypes.POINTER(MODULEENTRY32)]
+Module32Next.rettype = ctypes.c_int
 
 CloseHandle = ctypes.windll.kernel32.CloseHandle
 CloseHandle.argtypes = [ctypes.c_void_p]
 CloseHandle.rettype = ctypes.c_int
+
+GetLastError = ctypes.windll.kernel32.GetLastError
+GetLastError.rettype = ctypes.c_long
 
 # ReadProcessMemory is also a cytpe, but will perform the actual memory reading
 ReadProcessMemory = ctypes.WinDLL(
@@ -108,25 +115,29 @@ class ReadMemory:
         Using the global ctype constructors, determine the base address
         of the process ID we are working with. In something like cheat engine,
         this is the equivalent of the "SoTGame.exe" portions in
-        "SoTGame.exe"+0x15298A
+        "SoTGame.exe"+0x15298A. Creates a snapshot of the process, then begins
+        to iterate over the modules (.exe/.dlls) until we match the provided
+        exe_name
         :return: the base memory address for the process
         """
-        h_module_snap = ctypes.c_void_p(0)
-        me_32 = MODULEENTRY32()
-        me_32.dwSize = ctypes.sizeof(MODULEENTRY32)  # pylint: disable=invalid-name, attribute-defined-outside-init)
-        h_module_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE |
-                                                 TH32CS_SNAPMODULE32, self.pid)
-        ret = Module32First(h_module_snap, ctypes.byref(me_32))
+        hModuleSnap = ctypes.c_void_p(0)
+        me32 = MODULEENTRY32()
+        me32.dwSize = ctypes.sizeof(MODULEENTRY32)
+        hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, self.pid)
 
-        if ret == 0:
-            print('Error on Thread32First')
+        mod = Module32First(hModuleSnap, ctypes.pointer(me32))
+
+        if not mod:
+            print("Error getting {} base address".format(self.exe),
+                  GetLastError())
+            CloseHandle(hModuleSnap)
             return False
-
-        ret = Module32First(h_module_snap, ctypes.pointer(me_32))
-        if ret == 0:
-            print('ListProcessModules() Error on Module32First')
-
-        return me_32.modBaseAddr
+        while mod:
+            if me32.szModule.decode() == self.exe:
+                CloseHandle(hModuleSnap)
+                return me32.modBaseAddr
+            else:
+                mod = Module32Next(hModuleSnap, ctypes.pointer(me32))
 
     def read_bytes(self, address: int, byte: int) -> bytes:
         """

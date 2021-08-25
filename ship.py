@@ -120,6 +120,8 @@ class Ship(DisplayObject):
         """
         if self._get_actor_id(self.address) != self.actor_id:
             self.to_delete = True
+            self.icon.delete()
+            self.text_render.delete()
             return
 
         self.my_coords = my_coords

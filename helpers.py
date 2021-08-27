@@ -100,7 +100,7 @@ def object_to_screen(player: dict, actor: dict) -> tuple:
         if y > SOT_WINDOW_H or y < 0:
             return False
 
-        return x, SOT_WINDOW_H - y
+        return int(x), int(SOT_WINDOW_H - y)
     except Exception as e:
         print(f"Couldnt gen screen coordinates for {actor}: {e}")
 

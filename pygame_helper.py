@@ -42,7 +42,7 @@ class PyGameHelper:
                                               pygame.NOFRAME)
 
         # Forces the window to be "on top", sets the layer to be transparent
-        # using the fucsia color, and makes it so it cannot move.
+        # using the fuchsia color, and makes it so it cannot move.
         hwnd = pygame.display.get_wm_info()["window"]
         win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE,
                        win32gui.GetWindowLong(hwnd, win32con.GWL_EXSTYLE) |

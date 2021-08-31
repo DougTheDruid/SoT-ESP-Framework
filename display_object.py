@@ -18,7 +18,7 @@ class DisplayObject:
 
     def __init__(self, memory_reader: ReadMemory):
         """
-        Parent class to objects like Ship's. Helpful as the methods found here
+        Parent class to objects such as 'Ship' objects. Helpful as the methods found here
         would be considered "common" and reduces redundant code.
         :param memory_reader: The SoT MemoryHelper object we are utilizing to
         read memory data from the game

@@ -144,8 +144,8 @@ def calculate_distance(obj_to: dict, obj_from: dict,
     Determines the distances From one object To another in meters, rounding
     to whatever degree of precision you request
 
-    :param obj_to: A coordinate dict for the object we are going "to"
-    :param obj_from: A coordinate dict for the object we are going "from"
+    :param obj_to: A coordinate dict for the destination object
+    :param obj_from: A coordinate dict for the origin object
     :param round_to: How precise to be in the return
     :return: the distance in meters from obj_from to obj_to
     """

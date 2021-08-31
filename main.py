@@ -25,7 +25,7 @@ if __name__ == '__main__':
     if not DEBUG:
         pgh = PyGameHelper()
 
-    # Our pygame loop that is responsible for actually display object if we
+    # Our pygame loop that is responsible for actually displaying objects if we
     # are in debug mode, doesnt push graphics to pygame, just reads actor data
     while not done:
         smr.read_actors()

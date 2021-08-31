@@ -60,7 +60,7 @@ ReadProcessMemory.restype = ctypes.wintypes.BOOL
 
 class ReadMemory:
     """
-    Class responsible for aiding is memory reading
+    Class responsible for aiding in memory reading
     """
     def __init__(self, exe_name: str):
         """
@@ -106,7 +106,7 @@ class ReadMemory:
         """
         Using the global ctype constructors, determine the base address
         of the process ID we are working with. In something like cheat engine,
-        this is the equivilent of the "SoTGame.exe" portions in
+        this is the equivalent of the "SoTGame.exe" portions in
         "SoTGame.exe"+0x15298A
         :return: the base memory address for the process
         """
@@ -204,7 +204,7 @@ class ReadMemory:
     def read_name_string(self, address: int, byte: int = 32) -> int:
         """
         Used to convert bytes that represent a players name to a string. Player
-        names always are seperated by at least 3 null characters
+        names always are separated by at least 3 null characters
         :param address: address at which to read a number of bytes
         :param byte: count of bytes to read, optional as we assume a 32
         byte name

@@ -139,6 +139,21 @@ class ReadMemory:
             else:
                 mod = Module32Next(hModuleSnap, ctypes.pointer(me32))
 
+    def check_process_is_active(self, _):
+        """
+        Check if the game is still running and if not, exit
+        """
+        if not self._process_is_active():
+            print(f'{self.exe} has quit. Exiting.')
+            exit()
+
+    def _process_is_active(self) -> bool:
+        """
+        Check if the PID of the game exists
+        :return: value indicating the game process is alive or not
+        """
+        return psutil.pid_exists(self.pid)
+
     def read_bytes(self, address: int, byte: int) -> bytes:
         """
         Read a number of bytes at a specific address

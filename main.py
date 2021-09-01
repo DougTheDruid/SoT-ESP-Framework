@@ -165,6 +165,9 @@ if __name__ == '__main__':
     # We schedule an "update all" to scan all actors every 5seconds
     pyglet.clock.schedule_interval(update_all, 5)
 
+    # We schedule a check to make sure the game is still running every 3 seconds
+    pyglet.clock.schedule_interval(smr.rm.check_process_is_active, 3)
+
     # We schedule an basic graphics load which is responsible for drawing
     # our interesting information to the screen. Max 144fps, can set unlimited
     # pyglet.clock.schedule(load_graphics)

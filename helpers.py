@@ -11,7 +11,7 @@ from pyglet.graphics import Batch
 # True=Enabled & False=Disabled for each of the config items
 CONFIG = {
     "WORLD_PLAYERS_ENABLED": True,
-    "SHIPS_ENABLED": False,
+    "SHIPS_ENABLED": True
 }
 
 # Offset values for the text labels from the circles we draw to the screen

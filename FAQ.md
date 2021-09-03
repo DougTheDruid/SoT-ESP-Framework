@@ -25,8 +25,9 @@ your pyglet window also scaling:
 
 ### What do I do first?
 First, you should get the hack to a state where all the features mentioned in the readme are working as expected.
-Once you are familiar with the hack and how the code operates, I would take a look through the below list, pick one small
-component to implement, and give it your best shot. Ask for help on Discord
+After that I recommend reading through: https://github.com/DougTheDruid/SoT-Python-Offset-Finder#how-to-search-the-sdk to 
+gain some additional understanding on how to work with the SDK. You may then take a look through the below list, pick one small
+component to implement, and give it your best shot. Ask for help on Discord.
 
 ### Do you have a list of things I can do with this hack?
 Things I (and others) have implemented utilizing this framework:

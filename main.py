@@ -6,13 +6,6 @@ For community support, please contact me on Discord: DougTheDruid#2784
 
 import pyglet
 from pyglet.text import Label
-from pyglet.libs.win32 import _gdi32, _dwmapi
-from pyglet.libs.win32.types import ctypes, DWORD, BOOL, HRGN
-from pyglet.gl import Config, glFlush, glEnable, glBlendFunc, GL_BLEND, \
-    GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA
-import win32api
-import win32con
-import win32gui
 from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch
 from sot_hack import SoTMemoryReader
 
@@ -21,64 +14,6 @@ DEBUG = False
 
 # Pyglet clock used to track time via FPS
 clock = pyglet.clock.Clock()
-
-# Magic numbers of enabling BlurBehind functionality
-DWM_BB_ENABLE = 0x00000001
-DWM_BB_BLURREGION = 0x00000002
-
-
-class DWM_BLURBEHIND(ctypes.Structure):  # pylint: disable=invalid-name
-    """
-    Replica class of windows DWM_BLURBEHIND
-    """
-    _fields_ = [
-        ("dwFlags", DWORD),
-        ("fEnable", BOOL),
-        ("hRgnBlur", HRGN),
-        ("fTransitionOnMaximized", DWORD),
-    ]
-
-
-def update_transparency():
-    """
-    Method to enable BlurBehind in a specific region (all of our window), we
-    can then use BlurBehind as our Alpha layer
-    """
-    # Region of all of our window
-    region = _gdi32.CreateRectRgn(0, 0, -1, -1)
-
-    # Create out BlurBehind c-type from follow the struct above & set variables
-    bb = DWM_BLURBEHIND()
-    bb.dwFlags = DWM_BB_ENABLE | DWM_BB_BLURREGION  # pylint: disable=attribute-defined-outside-init, invalid-name
-    bb.hRgnBlur = region  # pylint: disable=attribute-defined-outside-init, invalid-name
-    bb.fEnable = True  # pylint: disable=attribute-defined-outside-init, invalid-name
-
-    # Enable the BlurBehind for our given window handle
-    _dwmapi.DwmEnableBlurBehindWindow(hwnd, ctypes.byref(bb))
-
-    # Delete the region because its no longer needed after setting it up
-    _gdi32.DeleteObject(region)
-
-
-def set_window_info():
-    """
-    Sets windows attributes for a global hwnd (window ID). Responsible
-    for transparency, topmost, and covering our SoT window.
-    """
-    # Setting attributes for our window to support transparency and
-    # click-through
-    win32gui.SetWindowLong(hwnd, win32con.GWL_EXSTYLE,
-                           win32con.WS_EX_TRANSPARENT |
-                           win32con.WS_EX_LAYERED |
-                           win32con.WS_EX_TOPMOST)
-
-    # Move the window to cover SoT & keep it on top always
-    win32gui.SetWindowPos(hwnd, win32con.HWND_TOPMOST, SOT_WINDOW[0],
-                          SOT_WINDOW[1], 0, 0, win32con.SWP_NOSIZE)
-
-    # Set (0, 0, 0) to our alpha color. Not the best, but works for now
-    win32gui.SetLayeredWindowAttributes(hwnd, win32api.RGB(0, 0, 0), 254,
-                                        win32con.LWA_ALPHA)
 
 
 def update_all(_):
@@ -128,18 +63,16 @@ if __name__ == '__main__':
         while True:
             smr.read_actors()
 
-    # Create a window config with an alpha size to 8 bytes, allows transparency
-    # Interesting additional config options: double_buffer=False, vsync=False
-    config = Config(alpha_size=8)
-    # Create a borderless window with Pyglet at the same size as our SoT Window
+    # You may want to add a custom config per the pyglet docs to disable vsync,
+    # or other options: https://pyglet.readthedocs.io/en/latest/programming_guide/context.html#opengl-configuration-options
+
+    # Create an overlay window with Pyglet at the same size as our SoT Window
     window = pyglet.window.Window(SOT_WINDOW_W, SOT_WINDOW_H,
-                                  vsync=False, style='borderless',
-                                  config=config)
+                                  vsync=False, style='overlay')
     hwnd = window._hwnd  # pylint: disable=protected-access
 
-    # Update the window we created to be transparent, have click-through
-    # capabilities, etc.
-    set_window_info()
+    # Move our window to the same location that our SoT Window is at
+    window.set_location(SOT_WINDOW[0], SOT_WINDOW[1])
 
     @window.event
     def on_draw():
@@ -158,10 +91,6 @@ if __name__ == '__main__':
         main_batch.draw()
         fps_display.draw()
 
-        # Make the background transparent and flush openGL
-        update_transparency()
-        glFlush()
-
     # We schedule an "update all" to scan all actors every 5seconds
     pyglet.clock.schedule_interval(update_all, 5)
 
@@ -176,10 +105,6 @@ if __name__ == '__main__':
     # Adds an FPS counter at the bottom left corner of our pyglet window
     # Note: May not translate to actual FPS, but rather FPS of the program
     fps_display = pyglet.window.FPSDisplay(window)
-
-    # Enable blending & background alpha functionality
-    glEnable(GL_BLEND)
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA)
 
     # Our base player_count label in the top-right of our screen. Updated
     # in on_draw()

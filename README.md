@@ -24,10 +24,15 @@ bit as well and try to maintain a "documentation-focused" mindset as I have. I r
 framework for any commercial purposes (selling "your" version which is based on this framework) without contacting me and
 receiving my approval prior.
 
-### What version(s) of the game does this work with?
+### Does this work with both Steam & Microsoft versions?
 This hack will work with both versions of the game (Microsoft & Steam), and by default is configured to work for the 
 Microsoft version. If you are using the Steam version, you will need to change the appropriate variable at the top
 of SoTHack.py
+
+### What SoT Version is the framework build for?
+Currently, the framework is build for SoT 2.2.1.1. I attempt to update ASAP, in the event it is not
+up-to-date, you will need to modify the global offsets (per "How to update for new SoT Versions"), 
+and possibly update your offsets. See "Other Offerings"
 
 ### Why Python?!
 Python is at its more user-friendly version of C. Hypothetically, we can perform any C action using python,
@@ -122,7 +127,11 @@ If you are interested in helping maintain this code base, first off, thank you! 
 3. Keep the framework a framework, do not add new features outside those listed in the "TODO" section
 4. Create "Issues" if something strikes you as incorrect or needing improvement. Also consider looking at issues for
 opportunities to contribute
-   
+
+### Other Offerings
+https://github.com/DougTheDruid/SoT-Python-Offset-Finder - An attempt for me to keep an up-to-date SDK avaliable to the community, and a python file to automatically generate an offsets file based on your configuration
+https://github.com/DougTheDruid/SoT-Actor-Names - A manually-created list that maps actors raw names to more common names
+
 ### TODO
 - Implement an "auto-scanning" function for finding the base (uWorld, gName, gObject) offsets
 - (Possibly) Recreating objects in their entirety in accordance with the SDK and compare to current speed

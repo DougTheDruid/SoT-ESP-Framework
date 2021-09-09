@@ -38,9 +38,9 @@ ships = {
     "BP_AILargeShipNetProxy_C": {
         "Name": "Ghost Galleon",
     },
-    # "BP_AggressiveGhostShip_C": {
-    #     "Name": "Flameheart Galleon",
-    # },  # Only works sometimes?
+    "BP_AggressiveGhostShip_C": {
+        "Name": "Flameheart Galleon",
+     },  
 }
 
 ship_keys = set(ships.keys())

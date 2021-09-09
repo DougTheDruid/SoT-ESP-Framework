@@ -28,7 +28,7 @@ This hack will work with both versions of the game (Microsoft & Steam), and by d
 Microsoft version. If you are using the Steam version, you will need to change the appropriate variable at the top
 of SoTHack.py
 
-### Why Python?!
+### Why Python?!?
 Python is at its root a more user-friendly (IMO) version of C. Hypothetically, we can perform any C action using python,
 but make it more readible and beginner-friendly. I am also much more comfortable developing in Python and saw this as
 an opportunity to challenge myself.

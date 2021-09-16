@@ -57,18 +57,20 @@ if __name__ == '__main__':
     smr = SoTMemoryReader()
     smr.read_actors()
 
-    # Custom Debug mode for using a literally python interpreter debugger
-    # to validate our fields.
+    # Custom Debug mode for using a literal python interpreter debugger
+    # to validate our fields. Does not generate a GUI.
     if DEBUG:
         while True:
             smr.read_actors()
 
-    # You may want to add a custom config per the pyglet docs to disable vsync,
-    # or other options: https://pyglet.readthedocs.io/en/latest/programming_guide/context.html#opengl-configuration-options
+    # You may want to add a custom config per the pyglet docs to disable vsync
+    # or other options: https://tinyurl.com/45tcx6eu
 
     # Create an overlay window with Pyglet at the same size as our SoT Window
     window = pyglet.window.Window(SOT_WINDOW_W, SOT_WINDOW_H,
-                                  vsync=False, style='overlay')
+                                  vsync=False, style='overlay',
+                                  caption="DougTheDruid's ESP Framework")
+    # window.set_caption('A different caption')
     hwnd = window._hwnd  # pylint: disable=protected-access
 
     # Move our window to the same location that our SoT Window is at

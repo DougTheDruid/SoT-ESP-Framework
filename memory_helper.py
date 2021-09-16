@@ -68,7 +68,7 @@ ReadProcessMemory.restype = ctypes.wintypes.BOOL
 
 class ReadMemory:
     """
-    Class responsible for aiding is memory reading
+    Class responsible for aiding in memory reading
     """
     def __init__(self, exe_name: str):
         """
@@ -120,24 +120,24 @@ class ReadMemory:
         exe_name
         :return: the base memory address for the process
         """
-        hModuleSnap = ctypes.c_void_p(0)
+        h_module_snap = ctypes.c_void_p(0)
         me32 = MODULEENTRY32()
-        me32.dwSize = ctypes.sizeof(MODULEENTRY32)
-        hModuleSnap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, self.pid)
+        me32.dwSize = ctypes.sizeof(MODULEENTRY32)  # pylint: disable=invalid-name, attribute-defined-outside-init
+        h_module_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, self.pid)
 
-        mod = Module32First(hModuleSnap, ctypes.pointer(me32))
+        mod = Module32First(h_module_snap, ctypes.pointer(me32))
 
         if not mod:
             print("Error getting {} base address".format(self.exe),
                   GetLastError())
-            CloseHandle(hModuleSnap)
+            CloseHandle(h_module_snap)
             return False
         while mod:
             if me32.szModule.decode() == self.exe:
-                CloseHandle(hModuleSnap)
+                CloseHandle(h_module_snap)
                 return me32.modBaseAddr
-            else:
-                mod = Module32Next(hModuleSnap, ctypes.pointer(me32))
+
+            mod = Module32Next(h_module_snap, ctypes.pointer(me32))
 
     def check_process_is_active(self, _):
         """
@@ -145,7 +145,7 @@ class ReadMemory:
         """
         if not self._process_is_active():
             print(f'{self.exe} has quit. Exiting.')
-            exit()
+            exit(0)
 
     def _process_is_active(self) -> bool:
         """

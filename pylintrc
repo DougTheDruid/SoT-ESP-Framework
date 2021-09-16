@@ -57,7 +57,8 @@ disable=broad-except,
         global-statement,
         logging-fstring-interpolation,
         too-many-instance-attributes,
-        bare-except
+        bare-except,
+        consider-using-sys-exit
 
 
 [DESIGN]

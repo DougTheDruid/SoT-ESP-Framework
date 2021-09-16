@@ -8,7 +8,7 @@ import struct
 from memory_helper import ReadMemory
 from mapping import ship_keys
 from helpers import OFFSETS, CONFIG
-from ship import Ship
+from Modules.ship import Ship
 
 
 STEAM_VERSION = False

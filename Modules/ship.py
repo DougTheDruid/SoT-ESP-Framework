@@ -9,9 +9,10 @@ from pyglet.graphics import Group
 from helpers import calculate_distance, object_to_screen, main_batch, \
      TEXT_OFFSET_X, TEXT_OFFSET_Y
 from mapping import ships
-from display_object import DisplayObject
+from Modules.display_object import DisplayObject
 
 SHIP_COLOR = (100, 0, 0)  # The color we want the indicator circle to be
+CIRCLE_SIZE = 10  # The size of the indicator circle we want
 COORD_OFFSET = 0x100
 
 
@@ -73,8 +74,9 @@ class Ship(DisplayObject):
         Assigns the object to our batch & group
         """
         if self.screen_coords:
-            return Circle(self.screen_coords[0], self.screen_coords[1], 10,
-                          color=self.color, batch=main_batch, group=self.group)
+            return Circle(self.screen_coords[0], self.screen_coords[1],
+                          CIRCLE_SIZE, color=self.color, batch=main_batch,
+                          group=self.group)
 
         return Circle(0, 0, 10, color=self.color, batch=main_batch,
                       group=self.group)

@@ -7,6 +7,7 @@ import math
 import json
 import win32gui
 from pyglet.graphics import Batch
+from pyglet.text import Label
 
 # True=Enabled & False=Disabled for each of the config items
 CONFIG = {
@@ -22,8 +23,8 @@ TEXT_OFFSET_Y = -5
 # data to the screen. May need to manually override if wonky
 window = win32gui.FindWindow(None, "Sea of Thieves")
 SOT_WINDOW = win32gui.GetWindowRect(window)  # (x1, y1, x2, y2)
-SOT_WINDOW_H = SOT_WINDOW[3]-SOT_WINDOW[1]
-SOT_WINDOW_W = SOT_WINDOW[2]-SOT_WINDOW[0]
+SOT_WINDOW_H = SOT_WINDOW[3] - SOT_WINDOW[1]
+SOT_WINDOW_W = SOT_WINDOW[2] - SOT_WINDOW[0]
 
 # Creates a pyglet "Batch" that we draw our information to. Effectively serves
 # as a piece of paper, so we save render cost because its 2D
@@ -150,11 +151,16 @@ def calculate_distance(obj_to: dict, obj_from: dict) -> int:
 
     Note: Can convert the int() to a round() if you want more precision
 
-    :param obj_to: A coordinate dict for the object we are going "to"
-    :param obj_from: A coordinate dict for the object we are going "from"
+    :param obj_to: A coordinate dict for the destination object
+    :param obj_from: A coordinate dict for the origin object
     :rtype: int
     :return: the distance in meters from obj_from to obj_to
     """
-    return int(math.sqrt((obj_to.get("x") - obj_from.get("x"))**2 +
-                         (obj_to.get("y") - obj_from.get("y"))**2 +
-                         (obj_to.get("z") - obj_from.get("z"))**2))
+    return int(math.sqrt((obj_to.get("x") - obj_from.get("x")) ** 2 +
+                         (obj_to.get("y") - obj_from.get("y")) ** 2 +
+                         (obj_to.get("z") - obj_from.get("z")) ** 2))
+
+
+brand_label = Label("DougTheDruid's ESP Framework",
+                    x=SOT_WINDOW_W - 537, y=10, font_size=24, bold=True,
+                    color=(127, 127, 127, 65), batch=main_batch)

@@ -100,7 +100,16 @@ use that object to build display information for Pyglet to utilize.
 Largely speaking, if you want to see the flow of the code, start at `main.py` and work your way down into the objects
 and other files.
 
-*This is an early build using Pyglet, I am still working to optimize some code*
+### Modules
+Generally speaking, in my personal version of this framework, I create a separate "Module" to plug into
+my hack similarly to how a `Ship` object is created in the framework. This allows me to have all unique logic to parse
+data for a given entity type in one location. I recommend using this strategy as it helps keep your `sot_hack.py` file clean, but
+also allows you to copy/paste another similar module to use as a starting point when adding new entities.
+
+When using another module as a starting point, you are required to include an `update` method which is called in our
+`main.py` to ensure we keep our entity information up-to-date in between scans of the entire actor list. There is
+a number of important logic in the update method for `ship.py` to ensure the entities change visibility correctly & are deleted
+correctly if something changes unexpectedly.
 
 ### Structs
 Instead of rebuilding structures similarly to how you would in C or C++, I utilize something fairly frequently in my
@@ -134,4 +143,27 @@ https://github.com/DougTheDruid/SoT-Actor-Names - A manually-created list that m
 
 ### TODO
 - Implement an "auto-scanning" function for finding the base (uWorld, gName, gObject) offsets
-- (Possibly) Recreating objects in their entirety in accordance with the SDK and compare to current speed
+- Automatically update the pyglet window location every X seconds to match SoT window location
+- Handle weird issue where pyglet doesn't match the actual SoTWindow. Potential fix in `main.py`:
+   ```python
+    window = pyglet.window.Window(SOT_WINDOW_W-20, SOT_WINDOW_H-10,
+                                  vsync=False, style='overlay',
+                                  caption="DougTheDruid's ESP Framework")
+    # window.set_caption('A different caption')
+    hwnd = window._hwnd  # pylint: disable=protected-access
+
+    # Move our window to the same location that our SoT Window is at
+    window.set_location(SOT_WINDOW[0]+8, SOT_WINDOW[1])
+   ```
+- Update to calculate actual FOV correctly:
+  Suspect its an issue with the "world to screen" method. changing fov calculation to 
+   ```
+   fov = player.get("fov")
+   if fov == 20:
+       fov = 19
+   else:
+       fov *= 1.03
+   ```
+   This fixes the issue with left/right for me. Can also modify `screen_center_y` to be = (SOT_WINDOW_H+30) / 2, 
+   which might help with height issues if you have a title/task bar. If you also have issues with tracking, 
+   but this doesn't fix it right away, I would recommend starting with this and modifying slightly. 

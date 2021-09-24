@@ -18,14 +18,14 @@ GOBJECT_PATTERN = "89 0D ? ? ? ? 48 8B DF 48 89 5C 24"
 GNAME_PATTERN = "48 8B 1D ? ? ? ? 48 85 DB 75 ? B9 08 04 00 00"
 
 if STEAM_VERSION:
-    UWORLDBASE = 0x704A8B
-    GOBJECTBASE = 0x16953A4
-    GNAMEBASE = 0x159EA5A
+    UWORLDBASE = 0x70B4AB
+    GOBJECTBASE = 0x16A0C44
+    GNAMEBASE = 0x15A9EBA
 
 else:
-    UWORLDBASE = 0x70415B
-    GOBJECTBASE = 0x164B524
-    GNAMEBASE = 0x1560088
+    UWORLDBASE = 0x709BEB
+    GOBJECTBASE = 0x16559D4
+    GNAMEBASE = 0x156A0F8
 
 
 class SoTMemoryReader:
@@ -55,8 +55,8 @@ class SoTMemoryReader:
         self.world_address = self.rm.read_ptr(u_world)
 
         g_name_offset = self.rm.read_ulong(base_address + GNAMEBASE + 3)
-        self.g_name = self.rm.read_ptr(base_address + GNAMEBASE
-                                       + g_name_offset + 7)
+        g_name = base_address + GNAMEBASE + g_name_offset + 7
+        self.g_name = self.rm.read_ptr(g_name)
 
         g_objects_offset = self.rm.read_ulong(base_address + GOBJECTBASE + 2)
         g_objects = base_address + GOBJECTBASE + g_objects_offset + 22

@@ -12,6 +12,7 @@ ships = {
     "BP_SmallShipNetProxy_C": {
         "Name": "Sloop",
     },
+
     "BP_MediumShipTemplate_C": {
         "Name": "Brig (Near)",
     },
@@ -40,7 +41,7 @@ ships = {
     },
     # "BP_AggressiveGhostShip_C": {
     #     "Name": "Flameheart Galleon",
-    # },  # Only works sometimes?
+    # },  # To implement, must modify ship.py's update method for visibility
 }
 
 ship_keys = set(ships.keys())

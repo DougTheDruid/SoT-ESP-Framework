@@ -3,7 +3,6 @@
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 """
 
-
 from string import printable
 import ctypes
 import ctypes.wintypes
@@ -43,15 +42,24 @@ CreateToolhelp32Snapshot.reltype = ctypes.c_long
 CreateToolhelp32Snapshot.argtypes = [ctypes.c_ulong, ctypes.c_ulong]
 
 Module32First = ctypes.windll.kernel32.Module32First
-Module32First.argtypes = [ctypes.c_void_p, ctypes.POINTER(MODULEENTRY32) ]
+Module32First.argtypes = [ctypes.c_void_p, ctypes.POINTER(MODULEENTRY32)]
 Module32First.rettype = ctypes.c_int
+
+Module32Next = ctypes. windll.kernel32.Module32Next
+Module32Next.argtypes = [ctypes. c_void_p, ctypes.POINTER(MODULEENTRY32)]
+Module32Next.rettype = ctypes.c_int
 
 CloseHandle = ctypes.windll.kernel32.CloseHandle
 CloseHandle.argtypes = [ctypes.c_void_p]
 CloseHandle.rettype = ctypes.c_int
 
+GetLastError = ctypes.windll.kernel32.GetLastError
+GetLastError.rettype = ctypes.c_long
+
 # ReadProcessMemory is also a cytpe, but will perform the actual memory reading
-ReadProcessMemory = ctypes.WinDLL('kernel32', use_last_error=True).ReadProcessMemory
+ReadProcessMemory = ctypes.WinDLL(
+    'kernel32', use_last_error=True
+).ReadProcessMemory
 ReadProcessMemory.argtypes = [ctypes.wintypes.HANDLE, ctypes.wintypes.LPCVOID,
                               ctypes.wintypes.LPVOID, ctypes.c_size_t,
                               ctypes.POINTER(ctypes.c_size_t)]
@@ -60,7 +68,7 @@ ReadProcessMemory.restype = ctypes.wintypes.BOOL
 
 class ReadMemory:
     """
-    Class responsible for aiding is memory reading
+    Class responsible for aiding in memory reading
     """
     def __init__(self, exe_name: str):
         """
@@ -106,26 +114,45 @@ class ReadMemory:
         """
         Using the global ctype constructors, determine the base address
         of the process ID we are working with. In something like cheat engine,
-        this is the equivilent of the "SoTGame.exe" portions in
-        "SoTGame.exe"+0x15298A
+        this is the equivalent of the "SoTGame.exe" portions in
+        "SoTGame.exe"+0x15298A. Creates a snapshot of the process, then begins
+        to iterate over the modules (.exe/.dlls) until we match the provided
+        exe_name
         :return: the base memory address for the process
         """
         h_module_snap = ctypes.c_void_p(0)
-        me_32 = MODULEENTRY32()
-        me_32.dwSize = ctypes.sizeof(MODULEENTRY32)  # pylint: disable=invalid-name, attribute-defined-outside-init)
-        h_module_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE |
-                                                 TH32CS_SNAPMODULE32, self.pid)
-        ret = Module32First(h_module_snap, ctypes.byref(me_32))
+        me32 = MODULEENTRY32()
+        me32.dwSize = ctypes.sizeof(MODULEENTRY32)  # pylint: disable=invalid-name, attribute-defined-outside-init
+        h_module_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, self.pid)
 
-        if ret == 0:
-            print('Error on Thread32First')
+        mod = Module32First(h_module_snap, ctypes.pointer(me32))
+
+        if not mod:
+            print("Error getting {} base address".format(self.exe),
+                  GetLastError())
+            CloseHandle(h_module_snap)
             return False
+        while mod:
+            if me32.szModule.decode() == self.exe:
+                CloseHandle(h_module_snap)
+                return me32.modBaseAddr
 
-        ret = Module32First(h_module_snap, ctypes.pointer(me_32))
-        if ret == 0:
-            print('ListProcessModules() Error on Module32First')
+            mod = Module32Next(h_module_snap, ctypes.pointer(me32))
 
-        return me_32.modBaseAddr
+    def check_process_is_active(self, _):
+        """
+        Check if the game is still running and if not, exit
+        """
+        if not self._process_is_active():
+            print(f'{self.exe} has quit. Exiting.')
+            exit(0)
+
+    def _process_is_active(self) -> bool:
+        """
+        Check if the PID of the game exists
+        :return: value indicating the game process is alive or not
+        """
+        return psutil.pid_exists(self.pid)
 
     def read_bytes(self, address: int, byte: int) -> bytes:
         """
@@ -137,13 +164,9 @@ class ReadMemory:
             raise TypeError('Address must be int: {}'.format(address))
         buff = ctypes.create_string_buffer(byte)
         bytes_read = ctypes.c_size_t()
-        ctypes.windll.kernel32.SetLastError(0)
+        # ctypes.windll.kernel32.SetLastError()
         ReadProcessMemory(self.handle, ctypes.c_void_p(address),
                           ctypes.byref(buff), byte, ctypes.byref(bytes_read))
-        error_code = ctypes.windll.kernel32.GetLastError()
-        if error_code:
-            print("Error")
-            ctypes.windll.kernel32.SetLastError(0)
         raw = buff.raw
         return raw
 
@@ -191,7 +214,7 @@ class ReadMemory:
     def read_string(self, address: int, byte: int = 50) -> int:
         """
         Read a number of bytes and convert that to a string up until the first
-        occurance of no data. Useful in getting raw names
+        occurrence of no data. Useful in getting raw names
         :param address: address at which to read a number of bytes
         :param byte: count of bytes to read, optional as we assume a 50
         byte name
@@ -201,10 +224,10 @@ class ReadMemory:
         i = buff.find(b'\x00')
         return str("".join(map(chr, buff[:i])))
 
-    def read_name_string(self, address: int, byte: int = 32) -> int:
+    def read_name_string(self, address: int, byte: int = 32) -> str:
         """
         Used to convert bytes that represent a players name to a string. Player
-        names always are seperated by at least 3 null characters
+        names always are separated by at least 3 null characters
         :param address: address at which to read a number of bytes
         :param byte: count of bytes to read, optional as we assume a 32
         byte name

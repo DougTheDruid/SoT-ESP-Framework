@@ -8,6 +8,7 @@ import pyglet
 from pyglet.text import Label
 from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch
 from sot_hack import SoTMemoryReader
+from pyglet.gl import Config
 
 # See explanation in Main, toggle for a non-graphical debug
 DEBUG = False
@@ -63,12 +64,13 @@ if __name__ == '__main__':
         while True:
             smr.read_actors()
 
-    # You may want to add a custom config per the pyglet docs to disable vsync
-    # or other options: https://tinyurl.com/45tcx6eu
+    # You may want to add/modify this custom config per the pyglet docs to
+    # disable vsync or other options: https://tinyurl.com/45tcx6eu
+    config = Config(double_buffer=True, depth_size=24, alpha_size=8)
 
     # Create an overlay window with Pyglet at the same size as our SoT Window
     window = pyglet.window.Window(SOT_WINDOW_W, SOT_WINDOW_H,
-                                  vsync=False, style='overlay',
+                                  vsync=False, style='overlay', config=config,
                                   caption="DougTheDruid's ESP Framework")
     # window.set_caption('A different caption')
     hwnd = window._hwnd  # pylint: disable=protected-access

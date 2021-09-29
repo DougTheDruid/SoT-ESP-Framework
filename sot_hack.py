@@ -23,9 +23,9 @@ if STEAM_VERSION:
     GNAMEBASE = 0x15A9EBA
 
 else:
-    UWORLDBASE = 0x709BEB
-    GOBJECTBASE = 0x16559D4
-    GNAMEBASE = 0x156A0F8
+    UWORLDBASE = 0x709BFB
+    GOBJECTBASE = 0x1655AB4
+    GNAMEBASE = 0x156A1D8
 
 
 class SoTMemoryReader:
@@ -56,10 +56,12 @@ class SoTMemoryReader:
 
         g_name_offset = self.rm.read_ulong(base_address + GNAMEBASE + 3)
         g_name = base_address + GNAMEBASE + g_name_offset + 7
+        print(f"SoT gName Address: {hex(g_name)}")
         self.g_name = self.rm.read_ptr(g_name)
 
         g_objects_offset = self.rm.read_ulong(base_address + GOBJECTBASE + 2)
         g_objects = base_address + GOBJECTBASE + g_objects_offset + 22
+        print(f"SoT gObject Address: {hex(g_objects)}")
         self.g_objects = self.rm.read_ptr(g_objects)
 
         self.u_level = self.rm.read_ptr(self.world_address +

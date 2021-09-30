@@ -8,6 +8,7 @@ import ctypes
 import ctypes.wintypes
 import struct
 import psutil
+import re
 
 
 MAX_PATH = 260
@@ -65,6 +66,44 @@ ReadProcessMemory.argtypes = [ctypes.wintypes.HANDLE, ctypes.wintypes.LPCVOID,
                               ctypes.POINTER(ctypes.c_size_t)]
 ReadProcessMemory.restype = ctypes.wintypes.BOOL
 
+UWORLDPATTERN = "48 8B 05 ? ? ? ? 48 8B 88 ? ? ? ? 48 85 C9 74 06 48 8B 49 70"
+GOBJECTPATTERN = "89 0D ? ? ? ? 48 8B DF 48 89 5C 24"
+GNAMEPATTERN = "48 8B 1D ? ? ? ? 48 85 DB 75 ? B9 08 04 00 00"
+
+
+def convert_pattern_to_regex(pattern: str) -> bytes:
+    """
+    Taking in our standard "pattern" format, convert that format to one that
+    can be used in a regex search for those bytes
+    :param pattern: the raw string-formatted pattern we want to convert
+    :return: Regex-compatible bytes pattern search
+    """
+    split_bytes = pattern.split(' ')
+    re_pat = bytearray()
+    for byte in split_bytes:
+        if '?' in byte:
+            re_pat.extend(b'.')
+        else:
+            re_pat.extend(re.escape(bytes.fromhex(byte)))
+    return bytes(re_pat)
+
+
+def search_data_for_pattern(data: bytes, raw_pattern: str):
+    """
+    Convert out raw pattern into an address where that pattern exists in
+    memory
+    :param data: A large dump of the early process memory
+    :param raw_pattern: string-formatted pattern we want to identify the
+    location of in memory
+    :return: Return the first location of our pattern in the large data scan we
+    conducted at memory reader init time.
+    """
+    return re.search(
+        convert_pattern_to_regex(raw_pattern),
+        data,
+        re.MULTILINE | re.DOTALL
+    ).start()
+
 
 class ReadMemory:
     """
@@ -85,6 +124,18 @@ class ReadMemory:
         self.pid = self._get_process_id()
         self.handle = self._get_process_handle()
         self.base_address = self._get_base_address()
+
+        # There is definitely a better way to get lots of base memory data, but
+        # this is v1 of automated pattern searching
+        bulk_scan = self.read_bytes(self.base_address, 1000000000)
+        self.u_world_base = search_data_for_pattern(bulk_scan, UWORLDPATTERN)
+        self.g_object_base = search_data_for_pattern(bulk_scan, GOBJECTPATTERN)
+        self.g_name_base = search_data_for_pattern(bulk_scan, GNAMEPATTERN)
+        del bulk_scan
+
+        print(f"Offsets: gObject {hex(self.g_object_base)} | "
+              f"uWorld {hex(self.u_world_base)} "
+              f"| gName {hex(self.g_name_base)}")
 
     def _get_process_id(self):
         """

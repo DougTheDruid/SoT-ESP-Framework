@@ -13,20 +13,6 @@ from Modules.ship import Ship
 
 STEAM_VERSION = False
 
-UWORLD_PATTERN = "48 8B 05 ? ? ? ? 48 8B 88 ? ? ? ? 48 85 C9 74 06 48 8B 49 70"
-GOBJECT_PATTERN = "89 0D ? ? ? ? 48 8B DF 48 89 5C 24"
-GNAME_PATTERN = "48 8B 1D ? ? ? ? 48 85 DB 75 ? B9 08 04 00 00"
-
-if STEAM_VERSION:
-    UWORLDBASE = 0x70B4BB
-    GOBJECTBASE = 0x16A0D04
-    GNAMEBASE = 0x15A9F7A
-
-else:
-    UWORLDBASE = 0x709BFB
-    GOBJECTBASE = 0x1655AB4
-    GNAMEBASE = 0x156A1D8
-
 
 class SoTMemoryReader:
     """
@@ -50,17 +36,23 @@ class SoTMemoryReader:
         self.rm = ReadMemory("SoTGame.exe")
         base_address = self.rm.base_address
 
-        u_world_offset = self.rm.read_ulong(base_address + UWORLDBASE + 3)
-        u_world = base_address + UWORLDBASE + u_world_offset + 7
+        u_world_offset = self.rm.read_ulong(
+            base_address + self.rm.u_world_base + 3
+        )
+        u_world = base_address + self.rm.u_world_base + u_world_offset + 7
         self.world_address = self.rm.read_ptr(u_world)
 
-        g_name_offset = self.rm.read_ulong(base_address + GNAMEBASE + 3)
-        g_name = base_address + GNAMEBASE + g_name_offset + 7
+        g_name_offset = self.rm.read_ulong(
+            base_address + self.rm.g_name_base + 3
+        )
+        g_name = base_address + self.rm.g_name_base + g_name_offset + 7
         print(f"SoT gName Address: {hex(g_name)}")
         self.g_name = self.rm.read_ptr(g_name)
 
-        g_objects_offset = self.rm.read_ulong(base_address + GOBJECTBASE + 2)
-        g_objects = base_address + GOBJECTBASE + g_objects_offset + 22
+        g_objects_offset = self.rm.read_ulong(
+            base_address + self.rm.g_object_base + 2
+        )
+        g_objects = base_address + self.rm.g_object_base + g_objects_offset + 22
         print(f"SoT gObject Address: {hex(g_objects)}")
         self.g_objects = self.rm.read_ptr(g_objects)
 

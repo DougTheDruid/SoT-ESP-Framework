@@ -167,3 +167,12 @@ https://github.com/DougTheDruid/SoT-Actor-Names - A manually-created list that m
    This fixes the issue with left/right for me. Can also modify `screen_center_y` to be = (SOT_WINDOW_H+30) / 2, 
    which might help with height issues if you have a title/task bar. If you also have issues with tracking, 
    but this doesn't fix it right away, I would recommend starting with this and modifying slightly. 
+
+### Shoutouts!
+I know without a doubt this framework wouldnt be nearly as polished as it is without the help of
+a ton of people in the community. Sincerely thank you to everyone who has reached out and helped in any capacity!
+Special thanks to:
+
+- [Gummy](https://www.unknowncheats.me/forum/members/726677.html) - Previously provided an opensource C++ version of a SoT Hack. Wouldnt have been possible without him!
+- [miniman06](https://www.unknowncheats.me/forum/members/2903443.html) - Pattern recognition for automatic offset generation
+

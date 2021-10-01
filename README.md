@@ -142,7 +142,6 @@ https://github.com/DougTheDruid/SoT-Python-Offset-Finder - An attempt for me to 
 https://github.com/DougTheDruid/SoT-Actor-Names - A manually-created list that maps actors raw names to more common names
 
 ### TODO
-- Implement an "auto-scanning" function for finding the base (uWorld, gName, gObject) offsets
 - Automatically update the pyglet window location every X seconds to match SoT window location
 - Handle weird issue where pyglet doesn't match the actual SoTWindow. Potential fix in `main.py`:
    ```python

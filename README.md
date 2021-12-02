@@ -172,7 +172,7 @@ https://github.com/DougTheDruid/SoT-Actor-Names - A manually-created list that m
 ### Shoutouts!
 I know without a doubt this framework wouldnt be nearly as polished as it is without the help of
 a ton of people in the community. Sincerely thank you to everyone who has reached out and helped in any capacity!
-Special thanks to:
+Special thanks to: 
 
 - [Gummy](https://www.unknowncheats.me/forum/members/726677.html) - Previously provided an opensource C++ version of a SoT Hack. Wouldnt have been possible without him!
 - [miniman06](https://www.unknowncheats.me/forum/members/2903443.html) - Pattern recognition for automatic offset generation

@@ -260,7 +260,7 @@ class ReadMemory:
         read_bytes = struct.unpack('<Q', read_bytes)[0]
         return read_bytes
 
-    def read_string(self, address: int, byte: int = 50) -> int:
+    def read_string(self, address: int, byte: int = 50) -> str:
         """
         Read a number of bytes and convert that to a string up until the first
         occurrence of no data. Useful in getting raw names

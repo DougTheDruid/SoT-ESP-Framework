@@ -158,6 +158,10 @@ class SoTMemoryReader:
                 display_ob.text_render.delete()
             except:
                 continue
+            try:
+                display_ob.icon.delete()
+            except:
+                continue
         self.display_objects = []
         self.update_my_coords()
 

@@ -54,19 +54,21 @@ At the time of writing, the script is built for a version of SoT with ~6 weeks l
 necessary pre-requisites, should execute with no major issues. Simply run `main.py` once you are in a server.
 
 ### How to update for new SoT Versions
+The Framework can automatically detect changes in the uWorld, gName, and gObject offsets if there are new version of the game. If for some reason you need to manually override those
+found automatically, here is the procedure to do so:
 If there has been a game version update:
    1. Load into a game server
    2. Open Cheat Engine 
    3. Open the `SoTGame.exe` process in Cheat Engine
    4. Change your "value type" to an "Array of byte"
-   5. One-by-one enter the patterns found at the top of `sot_hack.py` (uWorld, gName, gObject) 
+   5. One-by-one enter the *patterns* found at the top of `memory_helper.py` (uWorld, gName, gObject) 
    6. Hit scan. Upon scanning, you should get one or two results, he top result is the one we want
    7. Extend the "Address" column to see all the data. Anything after "SoTGame.exe+" is our base offset
-   8. Update the relevant BASE offsets in `sot_hack.py` at the top
+   8. Update the relevant variable(s) in the initialization of `ReadMemory`
 
-If after performing those updates the hack is still not working, you may also need to update offsets found in the 
-`offsets.json` file. If so, update the offsets according to the latest SDK ([this repo](https://github.com/pubgsdk/SoT-SDK) has been my go-to, with a custom 
-script to read data out of the files automatically).
+If the automatically generated offsets match the ones you find in Cheat Engine, and it still is not working, you may also need to update offsets found in the 
+`offsets.json` file. If so, update the offsets according to the latest SDK (various providers avaliable on Unknown Cheats, or [try mine if its up to date](https://github.com/DougTheDruid/SoT-Python-Offset-Finder/tree/main/SDK)). You may also use [my offset
+finder](https://github.com/DougTheDruid/SoT-Python-Offset-Finder) to help pull the appropriate data from the SDK files
 
 Running the script in Debug mode (set `debug`=`True` in `main.py` and utilize PyCharms Debug feature), may help you 
 identify what offsets are *not* working correctly and need updating.
@@ -142,7 +144,6 @@ https://github.com/DougTheDruid/SoT-Python-Offset-Finder - An attempt for me to 
 https://github.com/DougTheDruid/SoT-Actor-Names - A manually-created list that maps actors raw names to more common names
 
 ### TODO
-- Implement an "auto-scanning" function for finding the base (uWorld, gName, gObject) offsets
 - Automatically update the pyglet window location every X seconds to match SoT window location
 - Handle weird issue where pyglet doesn't match the actual SoTWindow. Potential fix in `main.py`:
    ```python

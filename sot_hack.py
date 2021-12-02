@@ -35,6 +35,7 @@ class SoTMemoryReader:
         """
         self.rm = ReadMemory("SoTGame.exe")
         base_address = self.rm.base_address
+        print(f"Process ID: {self.rm.pid}")
 
         u_world_offset = self.rm.read_ulong(
             base_address + self.rm.u_world_base + 3

@@ -5,6 +5,7 @@
 
 import math
 import json
+import logging
 import win32gui
 from pyglet.graphics import Batch
 from pyglet.text import Label
@@ -12,8 +13,15 @@ from pyglet.text import Label
 # True=Enabled & False=Disabled for each of the config items
 CONFIG = {
     "WORLD_PLAYERS_ENABLED": True,
-    "SHIPS_ENABLED": False
+    "SHIPS_ENABLED": True
 }
+
+version = "1.0.0"
+
+# Config specification for logging file
+logging.basicConfig(filename='DougsESP.log', level=logging.DEBUG,
+                    format='%(asctime)s %(levelname)s %(message)s', filemode="w")
+logger = logging.getLogger()
 
 # Offset values for the text labels from the circles we draw to the screen
 TEXT_OFFSET_X = 13
@@ -21,10 +29,14 @@ TEXT_OFFSET_Y = -5
 
 # Information on SoT height and width. Used here and in main.py to display
 # data to the screen. May need to manually override if wonky
-window = win32gui.FindWindow(None, "Sea of Thieves")
-SOT_WINDOW = win32gui.GetWindowRect(window)  # (x1, y1, x2, y2)
-SOT_WINDOW_H = SOT_WINDOW[3] - SOT_WINDOW[1]
-SOT_WINDOW_W = SOT_WINDOW[2] - SOT_WINDOW[0]
+try:
+    window = win32gui.FindWindow(None, "Sea of Thieves")
+    SOT_WINDOW = win32gui.GetWindowRect(window)  # (x1, y1, x2, y2)
+    SOT_WINDOW_H = SOT_WINDOW[3] - SOT_WINDOW[1]
+    SOT_WINDOW_W = SOT_WINDOW[2] - SOT_WINDOW[0]
+except Exception as e:
+    logger.error("Unable to find Sea of Thieves window; exiting.")
+    exit(-1)
 
 # Creates a pyglet "Batch" that we draw our information to. Effectively serves
 # as a piece of paper, so we save render cost because its 2D
@@ -35,13 +47,13 @@ with open("offsets.json") as infile:
     OFFSETS = json.load(infile)
 
 
-def dot(array_1: list, array_2: list) -> float:
+def dot(array_1: tuple, array_2: tuple) -> float:
     """
     Python-converted version of Gummy's External SoT v2 vMatrix Dot method (No
     Longer Avail). Takes two lists and multiplies the same index across both
     lists, and adds them together. (Need Source)
-    :param list array_1: Presumably some array about our player position
-    :param list array_2: Presumably some array about the dest actor position
+    :param tuple array_1: Presumably some array about our player position
+    :param tuple array_2: Presumably some array about the dest actor position
     :rtype: float
     :return: The result of a math equation between those two arrays
     """
@@ -103,10 +115,10 @@ def object_to_screen(player: dict, actor: dict) -> tuple:
 
         return int(x), int(SOT_WINDOW_H - y)
     except Exception as e:
-        print(f"Couldnt gen screen coordinates for {actor}: {e}")
+        logger.error(f"Couldn't generate screen coordinates for entity: {e}")
 
 
-def make_v_matrix(rot: dict) -> list:
+def make_v_matrix(rot: tuple) -> list:
     """
     Builds data around how the camera is currently rotated.
 

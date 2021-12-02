@@ -4,6 +4,7 @@
 """
 
 from string import printable
+from helpers import logger
 import ctypes
 import ctypes.wintypes
 import struct
@@ -121,21 +122,24 @@ class ReadMemory:
         memory from
         """
         self.exe = exe_name
-        self.pid = self._get_process_id()
-        self.handle = self._get_process_handle()
-        self.base_address = self._get_base_address()
+        try:
+            self.pid = self._get_process_id()
+            self.handle = self._get_process_handle()
+            self.base_address = self._get_base_address()
 
-        # There is definitely a better way to get lots of base memory data, but
-        # this is v1 of automated pattern searching
-        bulk_scan = self.read_bytes(self.base_address, 1000000000)
-        self.u_world_base = search_data_for_pattern(bulk_scan, UWORLDPATTERN)
-        self.g_object_base = search_data_for_pattern(bulk_scan, GOBJECTPATTERN)
-        self.g_name_base = search_data_for_pattern(bulk_scan, GNAMEPATTERN)
-        del bulk_scan
+            # There is definitely a better way to get lots of base memory data, but
+            # this is v1 of automated pattern searching
+            bulk_scan = self.read_bytes(self.base_address, 1000000000)
+            self.u_world_base = search_data_for_pattern(bulk_scan, UWORLDPATTERN)
+            self.g_object_base = search_data_for_pattern(bulk_scan, GOBJECTPATTERN)
+            self.g_name_base = search_data_for_pattern(bulk_scan, GNAMEPATTERN)
+            del bulk_scan
 
-        print(f"Offsets: gObject {hex(self.g_object_base)} | "
-              f"uWorld {hex(self.u_world_base)} "
-              f"| gName {hex(self.g_name_base)}")
+            logger.info(f"gObject offset: {hex(self.g_object_base)}")
+            logger.info(f"uWorld offset: {hex(self.u_world_base)}")
+            logger.info(f"gName offset: {hex(self.g_name_base)}")
+        except Exception as e:
+            logger.error(f"Error initializing memory reader")
 
     def _get_process_id(self):
         """
@@ -179,15 +183,12 @@ class ReadMemory:
         mod = Module32First(h_module_snap, ctypes.pointer(me32))
 
         if not mod:
-            print("Error getting {} base address".format(self.exe),
-                  GetLastError())
             CloseHandle(h_module_snap)
-            return False
+            raise Exception(f"Error getting {self.exe} base address: {GetLastError()}")
         while mod:
             if me32.szModule.decode() == self.exe:
                 CloseHandle(h_module_snap)
                 return me32.modBaseAddr
-
             mod = Module32Next(h_module_snap, ctypes.pointer(me32))
 
     def check_process_is_active(self, _):
@@ -195,7 +196,7 @@ class ReadMemory:
         Check if the game is still running and if not, exit
         """
         if not self._process_is_active():
-            print(f'{self.exe} has quit. Exiting.')
+            logger.info(f"Appears {self.exe} has been closed. Exiting program.")
             exit(0)
 
     def _process_is_active(self) -> bool:
@@ -215,7 +216,6 @@ class ReadMemory:
             raise TypeError('Address must be int: {}'.format(address))
         buff = ctypes.create_string_buffer(byte)
         bytes_read = ctypes.c_size_t()
-        # ctypes.windll.kernel32.SetLastError()
         ReadProcessMemory(self.handle, ctypes.c_void_p(address),
                           ctypes.byref(buff), byte, ctypes.byref(bytes_read))
         raw = buff.raw
@@ -245,7 +245,6 @@ class ReadMemory:
         :return: the 4-bytes of data (ulong) that live at the provided
         address
         """
-        # 4 bytes address
         read_bytes = self.read_bytes(address, struct.calcsize('L'))
         read_bytes = struct.unpack('<L', read_bytes)[0]
         return read_bytes
@@ -257,7 +256,6 @@ class ReadMemory:
         :return: the 8-bytes of data (ulonglong) that live at the provided
         address
         """
-        # 8 bytes address
         read_bytes = self.read_bytes(address, struct.calcsize('Q'))
         read_bytes = struct.unpack('<Q', read_bytes)[0]
         return read_bytes
@@ -271,7 +269,6 @@ class ReadMemory:
         byte name
         """
         buff = self.read_bytes(address, byte)
-        # print(type(buff))
         i = buff.find(b'\x00')
         return str("".join(map(chr, buff[:i])))
 

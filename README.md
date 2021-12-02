@@ -16,7 +16,7 @@ This is intentionally left as a framework and not a full-featured hack for a few
 3. Much of the code is very well documented to help you understand the "how" of the hacks inner workings; as a 
    result many resources on hacking forums will give you guidelines for implementing new functionality; I did it myself, 
    you can to
-4. I have undergone 5 or 6 major iterations of this same code. **I am still learning** and re-writing functionality all 
+4. I have undergone 6 or 7 major iterations of this same code. **I am still learning** and re-writing functionality all 
    the time; a smaller code base is much more simple to maintain
    
 I do ask that if you decided to take this into your own personal development, encourage others to think for themselves a
@@ -30,7 +30,7 @@ Microsoft version. If you are using the Steam version, you will need to change t
 of SoTHack.py
 
 ### What SoT Version is the framework build for?
-Currently, the framework is build for SoT 2.3.0. I attempt to update ASAP, in the event it is not
+Currently, the framework is build for SoT 2.4.0. I attempt to update ASAP, in the event it is not
 up-to-date, you will need to modify the global offsets (per "How to update for new SoT Versions"), 
 and possibly update your offsets. See "Other Offerings"
 
@@ -101,6 +101,8 @@ use that object to build display information for Pyglet to utilize.
 
 Largely speaking, if you want to see the flow of the code, start at `main.py` and work your way down into the objects
 and other files.
+
+
 
 ### Modules
 Generally speaking, in my personal version of this framework, I create a separate "Module" to plug into

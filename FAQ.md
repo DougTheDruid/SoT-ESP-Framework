@@ -1,13 +1,12 @@
 ### When I run the hack, nothing shows up
 If you JUST run the hack as-is without changing any code, you should **only** see a player count at the top right
-of the window. You MAY need to change where that is being displayed on the screen dependent on your monitor size. To
-change that position in the main.py file. There are more features mentioned in the readme.md, but there is work required
-to get there also mentioned in the readme.md (Prerequisites section)
+of the window. There are more features mentioned in the readme.md, but there is work required
+to get those functions operational; these are also mentioned in the readme.md (Prerequisites section)
 
 Check the following:
 1. By default, it works for the Microsoft version of the game, there is a variable to toggle if you are using Steam. 
    Does this apply to you? Did you change the toggle?
-2. Validate you have a pyglet window that is opening and there are no errors in the python window
+2. Validate you have a pyglet window that is opening and there are no errors DougsESP.log
 3. Have you corrected the tests of faith mentioned in the readme.md (Prerequisites section)?
 4. Are you running in windowed mode?
 

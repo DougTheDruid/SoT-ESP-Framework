@@ -5,9 +5,10 @@ For community support, please contact me on Discord: DougTheDruid#2784
 """
 
 import struct
+import logging
 from memory_helper import ReadMemory
 from mapping import ship_keys
-from helpers import OFFSETS, CONFIG
+from helpers import OFFSETS, CONFIG, logger
 from Modules.ship import Ship
 
 
@@ -35,7 +36,7 @@ class SoTMemoryReader:
         """
         self.rm = ReadMemory("SoTGame.exe")
         base_address = self.rm.base_address
-        print(f"Process ID: {self.rm.pid}")
+        logging.info(f"Process ID: {self.rm.pid}")
 
         u_world_offset = self.rm.read_ulong(
             base_address + self.rm.u_world_base + 3
@@ -47,14 +48,14 @@ class SoTMemoryReader:
             base_address + self.rm.g_name_base + 3
         )
         g_name = base_address + self.rm.g_name_base + g_name_offset + 7
-        print(f"SoT gName Address: {hex(g_name)}")
+        logging.info(f"SoT gName Address: {hex(g_name)}")
         self.g_name = self.rm.read_ptr(g_name)
 
         g_objects_offset = self.rm.read_ulong(
             base_address + self.rm.g_object_base + 2
         )
         g_objects = base_address + self.rm.g_object_base + g_objects_offset + 22
-        print(f"SoT gObject Address: {hex(g_objects)}")
+        logging.info(f"SoT gObject Address: {hex(g_objects)}")
         self.g_objects = self.rm.read_ptr(g_objects)
 
         self.u_level = self.rm.read_ptr(self.world_address +
@@ -180,7 +181,7 @@ class SoTMemoryReader:
                     raw_name = self._read_name(actor_id)
                     self.actor_name_map[actor_id] = raw_name
                 except Exception as e:
-                    print(str(e))
+                    logger.error(f"Unable to find actor name: {e}")
             elif actor_id in self.actor_name_map:
                 raw_name = self.actor_name_map.get(actor_id)
 

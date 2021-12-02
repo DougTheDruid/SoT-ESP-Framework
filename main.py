@@ -3,10 +3,10 @@
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 For community support, please contact me on Discord: DougTheDruid#2784
 """
-
 import pyglet
 from pyglet.text import Label
-from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch
+from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, \
+    version, logger
 from sot_hack import SoTMemoryReader
 from pyglet.gl import Config
 
@@ -54,6 +54,9 @@ def load_graphics(_):
 
 
 if __name__ == '__main__':
+    logger.info("Hack Starting")
+    logger.info(f"Hack Version: {version}")
+
     # Initialize our SoT Hack object, and do a first run of reading actors
     smr = SoTMemoryReader()
     smr.read_actors()

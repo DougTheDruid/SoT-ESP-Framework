@@ -102,7 +102,7 @@ use that object to build display information for Pyglet to utilize.
 Largely speaking, if you want to see the flow of the code, start at `main.py` and work your way down into the objects
 and other files.
 
-
+Debugging and error information will be available in the `DougsESP.log` file upon running the main.py file.
 
 ### Modules
 Generally speaking, in my personal version of this framework, I create a separate "Module" to plug into

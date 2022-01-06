@@ -4,10 +4,11 @@ of the window. There are more features mentioned in the readme.md, but there is 
 to get those functions operational; these are also mentioned in the readme.md (Prerequisites section)
 
 Check the following:
-1. Is SoT currently running and are you on server?
-2. 4. Are you running your SoT Game in windowed mode?
-3. Validate you have a pyglet window that is opening and there are no errors DougsESP.log
-4. If the program is running, have you corrected the tests of faith mentioned in the readme.md (Prerequisites section)?
+1. Is your framework up-to-date?
+2. Is SoT currently running and are you on server?
+3. 4. Are you running your SoT Game in windowed mode?
+4. Validate you have a pyglet window that is opening and there are no errors DougsESP.log
+5. If the program is running, have you corrected the tests of faith mentioned in the readme.md (Prerequisites section)?
 
 ### Rendered items in the hack (text/circles) are fuzzy and larger than they should be
 If you have windows scaling on (for a large/high DPI monitor), you may need to make a small change to python to avoid

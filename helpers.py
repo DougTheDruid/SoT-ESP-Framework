@@ -13,7 +13,7 @@ from pyglet.text import Label
 # True=Enabled & False=Disabled for each of the config items
 CONFIG = {
     "WORLD_PLAYERS_ENABLED": True,
-    "SHIPS_ENABLED": True
+    "SHIPS_ENABLED": False
 }
 
 version = "1.0.0"

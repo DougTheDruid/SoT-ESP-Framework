@@ -12,9 +12,6 @@ from helpers import OFFSETS, CONFIG, logger
 from Modules.ship import Ship
 
 
-STEAM_VERSION = False
-
-
 class SoTMemoryReader:
     """
     Wrapper class to handle reading data from the game, parsing what is

@@ -139,7 +139,7 @@ class ReadMemory:
             logger.info(f"uWorld offset: {hex(self.u_world_base)}")
             logger.info(f"gName offset: {hex(self.g_name_base)}")
         except Exception as e:
-            logger.error(f"Error initializing memory reader")
+            logger.error(f"Error initializing memory reader: {e}")
 
     def _get_process_id(self):
         """

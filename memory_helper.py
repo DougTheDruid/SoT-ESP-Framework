@@ -175,21 +175,20 @@ class ReadMemory:
         exe_name
         :return: the base memory address for the process
         """
-        h_module_snap = ctypes.c_void_p(0)
-        me32 = MODULEENTRY32()
-        me32.dwSize = ctypes.sizeof(MODULEENTRY32)  # pylint: disable=invalid-name, attribute-defined-outside-init
-        h_module_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE, self.pid)
+        module_entry = MODULEENTRY32()
+        module_entry.dwSize = ctypes.sizeof(MODULEENTRY32)  # pylint: disable=invalid-name, attribute-defined-outside-init
+        h_module_snap = CreateToolhelp32Snapshot(TH32CS_SNAPMODULE | TH32CS_SNAPMODULE32, self.pid)
 
-        mod = Module32First(h_module_snap, ctypes.pointer(me32))
+        module = Module32First(h_module_snap, ctypes.byref(module_entry))
 
-        if not mod:
+        if not module:
             CloseHandle(h_module_snap)
             raise Exception(f"Error getting {self.exe} base address: {GetLastError()}")
-        while mod:
-            if me32.szModule.decode() == self.exe:
+        while module:
+            if module_entry.szModule.decode() == self.exe:
                 CloseHandle(h_module_snap)
-                return me32.modBaseAddr
-            mod = Module32Next(h_module_snap, ctypes.pointer(me32))
+                return module_entry.modBaseAddr
+            module_entry = Module32Next(h_module_snap, ctypes.pointer(module_entry))
 
     def check_process_is_active(self, _):
         """

@@ -6,7 +6,7 @@ to get those functions operational; these are also mentioned in the readme.md (P
 Check the following:
 1. Is your framework up-to-date?
 2. Is SoT currently running and are you on server?
-3. 4. Are you running your SoT Game in windowed mode?
+3. Are you running your SoT Game in windowed mode?
 4. Validate you have a pyglet window that is opening and there are no errors DougsESP.log
 5. If the program is running, have you corrected the tests of faith mentioned in the readme.md (Prerequisites section)?
 

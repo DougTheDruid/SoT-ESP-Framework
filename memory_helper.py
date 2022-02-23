@@ -3,7 +3,6 @@
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 """
 
-from string import printable
 from helpers import logger
 import ctypes
 import ctypes.wintypes
@@ -269,7 +268,15 @@ class ReadMemory:
         """
         buff = self.read_bytes(address, byte)
         i = buff.find(b'\x00')
-        return str("".join(map(chr, buff[:i])))
+        return_string = str("".join(map(chr, buff[:i])))
+
+        # Sometimes in SoT, strings are UTF-16 vs UTF-8, so we want to check
+        # and see if this string is UTF-16 and return that version if it is
+        if len(return_string) == 1:
+            longer_check = self.read_name_string(address, byte)
+            if re.match('[A-Za-z0-9_/"]*', longer_check):
+                return_string = longer_check
+        return return_string
 
     def read_name_string(self, address: int, byte: int = 32) -> str:
         """
@@ -281,5 +288,11 @@ class ReadMemory:
         """
         buff = self.read_bytes(address, byte)
         i = buff.find(b"\x00\x00\x00")
-        joined = str("".join(map(chr, buff[:i])))
-        return ''.join(char for char in joined if char in printable)
+        shorter = buff[:i] + b'\x00'
+        # Try to decode it from UTF-16. This will fail if it is not UTF-16
+        # and revert to UTF-8
+        try:
+            joined = shorter.decode('utf-16').rstrip('\x00').rstrip()
+        except:
+            joined = str("".join(map(chr, shorter)))
+        return joined.replace('’', "'")

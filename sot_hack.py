@@ -131,17 +131,6 @@ class SoTMemoryReader:
 
         return coordinate_dict
 
-    def _read_name(self, actor_id: int) -> str:
-        """
-        Looks up an actors name in the g_name DB based on the actor ID provided
-        :param int actor_id: The ID for the actor we want to find the name of
-        :rtype: str
-        :return: The name for the actor
-        """
-        name_ptr = self.rm.read_ptr(self.g_name + int(actor_id / 0x4000) * 0x8)
-        name = self.rm.read_ptr(name_ptr + 0x8 * int(actor_id % 0x4000))
-        return self.rm.read_string(name + 0x10, 64)
-
     def read_actors(self):
         """
         Represents a full scan of every actor within our render distance.
@@ -179,7 +168,7 @@ class SoTMemoryReader:
             # saving memory calls
             if actor_id not in self.actor_name_map and actor_id != 0:
                 try:
-                    raw_name = self._read_name(actor_id)
+                    raw_name = self.rm.read_gname(actor_id)
                     self.actor_name_map[actor_id] = raw_name
                 except Exception as e:
                     logger.error(f"Unable to find actor name: {e}")

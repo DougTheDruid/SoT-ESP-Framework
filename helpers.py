@@ -16,7 +16,7 @@ CONFIG = {
     "SHIPS_ENABLED": False
 }
 
-version = "1.1.0"
+version = "1.1.1"
 
 # Config specification for logging file
 logging.basicConfig(filename='DougsESP.log', level=logging.DEBUG,

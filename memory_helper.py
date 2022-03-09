@@ -56,9 +56,7 @@ CloseHandle.argtypes = [ctypes.c_void_p]
 CloseHandle.rettype = ctypes.c_int
 
 # ReadProcessMemory is also a cytpe, but will perform the actual memory reading
-ReadProcessMemory = ctypes.WinDLL(
-    'kernel32', use_last_error=True
-).ReadProcessMemory
+ReadProcessMemory = kernel32.ReadProcessMemory
 ReadProcessMemory.argtypes = [ctypes.wintypes.HANDLE, ctypes.wintypes.LPCVOID,
                               ctypes.wintypes.LPVOID, ctypes.c_size_t,
                               ctypes.POINTER(ctypes.c_size_t)]
@@ -131,6 +129,10 @@ class ReadMemory:
             self.g_object_base = search_data_for_pattern(bulk_scan, GOBJECTPATTERN)
             self.g_name_base = search_data_for_pattern(bulk_scan, GNAMEPATTERN)
             del bulk_scan
+
+            g_name_offset = self.read_ulong(self.base_address + self.g_name_base + 3)
+            g_name_ptr = self.base_address + self.g_name_base + g_name_offset + 7
+            self.g_name_start_address = self.read_ptr(g_name_ptr)
 
             logger.info(f"gObject offset: {hex(self.g_object_base)}")
             logger.info(f"uWorld offset: {hex(self.u_world_base)}")
@@ -294,3 +296,14 @@ class ReadMemory:
         except:
             joined = str("".join(map(chr, shorter)))
         return joined.replace('’', "'")
+
+    def read_gname(self, actor_id: int) -> str:
+        """
+        Looks up an actors name in the g_name DB based on the actor ID provided
+        :param int actor_id: The ID for the actor we want to find the name of
+        :rtype: str
+        :return: The name for the actor
+        """
+        name_ptr = self.read_ptr(self.g_name_start_address + int(actor_id / 0x4000) * 0x8)
+        name = self.read_ptr(name_ptr + 0x8 * int(actor_id % 0x4000))
+        return self.read_string(name + 0x10, 64)

@@ -55,9 +55,6 @@ CloseHandle = kernel32.CloseHandle
 CloseHandle.argtypes = [ctypes.c_void_p]
 CloseHandle.rettype = ctypes.c_int
 
-GetLastError = kernel32.GetLastError
-GetLastError.rettype = ctypes.c_long
-
 # ReadProcessMemory is also a cytpe, but will perform the actual memory reading
 ReadProcessMemory = ctypes.WinDLL(
     'kernel32', use_last_error=True

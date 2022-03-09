@@ -13,8 +13,8 @@ import re
 
 MAX_PATH = 260
 MAX_MODULE_NAME32 = 255
-TH32CS_SNAPMODULE = 0x00000009
-TH32CS_SNAPMODULE32 = 0x00000011
+TH32CS_SNAPMODULE = 0x00000008
+TH32CS_SNAPMODULE32 = 0x00000010
 PROCESS_QUERY_INFORMATION = 0x0400
 PROCESS_VM_READ = 0x0010
 
@@ -38,11 +38,12 @@ class MODULEENTRY32(ctypes.Structure):
                 ('szExePath', ctypes.c_char * MAX_PATH)]
 
 
-CreateToolhelp32Snapshot = ctypes.windll.kernel32.CreateToolhelp32Snapshot
+kernel32 = ctypes.WinDLL('Kernel32', use_last_error=True)
+CreateToolhelp32Snapshot = kernel32.CreateToolhelp32Snapshot
 CreateToolhelp32Snapshot.reltype = ctypes.c_long
 CreateToolhelp32Snapshot.argtypes = [ctypes.c_ulong, ctypes.c_ulong]
 
-Module32First = ctypes.windll.kernel32.Module32First
+Module32First = kernel32.Module32First
 Module32First.argtypes = [ctypes.c_void_p, ctypes.POINTER(MODULEENTRY32)]
 Module32First.rettype = ctypes.c_int
 
@@ -50,11 +51,11 @@ Module32Next = ctypes. windll.kernel32.Module32Next
 Module32Next.argtypes = [ctypes. c_void_p, ctypes.POINTER(MODULEENTRY32)]
 Module32Next.rettype = ctypes.c_int
 
-CloseHandle = ctypes.windll.kernel32.CloseHandle
+CloseHandle = kernel32.CloseHandle
 CloseHandle.argtypes = [ctypes.c_void_p]
 CloseHandle.rettype = ctypes.c_int
 
-GetLastError = ctypes.windll.kernel32.GetLastError
+GetLastError = kernel32.GetLastError
 GetLastError.rettype = ctypes.c_long
 
 # ReadProcessMemory is also a cytpe, but will perform the actual memory reading
@@ -157,7 +158,7 @@ class ReadMemory:
         executable), used to make memory calls
         """
         try:
-            return ctypes.windll.kernel32.OpenProcess(PROCESS_QUERY_INFORMATION
+            return kernel32.OpenProcess(PROCESS_QUERY_INFORMATION
                                                       | PROCESS_VM_READ,
                                                       False, self.pid)
         except Exception as e:
@@ -182,7 +183,7 @@ class ReadMemory:
 
         if not module:
             CloseHandle(h_module_snap)
-            raise Exception(f"Error getting {self.exe} base address: {GetLastError()}")
+            raise Exception(f"Error getting {self.exe} base address: {ctypes.GetLastError()}")
         while module:
             if module_entry.szModule.decode() == self.exe:
                 CloseHandle(h_module_snap)

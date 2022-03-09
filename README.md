@@ -8,7 +8,7 @@ of resources utilized which could be useful in memory reading/editing for almost
 This hack has the following implemented:
 - Get the location of ships in render distance and display them on screen
 - Display a count of the players on the server
-- Display a list of all players on the server
+- Display a list of all players on the server, and update the list correctly
 
 This is intentionally left as a framework and not a full-featured hack for a few reasons:
 1. I already did the hard work of converting C functions to Python for you

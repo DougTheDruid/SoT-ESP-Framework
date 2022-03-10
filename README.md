@@ -1,8 +1,8 @@
 # Doug's Python SoT ESP Framework
 Hello all! This is a framework to develop an SoT ESP Hack, all utilizing Python. This is a trimmed down version 
 of a personal creation I utilize actively. This is a great foundation for someone who is looking to get started in 
-ESP hacks for Sea of Thieves and maybe even other UE4 games! The code should be loaded with comments to help you grasp the "how" and "why" of basic 
-memory editing and data display with Python. While this is intended for use within Sea of Thieves specifically, there is a lot
+ESP hacks for SoT and maybe even other UE4 games! The code should be loaded with comments to help you grasp the "how" and "why" of basic 
+memory editing and data display with Python. While this is intended for use within SoT specifically, there is a lot
 of resources utilized which could be useful in memory reading/editing for almost any game/program.
 
 This hack has the following implemented:
@@ -50,7 +50,7 @@ through the built-in Run and Stop functionality. You may choose to implement pro
 and uncomment a third line. This is a VERY small countermeasure to ensure this framework is actually used as intended.***
 
 ### How to execute
-At the time of writing, the script is built for a version of SoT with ~6 weeks left in Season 3 and given you have the
+At the time of writing, the script is built for a version of SoT at Season 6 launch and given you have the
 necessary pre-requisites, should execute with no major issues. Simply run `main.py` once you are in a server.
 
 ### How to update for new SoT Versions

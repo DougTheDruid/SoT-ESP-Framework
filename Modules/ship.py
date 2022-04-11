@@ -13,7 +13,7 @@ from Modules.display_object import DisplayObject
 
 SHIP_COLOR = (100, 0, 0)  # The color we want the indicator circle to be
 CIRCLE_SIZE = 10  # The size of the indicator circle we want
-COORD_OFFSET = 0x100
+COORD_OFFSET = 0x110
 
 
 class Ship(DisplayObject):

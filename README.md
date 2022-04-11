@@ -67,7 +67,7 @@ If there has been a game version update:
    8. Update the relevant variable(s) in the initialization of `ReadMemory`
 
 If the automatically generated offsets match the ones you find in Cheat Engine, and it still is not working, you may also need to update offsets found in the 
-`offsets.json` file. If so, update the offsets according to the latest SDK (various providers avaliable on Unknown Cheats, or [try mine if its up to date](https://github.com/DougTheDruid/SoT-Python-Offset-Finder/tree/main/SDK)). You may also use [my offset
+`offsets.json` file. If so, update the offsets according to the latest SDK (various providers avaliable on Unknown Cheats, or [try mine if its up to date](https://github.com/DougTheDruid/SoT-Python-Offset-Finder/tree/main/Alternate%20Versions/Doug2.0)). You may also use [my offset
 finder](https://github.com/DougTheDruid/SoT-Python-Offset-Finder) to help pull the appropriate data from the SDK files
 
 Running the script in Debug mode (set `debug`=`True` in `main.py` and utilize PyCharms Debug feature), may help you 

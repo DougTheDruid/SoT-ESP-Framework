@@ -5,10 +5,11 @@ For community support, please contact me on Discord: DougTheDruid#2784
 """
 import pyglet
 from pyglet.text import Label
+from pyglet.gl import Config
 from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, \
     version, logger
 from sot_hack import SoTMemoryReader
-from pyglet.gl import Config
+
 
 # See explanation in Main, toggle for a non-graphical debug
 DEBUG = False

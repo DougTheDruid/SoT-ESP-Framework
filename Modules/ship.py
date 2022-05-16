@@ -13,7 +13,6 @@ from Modules.display_object import DisplayObject
 
 SHIP_COLOR = (100, 0, 0)  # The color we want the indicator circle to be
 CIRCLE_SIZE = 10  # The size of the indicator circle we want
-COORD_OFFSET = 0x12c
 
 
 class Ship(DisplayObject):
@@ -52,7 +51,7 @@ class Ship(DisplayObject):
         # Generate our Ship's info
         self.name = ships.get(self.raw_name).get("Name")
         self.coords = self._coord_builder(self.actor_root_comp_ptr,
-                                          COORD_OFFSET)
+                                          self.coord_offset)
         self.distance = calculate_distance(self.coords, self.my_coords)
 
         self.screen_coords = object_to_screen(self.my_coords, self.coords)
@@ -128,7 +127,7 @@ class Ship(DisplayObject):
 
         self.my_coords = my_coords
         self.coords = self._coord_builder(self.actor_root_comp_ptr,
-                                          COORD_OFFSET)
+                                          self.coord_offset)
         new_distance = calculate_distance(self.coords, self.my_coords)
 
         self.screen_coords = object_to_screen(self.my_coords, self.coords)

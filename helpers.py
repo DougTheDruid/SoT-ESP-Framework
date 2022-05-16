@@ -7,6 +7,7 @@ import math
 import json
 import logging
 import win32gui
+import base64
 from pyglet.graphics import Batch
 from pyglet.text import Label
 
@@ -16,7 +17,7 @@ CONFIG = {
     "SHIPS_ENABLED": False
 }
 
-version = "1.1.3"
+version = "1.2.0"
 
 # Config specification for logging file
 logging.basicConfig(filename='DougsESP.log', level=logging.DEBUG,
@@ -35,7 +36,7 @@ try:
     SOT_WINDOW_H = SOT_WINDOW[3] - SOT_WINDOW[1]
     SOT_WINDOW_W = SOT_WINDOW[2] - SOT_WINDOW[0]
 except Exception as e:
-    logger.error("Unable to find Sea of Thieves window; exiting.")
+    logger.error("Unable to find SoT window; exiting.")
     exit(-1)
 
 # Creates a pyglet "Batch" that we draw our information to. Effectively serves
@@ -114,8 +115,8 @@ def object_to_screen(player: dict, actor: dict) -> tuple:
             return False
 
         return int(x), int(SOT_WINDOW_H - y)
-    except Exception as e:
-        logger.error(f"Couldn't generate screen coordinates for entity: {e}")
+    except Exception as w2s_error:
+        logger.error(f"Couldn't generate screen coordinates for entity: {w2s_error}")
 
 
 def make_v_matrix(rot: tuple) -> list:
@@ -173,6 +174,6 @@ def calculate_distance(obj_to: dict, obj_from: dict) -> int:
                          (obj_to.get("z") - obj_from.get("z")) ** 2))
 
 
-brand_label = Label("DougTheDruid's ESP Framework",
-                    x=SOT_WINDOW_W - 537, y=10, font_size=24, bold=True,
-                    color=(127, 127, 127, 65), batch=main_batch)
+b_label = Label(base64.b64decode('RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yaw==').decode("utf-8"),
+                x=SOT_WINDOW_W - 537, y=10, font_size=24, bold=True,
+                color=(127, 127, 127, 65), batch=main_batch)

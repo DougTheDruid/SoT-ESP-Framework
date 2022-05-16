@@ -1,12 +1,13 @@
 {
-  "AActor.actorId": 24,
-  "AActor.rootComponent": 368,
-  "APlayerState.PlayerName": 984,
-  "UGameInstance.LocalPlayers": 56,
-  "ULocalPlayer.PlayerController": 48,
-  "APlayerCameraManager.CameraCache": 1088,
-  "APlayerController.CameraManager": 1120,
-  "FCameraCacheEntry.FMinimalViewInfo": 16,
-  "UWorld.OwningGameInstance": 448,
-  "UWorld.PersistentLevel": 48
+  "Actor.actorId": 24,
+  "Actor.rootComponent": 368,
+  "CameraCacheEntry.MinimalViewInfo": 16,
+  "GameInstance.LocalPlayers": 56,
+  "LocalPlayer.PlayerController": 48,
+  "PlayerCameraManager.CameraCache": 1088,
+  "PlayerController.CameraManager": 1120,
+  "PlayerState.PlayerName": 984,
+  "SceneComponent.ActorCoordinates": 300,
+  "World.OwningGameInstance": 448,
+  "World.PersistentLevel": 48
 }

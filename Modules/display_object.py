@@ -25,6 +25,7 @@ class DisplayObject(metaclass=abc.ABCMeta):
         read memory data from the game
         """
         self.rm = memory_reader
+        self.coord_offset = OFFSETS.get('SceneComponent.ActorCoordinates')
 
     def _get_actor_id(self, address: int) -> int:
         """
@@ -35,7 +36,7 @@ class DisplayObject(metaclass=abc.ABCMeta):
         :return: The AActors ID
         """
         return self.rm.read_int(
-            address + OFFSETS.get('AActor.actorId')
+            address + OFFSETS.get('Actor.actorId')
         )
 
     def _get_root_comp_address(self, address: int) -> int:
@@ -46,7 +47,7 @@ class DisplayObject(metaclass=abc.ABCMeta):
         :return: the address of an AActors root component
         """
         return self.rm.read_ptr(
-            address + OFFSETS.get("AActor.rootComponent")
+            address + OFFSETS.get("Actor.rootComponent")
         )
 
     def _coord_builder(self, root_comp_ptr: int, offset: int) -> dict:

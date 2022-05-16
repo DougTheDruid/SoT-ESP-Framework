@@ -35,7 +35,7 @@ will help you grasp what is happening. But where do you start?
 
 Since we are running our script from `main.py`, I generally advise that as a good place to start when understanding the framework.
 
-When running `main.py`, an `SoTMemoryReader` object is created (found in `sot_hack.py`). `SoTMemoryReader` creates a 
+When running `main.py`, an `SoTMemoryReader` object is created (found in `sot_hack.py`). `SoTMemoryReader` creates a
 `ReadMemory` object (found in `memory_helper.py`) which is used to perform our requisite memory calls. We also create
 a Pyglet window (our GUI) to display our data, and give Pyglet a set of instructions to run certain
 update methods every so often (or every frame).

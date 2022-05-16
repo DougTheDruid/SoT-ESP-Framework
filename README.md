@@ -109,7 +109,7 @@ of what memory data may be available for each actor. But how do you know what me
 
 Once you have identified an actor name that you have interest in, we can begin to look through what is known as the SDK (Software Development Kit)
 for the game. This SDK can change during a patch, and luckily, I provide three versions here: https://github.com/DougTheDruid/SoT-Python-Offset-Finder/tree/main/SDKs
-There is more information in the `readme.md` file for this repo, but generally speaking, we can [search the SDK](https://github.com/DougTheDruid/SoT-Python-Offset-Finder#how-to-search-the-sdk)
+There is more information in the `readme.md` file for this repo, but generally speaking, we can [search the SDK](https://github.com/DougTheDruid/SoT-Python-Offset-Finder/blob/main/README.md#sdk-utilization)
 and determine what interesting attributes an actor has that we can read from. 
 
 Note: It's also important to note that we can use the memory from _parent_ classes as well when reading for an actor.
@@ -117,7 +117,7 @@ For example if we have an entity of `IslandService`, `IslandService` is a child 
 as if our object was an `Actor`-type as well.
 
 
-### Structs
+### Programming Structs
 Another resource-saving technique utilized in the framework is `structs`. Instead of rebuilding structures similarly 
 to how you would in C or C++, I utilize something fairly frequently in my code that may not be very clear called 
 `struct`. This is a Python-native import which allows us to more easily convert hex data to a list of information.
@@ -194,4 +194,4 @@ Special thanks to:
 
 - [Gummy](https://www.unknowncheats.me/forum/members/726677.html) - Previously provided an opensource C++ version of a SoT Hack. Wouldn't have been possible without him!
 - [miniman06](https://www.unknowncheats.me/forum/members/2903443.html) - Pattern recognition for automatic offset generation
-
+- [mogistink](https://www.unknowncheats.me/forum/members/3434160.html) - Supreme helper of the community and always providing valuable feedback on changes

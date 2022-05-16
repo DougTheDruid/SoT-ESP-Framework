@@ -58,7 +58,9 @@ disable=broad-except,
         logging-fstring-interpolation,
         too-many-instance-attributes,
         bare-except,
-        consider-using-sys-exit
+        consider-using-sys-exit,
+        unspecified-encoding,
+        import-error
 
 
 [DESIGN]

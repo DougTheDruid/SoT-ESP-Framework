@@ -56,11 +56,11 @@ class SoTMemoryReader:
         self.g_objects = self.rm.read_ptr(g_objects)
 
         self.u_level = self.rm.read_ptr(self.world_address +
-                                        OFFSETS.get('UWorld.PersistentLevel'))
+                                        OFFSETS.get('World.PersistentLevel'))
 
         self.u_local_player = self._load_local_player()
         self.player_controller = self.rm.read_ptr(
-            self.u_local_player + OFFSETS.get('ULocalPlayer.PlayerController')
+            self.u_local_player + OFFSETS.get('LocalPlayer.PlayerController')
         )
 
         self.my_coords = self._coord_builder(self.u_local_player)
@@ -78,10 +78,10 @@ class SoTMemoryReader:
         :return: Memory address of the local player object
         """
         game_instance = self.rm.read_ptr(
-            self.world_address + OFFSETS.get('UWorld.OwningGameInstance')
+            self.world_address + OFFSETS.get('World.OwningGameInstance')
         )
         local_player = self.rm.read_ptr(
-            game_instance + OFFSETS.get('UGameInstance.LocalPlayers')
+            game_instance + OFFSETS.get('GameInstance.LocalPlayers')
         )
         return self.rm.read_ptr(local_player)
 
@@ -92,12 +92,12 @@ class SoTMemoryReader:
         we dont always run a full scan and we need a way to update ourselves
         """
         manager = self.rm.read_ptr(
-            self.player_controller + OFFSETS.get('APlayerController.CameraManager')
+            self.player_controller + OFFSETS.get('PlayerController.CameraManager')
         )
         self.my_coords = self._coord_builder(
             manager,
-            OFFSETS.get('APlayerCameraManager.CameraCache')
-            + OFFSETS.get('FCameraCacheEntry.FMinimalViewInfo'),
+            OFFSETS.get('PlayerCameraManager.CameraCache')
+            + OFFSETS.get('CameraCacheEntry.MinimalViewInfo'),
             fov=True)
 
     def _coord_builder(self, actor_address: int, offset=0x78, camera=True,
@@ -161,7 +161,7 @@ class SoTMemoryReader:
             raw_name = ""
             actor_address = self.rm.read_ptr(actor_data[0] + (x * 0x8))
             actor_id = self.rm.read_int(
-                actor_address + OFFSETS.get('AActor.actorId')
+                actor_address + OFFSETS.get('Actor.actorId')
             )
 
             # We save a mapping of actor id to actor name for the sake of
@@ -206,7 +206,7 @@ class SoTMemoryReader:
         :param actor_address: The memory address which the actor begins at
         """
         player_name_location = self.rm.read_ptr(
-            actor_address + OFFSETS.get('APlayerState.PlayerName')
+            actor_address + OFFSETS.get('PlayerState.PlayerName')
         )
         player_name = self.rm.read_name_string(player_name_location)
 

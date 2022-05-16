@@ -3,12 +3,12 @@
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 """
 
-from helpers import logger
 import ctypes
 import ctypes.wintypes
 import struct
-import psutil
 import re
+import psutil
+from helpers import logger
 
 
 MAX_PATH = 260
@@ -211,7 +211,7 @@ class ReadMemory:
         :param byte: count of bytes to read
         """
         if not isinstance(address, int):
-            raise TypeError('Address must be int: {}'.format(address))
+            raise TypeError(f'Address must be int: {address}')
         buff = ctypes.create_string_buffer(byte)
         bytes_read = ctypes.c_size_t()
         ReadProcessMemory(self.handle, ctypes.c_void_p(address),

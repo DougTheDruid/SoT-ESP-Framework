@@ -3,6 +3,7 @@
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 For community support, please contact me on Discord: DougTheDruid#2784
 """
+import base64
 import pyglet
 from pyglet.text import Label
 from pyglet.gl import Config
@@ -55,7 +56,7 @@ def load_graphics(_):
 
 
 if __name__ == '__main__':
-    logger.info("Hack Starting")
+    logger.info(base64.b64decode("RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yayBTdGFydGluZw==").decode("utf-8"))
     logger.info(f"Hack Version: {version}")
 
     # Initialize our SoT Hack object, and do a first run of reading actors

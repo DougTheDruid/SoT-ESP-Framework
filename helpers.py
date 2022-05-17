@@ -109,7 +109,7 @@ def object_to_screen(player: dict, actor: dict) -> tuple:
         if x > SOT_WINDOW_W or x < 0:
             return False
         y = screen_center_y - v_transformed[1] * \
-            (screen_center_x / math.tan(fov * math.pi / 360)) \
+            (screen_center_x / tmp_fov) \
             / v_transformed[2]
         if y > SOT_WINDOW_H or y < 0:
             return False

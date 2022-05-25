@@ -87,9 +87,7 @@ banned, nor concerned for being banned. Does that guarantee you won't be? No. Do
 get banned? No. If you aren't sure what something does, or why something is done a certain way, do some research on the potential impact of changing it before actually changing it.
 
 ### Does this work with both Steam & Microsoft versions?
-This hack will work with both versions of the game (Microsoft & Steam), and by default is configured to work for the 
-Microsoft version. If you are using the Steam version, you will need to change the appropriate variable at the top
-of SoTHack.py
+This hack will work with both versions of the game (Microsoft & Steam). It is confirmed to work on running Windows 10 and Windows 11.
 
 ### Why Python?!
 Python is at its more user-friendly version of C. Hypothetically, we can perform any C action using python,

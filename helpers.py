@@ -13,9 +13,12 @@ from pyglet.text import Label
 
 # True=Enabled & False=Disabled for each of the config items
 CONFIG = {
-    "WORLD_PLAYERS_ENABLED": True,
+    "CREWS_ENABLED": True,
     "SHIPS_ENABLED": False
 }
+
+#
+crew_tracker = {}
 
 version = "1.2.0"
 

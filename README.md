@@ -56,7 +56,7 @@ of guidance as to where to look to find those bugs.
 This hack has the following implemented:
 - Get the location of ships in render distance and display them on screen
 - Display a count of the players on the server
-- Display a list of all players on the server, and update the list correctly
+- Display a list of all the crews on the server, how many players are on that crew, and update this list regularly
 
 ## Your First Additions
 Once you have accomplished getting the framework working as intended, you may find yourself asking, what do I do next?

@@ -92,9 +92,9 @@ if __name__ == '__main__':
         """
         window.clear()
 
-        # Update our player count Label & player list
-        player_count.text = f"Player Count: {len(smr.server_players)}"
-        # player_list.text = "\n".join(smr.server_players)
+        # Update our player count Label & crew list
+        player_count.text = f"Player Count: {smr.crew_data.total_players}"
+        # crew_list.text = smr.crew_data.crew_str
 
         # Draw our main batch & FPS counter at the bottom left
         main_batch.draw()
@@ -122,10 +122,11 @@ if __name__ == '__main__':
                          y=SOT_WINDOW_H * 0.9, batch=main_batch)
 
     # The label for showing all players on the server under the count
+    # This purely INITIALIZES it does not inherently update automatically
     if False:  # pylint: disable=using-constant-test
-        player_list = Label("\n".join(smr.server_players), x=SOT_WINDOW_W * 0.85,
-                            y=(SOT_WINDOW_H-25) * 0.9, batch=main_batch, width=300,
-                            multiline=True)
+        crew_list = Label(f"{smr.crew_data.crew_str}", x=SOT_WINDOW_W * 0.85,
+                          y=(SOT_WINDOW_H-25) * 0.9, batch=main_batch, width=300,
+                          multiline=True)
         # Note: The width of 300 is the max pixel width of a single line
         # before auto-wrapping the text to the next line. Updated in on_draw()
 

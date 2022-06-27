@@ -10,6 +10,7 @@ from memory_helper import ReadMemory
 from mapping import ship_keys
 from helpers import OFFSETS, CONFIG, logger
 from Modules.ship import Ship
+from Modules.crews import Crews
 
 
 class SoTMemoryReader:
@@ -69,6 +70,8 @@ class SoTMemoryReader:
         self.actor_name_map = {}
         self.server_players = []
         self.display_objects = []
+        self.crew_data = None
+
 
     def _load_local_player(self) -> int:
         """
@@ -190,13 +193,15 @@ class SoTMemoryReader:
                 # else:
                 self.display_objects.append(ship)
 
-            # If we have the world players enabled in helpers.py, and the name
-            # of the actor is AthenaPlayerState, we interpret the actor as a
-            # player on the server.
+            # If we have the crews data enabled in helpers.py and the name
+            # of the actor is CrewService, we create a class based on that Crew
+            # data to generate information about people on the server
             # NOTE: This will NOT give us information on nearby players for the
             # sake of ESP
-            elif CONFIG.get('WORLD_PLAYERS_ENABLED') and "AthenaPlayerState" in raw_name:
-                self.read_world_players(actor_address)
+            elif CONFIG.get('CREWS_ENABLED') and raw_name == "CrewService":
+                self.crew_data = Crews(self.rm, actor_id, actor_address)
+            # elif CONFIG.get('WORLD_PLAYERS_ENABLED') and "AthenaPlayerState" in raw_name:
+            #     self.read_world_players(actor_address)
 
     def read_world_players(self, actor_address):
         """

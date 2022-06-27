@@ -28,16 +28,16 @@ ships = {
     },
 
     "BP_AISmallShipTemplate_C": {
-        "Name": "Ghost Sloop (Near)",
+        "Name": "Skeleton Sloop (Near)",
     },
     "BP_AISmallShipNetProxy_C": {
-        "Name": "Ghost Sloop",
+        "Name": "Skeleton Sloop",
     },
     "BP_AILargeShipTemplate_C": {
-        "Name": "Ghost Galleon (Near)",
+        "Name": "Skeleton Galleon (Near)",
     },
     "BP_AILargeShipNetProxy_C": {
-        "Name": "Ghost Galleon",
+        "Name": "Skeleton Galleon",
     },
     # "BP_AggressiveGhostShip_C": {
     #     "Name": "Flameheart Galleon",

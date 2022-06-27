@@ -77,7 +77,6 @@ if __name__ == '__main__':
     window = pyglet.window.Window(SOT_WINDOW_W, SOT_WINDOW_H,
                                   vsync=False, style='overlay', config=config,
                                   caption="DougTheDruid's ESP Framework")
-    # window.set_caption('A different caption')
     hwnd = window._hwnd  # pylint: disable=protected-access
 
     # Move our window to the same location that our SoT Window is at

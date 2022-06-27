@@ -17,7 +17,7 @@ CONFIG = {
     "SHIPS_ENABLED": False
 }
 
-#
+# Used to track unique crews
 crew_tracker = {}
 
 version = "1.3.0"

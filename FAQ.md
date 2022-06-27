@@ -67,6 +67,8 @@ otherwise), so we now rely on crew data to help us learn more about the server w
 It is possible that once you interact with a player (e.g. they are close enough to you to render), we could store
 that data as a reference for building a "Crew list" after that interaction, but you will need to build that yourself.
 
+In the event you need that data, please browse the history of the repo prior to framework version 1.3.0.
+
 
 ## General Questions
 ### How can I contact you?

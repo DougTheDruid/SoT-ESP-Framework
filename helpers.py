@@ -20,7 +20,7 @@ CONFIG = {
 #
 crew_tracker = {}
 
-version = "1.2.0"
+version = "1.3.0"
 
 # Config specification for logging file
 logging.basicConfig(filename='DougsESP.log', level=logging.DEBUG,

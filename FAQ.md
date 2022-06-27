@@ -58,6 +58,16 @@ identify what offsets are *not* working correctly and need updating.
 Note: There are some offsets hardcoded into the program, it is possible those hardcoded offsets CAN change and cause
 your issues.
 
+### Why can't I see (world) player names anymore?!
+As of patch 2.5.3, it appears we are unable to collect all the player names on the entire server. Previously, we would
+read data from the `AthenaPlayerState` actors present regardless of your location and the subsequent `PlayerName`
+attribute from that actor. It appears that field no longer provides meaningful data (intentional by the dev's or 
+otherwise), so we now rely on crew data to help us learn more about the server we are on. 
+
+It is possible that once you interact with a player (e.g. they are close enough to you to render), we could store
+that data as a reference for building a "Crew list" after that interaction, but you will need to build that yourself.
+
+
 ## General Questions
 ### How can I contact you?
 Please, before contacting me ensure that you have read through the entire `readme.md` and `faq.md` files:

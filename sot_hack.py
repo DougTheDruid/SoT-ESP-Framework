@@ -200,20 +200,3 @@ class SoTMemoryReader:
             # sake of ESP
             elif CONFIG.get('CREWS_ENABLED') and raw_name == "CrewService":
                 self.crew_data = Crews(self.rm, actor_id, actor_address)
-            # elif CONFIG.get('WORLD_PLAYERS_ENABLED') and "AthenaPlayerState" in raw_name:
-            #     self.read_world_players(actor_address)
-
-    def read_world_players(self, actor_address):
-        """
-        Reads information about an AthenaPlayerState actor (a server-level
-        player object), to obtain into on who is on the server. Append the user
-        to the list of players on the server for a given run
-        :param actor_address: The memory address which the actor begins at
-        """
-        player_name_location = self.rm.read_ptr(
-            actor_address + OFFSETS.get('PlayerState.PlayerName')
-        )
-        player_name = self.rm.read_name_string(player_name_location)
-
-        if player_name and player_name not in self.server_players:
-            self.server_players.append(player_name)

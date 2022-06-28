@@ -11,6 +11,16 @@ Check the following:
 4. Validate you have a pyglet window that is opening and there are no errors DougsESP.log
 5. If the program is running, have you corrected the tests of faith mentioned in the readme.md (Prerequisites section)?
 
+### How do I fix the following error? `Error getting SoTGame.exe base address: X`
+Generally this is a result of a software issue or incorrect version of software being installed. I highly recommend using the 
+following software to minimize chance of this happening:
+- Windows 10 or Windows 11 64-bit
+- Python 3.7+ 64-bit version 
+- [PyWin32 64-bit version](https://github.com/mhammond/pywin32/releases); only 64-bit is available for python 3.10+ via pip
+
+I've direclty seen 32-bit python and 32-bit PyWin32 cause issues with the framework working, please try swapping those to 64-bit.
+If you have issues, please contact me on Discord and I will help troubleshoot with you.
+
 ### Rendered items in the hack (text/circles) are fuzzy and larger than they should be
 If you have windows scaling on (for a large/high DPI monitor), you may need to make a small change to python to avoid
 your pyglet window also scaling:

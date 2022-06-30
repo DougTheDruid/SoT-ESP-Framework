@@ -14,7 +14,7 @@ from pyglet.text import Label
 # True=Enabled & False=Disabled for each of the config items
 CONFIG = {
     "CREWS_ENABLED": True,
-    "SHIPS_ENABLED": False
+    "SHIPS_ENABLED": True
 }
 
 # Used to track unique crews
@@ -49,6 +49,11 @@ main_batch = Batch()
 # Load our offset json file
 with open("offsets.json") as infile:
     OFFSETS = json.load(infile)
+
+
+def re_init_main_batch():
+    global main_batch
+    main_batch = Batch()
 
 
 def dot(array_1: tuple, array_2: tuple) -> float:

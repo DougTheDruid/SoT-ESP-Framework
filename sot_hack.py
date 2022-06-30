@@ -8,9 +8,11 @@ import struct
 import logging
 from memory_helper import ReadMemory
 from mapping import ship_keys
-from helpers import OFFSETS, CONFIG, logger
+from helpers import OFFSETS, CONFIG, logger, re_init_main_batch
 from Modules.ship import Ship
 from Modules.crews import Crews
+from pyglet.graphics import Batch
+
 
 
 class SoTMemoryReader:
@@ -71,6 +73,7 @@ class SoTMemoryReader:
         self.server_players = []
         self.display_objects = []
         self.crew_data = None
+        self.main_batch = Batch()
 
 
     def _load_local_player(self) -> int:
@@ -142,15 +145,18 @@ class SoTMemoryReader:
         Then our main game loop updates those objects
         """
         # On a full run, start by cleaning up all the existing text renders
-        for display_ob in self.display_objects:
-            try:
-                display_ob.text_render.delete()
-            except:
-                continue
-            try:
-                display_ob.icon.delete()
-            except:
-                continue
+        # re_init_main_batch()
+        # main_batch = Batch()
+        # for display_ob in self.display_objects:
+        #     try:
+        #         display_ob.text_render.delete()
+        #     except:
+        #         continue
+        #     try:
+        #         display_ob.icon.delete()
+        #     except:
+        #         continue
+        self.main_batch = Batch()
         self.display_objects = []
         self.update_my_coords()
 
@@ -187,7 +193,7 @@ class SoTMemoryReader:
             # as a ship
             if CONFIG.get('SHIPS_ENABLED') and raw_name in ship_keys:
                 ship = Ship(self.rm, actor_id, actor_address, self.my_coords,
-                            raw_name)
+                            raw_name, self.main_batch)
                 # if "Near" not in ship.name and ship.distance < 1720:
                 #     continue
                 # else:

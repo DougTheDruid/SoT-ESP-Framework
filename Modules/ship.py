@@ -4,9 +4,9 @@
 """
 
 from pyglet.text import Label
+from vlabel import VLabel
 from pyglet.shapes import Circle
-from pyglet.graphics import Group
-from helpers import calculate_distance, object_to_screen, main_batch, \
+from helpers import calculate_distance, object_to_screen, \
      TEXT_OFFSET_X, TEXT_OFFSET_Y
 from mapping import ships
 from Modules.display_object import DisplayObject
@@ -20,7 +20,7 @@ class Ship(DisplayObject):
     Class to generate information for a ship object in memory
     """
 
-    def __init__(self, memory_reader, actor_id, address, my_coords, raw_name):
+    def __init__(self, memory_reader, actor_id, address, my_coords, raw_name, batch):
         """
         Upon initialization of this class, we immediately initialize the
         DisplayObject parent class as well (to utilize common methods)
@@ -47,6 +47,7 @@ class Ship(DisplayObject):
         self.actor_root_comp_ptr = self._get_root_comp_address(address)
         self.my_coords = my_coords
         self.raw_name = raw_name
+        self.batch = batch
 
         # Generate our Ship's info
         self.name = ships.get(self.raw_name).get("Name")
@@ -58,10 +59,11 @@ class Ship(DisplayObject):
 
         # All of our actual display information & rendering
         self.color = SHIP_COLOR
-        self.group = Group()
         self.text_str = self._built_text_string()
         self.text_render = self._build_text_render()
+        self.text_render.visible = False
         self.icon = self._build_circle_render()
+        self.icon.visible = False
 
         # Used to track if the display object needs to be removed
         self.to_delete = False
@@ -74,11 +76,9 @@ class Ship(DisplayObject):
         """
         if self.screen_coords:
             return Circle(self.screen_coords[0], self.screen_coords[1],
-                          CIRCLE_SIZE, color=self.color, batch=main_batch,
-                          group=self.group)
+                          CIRCLE_SIZE, color=self.color, batch=self.batch)
 
-        return Circle(0, 0, 10, color=self.color, batch=main_batch,
-                      group=self.group)
+        return Circle(0, 0, 10, color=self.color, batch=self.batch)
 
     def _built_text_string(self) -> str:
         """
@@ -98,13 +98,12 @@ class Ship(DisplayObject):
         :return: What text we want displayed next to the ship
         """
         if self.screen_coords:
-            return Label(self.text_str,
-                         x=self.screen_coords[0] + TEXT_OFFSET_X,
-                         y=self.screen_coords[1] + TEXT_OFFSET_Y,
-                         batch=main_batch, group=self.group)
+            return VLabel(self.text_str,
+                          x=self.screen_coords[0] + TEXT_OFFSET_X,
+                          y=self.screen_coords[1] + TEXT_OFFSET_Y,
+                          batch=self.batch)
 
-        return Label(self.text_str, x=0, y=0, batch=main_batch,
-                     group=self.group)
+        return VLabel(self.text_str, x=0, y=0, batch=self.batch)
 
     def update(self, my_coords: dict):
         """
@@ -136,17 +135,18 @@ class Ship(DisplayObject):
             # Ships have two actors dependant on distance. This switches them
             # seamlessly at 1750m
             if "Near" in self.name and new_distance > 1750:
-                self.group.visible = False
+                self.icon.visible = False
+                self.text_render.visible = False
             elif "Near" not in self.name and new_distance < 1750:
-                self.group.visible = False
+                self.icon.visible = False
+                self.text_render.visible = False
             else:
-                self.group.visible = True
+                self.icon.visible = True
+                self.text_render.visible = True
 
             # Update the position of our circle and text
-            self.icon.x = self.screen_coords[0]
-            self.icon.y = self.screen_coords[1]
-            self.text_render.x = self.screen_coords[0] + TEXT_OFFSET_X
-            self.text_render.y = self.screen_coords[1] + TEXT_OFFSET_Y
+            self.icon.position = (self.screen_coords[0], self.screen_coords[1])
+            self.text_render.position = (self.screen_coords[0] + TEXT_OFFSET_X, self.screen_coords[1] + TEXT_OFFSET_Y)
 
             # Update our text to reflect out new distance
             self.distance = new_distance
@@ -155,4 +155,5 @@ class Ship(DisplayObject):
 
         else:
             # if it isn't on our screen, set it to invisible to save resources
-            self.group.visible = False
+            self.icon.visible = False
+            self.text_render.visible = False

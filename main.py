@@ -5,6 +5,7 @@ For community support, please contact me on Discord: DougTheDruid#2784
 """
 import base64
 import pyglet
+# pyglet.options['debug_graphics_batch'] = True
 from pyglet.text import Label
 from pyglet.gl import Config
 from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, \
@@ -96,7 +97,8 @@ if __name__ == '__main__':
         # crew_list.text = smr.crew_data.crew_str
 
         # Draw our main batch & FPS counter at the bottom left
-        main_batch.draw()
+        # main_batch.draw()
+        smr.main_batch.draw()
         fps_display.draw()
 
     # We schedule an "update all" to scan all actors every 5seconds
@@ -118,14 +120,14 @@ if __name__ == '__main__':
     # in on_draw()
     player_count = Label("Player Count: {}",
                          x=SOT_WINDOW_W * 0.85,
-                         y=SOT_WINDOW_H * 0.9, batch=main_batch)
+                         y=SOT_WINDOW_H * 0.9, batch=smr.main_batch)
 
     # The label for showing all players on the server under the count
     # This purely INITIALIZES it does not inherently update automatically
-    if False:  # pylint: disable=using-constant-test
-        crew_list = Label(f"{smr.crew_data.crew_str}", x=SOT_WINDOW_W * 0.85,
-                          y=(SOT_WINDOW_H-25) * 0.9, batch=main_batch, width=300,
-                          multiline=True)
+    # if False:  # pylint: disable=using-constant-test
+    crew_list = Label(f"{smr.crew_data.crew_str}", x=SOT_WINDOW_W * 0.85,
+                      y=(SOT_WINDOW_H-25) * 0.9, batch=smr.main_batch, width=300,
+                      multiline=True)
         # Note: The width of 300 is the max pixel width of a single line
         # before auto-wrapping the text to the next line. Updated in on_draw()
 

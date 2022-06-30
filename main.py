@@ -6,6 +6,7 @@ For community support, please contact me on Discord: DougTheDruid#2784
 import base64
 import pyglet
 # pyglet.options['debug_graphics_batch'] = True
+pyglet.options['debug_gl'] = False
 from pyglet.text import Label
 from pyglet.gl import Config
 from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, \

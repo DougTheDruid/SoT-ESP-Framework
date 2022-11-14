@@ -139,7 +139,8 @@ Note: [See other `Structs` format information here](https://docs.python.org/3/li
 I do ask that if you decided to take this into your own personal development, encourage others to think for themselves a
 bit as well and try to maintain a "documentation-focused" mindset as I have. I request that you do not use this 
 framework for any commercial purposes (selling "your" version which is based on this framework) without contacting me and
-receiving my approval prior.
+receiving my approval prior. I also request that you do not publicly share additional features to this base framework. This is 
+intended to be a learning tool and if I wanted to provide a more fully-functional version, I would have done so myself.
 
 If you need help, please see the [Frequently Asked Questions](https://github.com/DougTheDruid/SoT-ESP-Framework/blob/main/FAQ.md)
 and if none of those apply or help, reach out to me on Discord: DougTheDruid#2784

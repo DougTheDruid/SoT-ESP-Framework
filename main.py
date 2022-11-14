@@ -3,12 +3,12 @@
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 For community support, please contact me on Discord: DougTheDruid#2784
 """
-import base64
+from base64 import b64decode
 import pyglet
 from pyglet.text import Label
 from pyglet.gl import Config
 from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, \
-    version, logger
+    version, logger, initialize_window
 from sot_hack import SoTMemoryReader
 
 
@@ -19,7 +19,7 @@ DEBUG = False
 clock = pyglet.clock.Clock()
 
 
-def update_all(_):
+def generate_all(_):
     """
     Triggers an entire read_actors call in our SoT Memory Reader. Will
     re-populate all of the display objects if something entered the screen
@@ -28,7 +28,7 @@ def update_all(_):
     smr.read_actors()
 
 
-def load_graphics(_):
+def update_graphics(_):
     """
     Our main graphical loop which updates all of our "interesting" items.
     During a "full run" (update_all()), a list of the objects near us and we
@@ -56,12 +56,13 @@ def load_graphics(_):
 
 
 if __name__ == '__main__':
-    logger.info(base64.b64decode("RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yayBTdGFydGluZw==").decode("utf-8"))
+    logger.info(
+        b64decode("RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yayBTdGFydGluZw==").decode("utf-8")
+    )
     logger.info(f"Hack Version: {version}")
 
     # Initialize our SoT Hack object, and do a first run of reading actors
     smr = SoTMemoryReader()
-    smr.read_actors()
 
     # Custom Debug mode for using a literal python interpreter debugger
     # to validate our fields. Does not generate a GUI.
@@ -92,43 +93,47 @@ if __name__ == '__main__':
         window.clear()
 
         # Update our player count Label & crew list
-        player_count.text = f"Player Count: {smr.crew_data.total_players}"
-        # crew_list.text = smr.crew_data.crew_str
+        if smr.crew_data:
+            player_count.text = f"Player Count: {smr.crew_data.total_players}"
+            # crew_list.text = smr.crew_data.crew_str
 
         # Draw our main batch & FPS counter at the bottom left
         main_batch.draw()
         fps_display.draw()
 
+    # Initializing the window for writing
+    init = initialize_window()
+
     # We schedule an "update all" to scan all actors every 5seconds
-    pyglet.clock.schedule_interval(update_all, 5)
+    pyglet.clock.schedule_interval(generate_all, 5)
 
     # We schedule a check to make sure the game is still running every 3 seconds
     pyglet.clock.schedule_interval(smr.rm.check_process_is_active, 3)
 
-    # We schedule an basic graphics load which is responsible for drawing
-    # our interesting information to the screen. Max 144fps, can set unlimited
-    # pyglet.clock.schedule(load_graphics)
-    pyglet.clock.schedule_interval(load_graphics, 1/144)
+    # We schedule a basic graphics load which is responsible for updating
+    # the actors we are interested in (from our generate_all). Runs as fast as possible
+    pyglet.clock.schedule(update_graphics)
 
     # Adds an FPS counter at the bottom left corner of our pyglet window
     # Note: May not translate to actual FPS, but rather FPS of the program
     fps_display = pyglet.window.FPSDisplay(window)
 
     # Our base player_count label in the top-right of our screen. Updated
-    # in on_draw()
-    player_count = Label("Player Count: {}",
+    # in on_draw(). Use a default of "Initializing", which will update once the
+    # hack is actually running
+    player_count = Label("...Initializing Framework...",
                          x=SOT_WINDOW_W * 0.85,
                          y=SOT_WINDOW_H * 0.9, batch=main_batch)
 
     # The label for showing all players on the server under the count
     # This purely INITIALIZES it does not inherently update automatically
     if False:  # pylint: disable=using-constant-test
-        crew_list = Label(f"{smr.crew_data.crew_str}", x=SOT_WINDOW_W * 0.85,
+        crew_list = Label("", x=SOT_WINDOW_W * 0.85,
                           y=(SOT_WINDOW_H-25) * 0.9, batch=main_batch, width=300,
                           multiline=True)
         # Note: The width of 300 is the max pixel width of a single line
         # before auto-wrapping the text to the next line. Updated in on_draw()
 
-    # Runs our application and starts to use our scheduled events to show data
-    pyglet.app.run()
+    # Runs our application, targeting a specific refresh rate (1/60 = 60fps)
+    pyglet.app.run(interval=1/60)
     # Note - ***Nothing past here will execute as app.run() is a loop***

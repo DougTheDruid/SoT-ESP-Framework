@@ -6,8 +6,8 @@
 import math
 import json
 import logging
+from base64 import b64decode
 import win32gui
-import base64
 from pyglet.graphics import Batch
 from pyglet.text import Label
 
@@ -20,7 +20,7 @@ CONFIG = {
 # Used to track unique crews
 crew_tracker = {}
 
-version = "1.3.0"
+version = "1.4.0"
 
 # Config specification for logging file
 logging.basicConfig(filename='DougsESP.log', level=logging.DEBUG,
@@ -177,6 +177,11 @@ def calculate_distance(obj_to: dict, obj_from: dict) -> int:
                          (obj_to.get("z") - obj_from.get("z")) ** 2))
 
 
-b_label = Label(base64.b64decode('RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yaw==').decode("utf-8"),
-                x=SOT_WINDOW_W - 537, y=10, font_size=24, bold=True,
-                color=(127, 127, 127, 65), batch=main_batch)
+def initialize_window():
+    """
+    Initializes our window with a given label
+    """
+    b_label = Label(b64decode('RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yaw==').decode("utf-8"),
+                    x=SOT_WINDOW_W - 537, y=10, font_size=24, bold=True,
+                    color=(127, 127, 127, 65), batch=main_batch)
+    return b_label

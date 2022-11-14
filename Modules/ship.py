@@ -5,7 +5,6 @@
 
 from pyglet.text import Label
 from pyglet.shapes import Circle
-from pyglet.graphics import Group
 from helpers import calculate_distance, object_to_screen, main_batch, \
      TEXT_OFFSET_X, TEXT_OFFSET_Y
 from mapping import ships
@@ -58,7 +57,6 @@ class Ship(DisplayObject):
 
         # All of our actual display information & rendering
         self.color = SHIP_COLOR
-        self.group = Group()
         self.text_str = self._built_text_string()
         self.text_render = self._build_text_render()
         self.icon = self._build_circle_render()
@@ -74,11 +72,9 @@ class Ship(DisplayObject):
         """
         if self.screen_coords:
             return Circle(self.screen_coords[0], self.screen_coords[1],
-                          CIRCLE_SIZE, color=self.color, batch=main_batch,
-                          group=self.group)
+                          CIRCLE_SIZE, color=self.color, batch=main_batch)
 
-        return Circle(0, 0, 10, color=self.color, batch=main_batch,
-                      group=self.group)
+        return Circle(0, 0, 10, color=self.color, batch=main_batch)
 
     def _built_text_string(self) -> str:
         """
@@ -101,10 +97,9 @@ class Ship(DisplayObject):
             return Label(self.text_str,
                          x=self.screen_coords[0] + TEXT_OFFSET_X,
                          y=self.screen_coords[1] + TEXT_OFFSET_Y,
-                         batch=main_batch, group=self.group)
+                         batch=main_batch)
 
-        return Label(self.text_str, x=0, y=0, batch=main_batch,
-                     group=self.group)
+        return Label(self.text_str, x=0, y=0, batch=main_batch)
 
     def update(self, my_coords: dict):
         """
@@ -136,11 +131,14 @@ class Ship(DisplayObject):
             # Ships have two actors dependant on distance. This switches them
             # seamlessly at 1750m
             if "Near" in self.name and new_distance > 1750:
-                self.group.visible = False
+                self.text_render.visible = False
+                self.icon.visible = False
             elif "Near" not in self.name and new_distance < 1750:
-                self.group.visible = False
+                self.text_render.visible = False
+                self.icon.visible = False
             else:
-                self.group.visible = True
+                self.text_render.visible = True
+                self.icon.visible = True
 
             # Update the position of our circle and text
             self.icon.x = self.screen_coords[0]
@@ -155,4 +153,5 @@ class Ship(DisplayObject):
 
         else:
             # if it isn't on our screen, set it to invisible to save resources
-            self.group.visible = False
+            self.text_render.visible = False
+            self.icon.visible = False

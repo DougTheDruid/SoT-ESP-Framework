@@ -72,7 +72,6 @@ class SoTMemoryReader:
         self.display_objects = []
         self.crew_data = None
 
-
     def _load_local_player(self) -> int:
         """
         Returns the local player object out of uWorld.UGameInstance.
@@ -151,6 +150,7 @@ class SoTMemoryReader:
                 display_ob.icon.delete()
             except:
                 continue
+
         self.display_objects = []
         self.update_my_coords()
 

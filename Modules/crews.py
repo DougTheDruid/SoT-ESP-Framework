@@ -3,10 +3,9 @@
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 """
 
-from helpers import *
 import struct
+from helpers import OFFSETS, crew_tracker
 from Modules.display_object import DisplayObject
-from helpers import crew_tracker
 
 
 class Crews(DisplayObject):
@@ -56,7 +55,7 @@ class Crews(DisplayObject):
         you need to add more data or want to change formatting
         """
         output = ""
-        for x in range(len(self.crew_info)):
+        for x, _ in enumerate(self.crew_info):  # x = crew number, _ = crew info
             # We store all of the crews in a tracker dictionary. This allows us
             # to assign each crew a "Short"-ID based on count on the server.
             short_id = crew_tracker.get(self.crew_info[x]['guid'], None)
@@ -65,6 +64,9 @@ class Crews(DisplayObject):
         return output
 
     def _get_crews_info(self):
+        """
+        Generates information about each of the crews on the server
+        """
         # Find the starting address for our Crews TArray
         crew_raw = self.rm.read_bytes(self.address + OFFSETS.get('CrewService.Crews'), 16)
 
@@ -90,7 +92,7 @@ class Crews(DisplayObject):
             # Players<Array>, current length, max length
             crew = struct.unpack("<Qii", crew_raw)
 
-            # If our crew has more than 0 people on it, we care about it, so we add it to our tracker
+            # If our crew is >0 people on it, we care about it, so we add it to our tracker
             if crew[1] > 0:
                 crew_data = {
                     "guid": crew_guid,
@@ -101,7 +103,7 @@ class Crews(DisplayObject):
                     crew_tracker[crew_guid] = len(crew_tracker)+1
         return crews_data
 
-    def update(self, my_coords):
+    def update(self, my_coords):  # pylint: disable=unused-argument
         """
         A generic method to update all the interesting data about the
         crews on our server. To be called when seeking to perform an update on

@@ -10,12 +10,12 @@ of code which could be useful in memory reading/editing for almost any game/prog
 to have basic Python programming experience in order to get started.**
 
 ### Installation Prerequisites & First Execution
-In theory, all you need to get started in using this hack is Python 3.7.9 (have also verified in 3.9.6), and to install 
-the requirements found in the `requirements.txt` file. With the requirements installed, ensure your game is in windowed mode,
-enter a server, and run `main.py`. An overlay should appear over your game window with the count of the players on the server
-to the top-right. The bottom-right should have a watermark for the framework and the bottom-left an FPS counter for the hack.
-You MAY need to make some minor changes in the code to accommodate your specific display configuration 
-(helpers.py, top of file). 
+In theory, all you need to get started in using this hack is Python 3.8+, OpenGL 3.3+ (probably already installed with your 
+graphics drivers), and to install the requirements found in the `requirements.txt` file. With the requirements installed, ensure your game is in 
+windowed mode, enter a server, and run `main.py`. An overlay should appear over your game window with the count of the players on 
+the server to the top-right. The bottom-right should have a watermark for the framework and the bottom-left an FPS counter 
+for the hack. You MAY need to make some minor changes in the code to accommodate your specific display configuration (helpers.py, 
+top of file). 
 
 Debugging and error information will be available in the `DougsESP.log` file upon running the `main.py` file.
 

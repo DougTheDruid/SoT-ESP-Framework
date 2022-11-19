@@ -98,8 +98,9 @@ def object_to_screen(player: dict, actor: dict) -> tuple:
                          dot(v_delta, v_axis_z),
                          dot(v_delta, v_axis_x)]
 
-        if v_transformed[2] < 1.0:
-            v_transformed[2] = 1.0
+        # If the actor is behind us, return a negative value
+        if v_transformed[2] < 0.01:
+            return -1, -1
 
         fov = player.get("fov")
         screen_center_x = SOT_WINDOW_W / 2

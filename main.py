@@ -12,6 +12,9 @@ from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, \
 from sot_hack import SoTMemoryReader
 
 
+# The FPS __Target__ for the program.
+FPS_TARGET = 60
+
 # See explanation in Main, toggle for a non-graphical debug
 DEBUG = False
 
@@ -135,5 +138,5 @@ if __name__ == '__main__':
         # before auto-wrapping the text to the next line. Updated in on_draw()
 
     # Runs our application, targeting a specific refresh rate (1/60 = 60fps)
-    pyglet.app.run(interval=1/60)
+    pyglet.app.run(interval=1/FPS_TARGET)
     # Note - ***Nothing past here will execute as app.run() is a loop***

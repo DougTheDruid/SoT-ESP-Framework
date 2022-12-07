@@ -11,7 +11,7 @@ import win32gui
 from pyglet.graphics import Batch
 from pyglet.text import Label
 
-# True=Enabled & False=Disabled for each of the config items
+# True=Enabled & False=Disabled for each relevant config items
 CONFIG = {
     "CREWS_ENABLED": True,
     "SHIPS_ENABLED": False
@@ -20,7 +20,7 @@ CONFIG = {
 # Used to track unique crews
 crew_tracker = {}
 
-version = "1.4.0"
+version = "1.5.0"
 
 # Config specification for logging file
 logging.basicConfig(filename='DougsESP.log', level=logging.DEBUG,
@@ -98,8 +98,9 @@ def object_to_screen(player: dict, actor: dict) -> tuple:
                          dot(v_delta, v_axis_z),
                          dot(v_delta, v_axis_x)]
 
+        # @Credit
         if v_transformed[2] < 1.0:
-            v_transformed[2] = 1.0
+            return False
 
         fov = player.get("fov")
         screen_center_x = SOT_WINDOW_W / 2

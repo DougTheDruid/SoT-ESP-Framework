@@ -156,13 +156,14 @@ class SoTMemoryReader:
 
         actor_raw = self.rm.read_bytes(self.u_level + 0xa0, 0xC)
         actor_data = struct.unpack("<Qi", actor_raw)
+        level_actors_raw = self.rm.read_bytes(actor_data[0], actor_data[1] * 8)
 
         self.server_players = []
         for x in range(0, actor_data[1]):
             # We start by getting the ActorID for a given actor, and comparing
             # that ID to a list of "known" id's we cache in self.actor_name_map
             raw_name = ""
-            actor_address = self.rm.read_ptr(actor_data[0] + (x * 0x8))
+            actor_address = int.from_bytes(level_actors_raw[(x*8):(x*8+8)], byteorder='little', signed=False)
             actor_id = self.rm.read_int(
                 actor_address + OFFSETS.get('Actor.actorId')
             )

@@ -98,7 +98,8 @@ def object_to_screen(player: dict, actor: dict) -> tuple:
                          dot(v_delta, v_axis_z),
                          dot(v_delta, v_axis_x)]
 
-        # @Credit
+        # Credit https://github.com/AlexBurneikis
+        # No valid screen coordinates if its behind us
         if v_transformed[2] < 1.0:
             return False
 

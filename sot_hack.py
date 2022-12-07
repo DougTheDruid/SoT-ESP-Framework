@@ -156,6 +156,9 @@ class SoTMemoryReader:
 
         actor_raw = self.rm.read_bytes(self.u_level + 0xa0, 0xC)
         actor_data = struct.unpack("<Qi", actor_raw)
+
+        # Credit @mogistink https://www.unknowncheats.me/forum/members/3434160.html
+        # One very large read for all the actors addresses to save us 1000+ reads every read_all
         level_actors_raw = self.rm.read_bytes(actor_data[0], actor_data[1] * 8)
 
         self.server_players = []

@@ -83,7 +83,7 @@ In the event you need that data, please browse the history of the repo prior to 
 ## General Questions
 ### How can I contact you?
 Please, before contacting me ensure that you have read through the entire `readme.md` and `faq.md` files:
-Discord: DougTheDruid#2784
+Discord: dougthedruid
 
 ### Why is this only a framework? Do you offer a full version? Or paid version?
 1. I already did the hard work of converting C functions to Python for you

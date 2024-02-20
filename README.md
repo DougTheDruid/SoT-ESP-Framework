@@ -143,7 +143,7 @@ receiving my approval prior. I also request that you do not publicly share addit
 intended to be a learning tool and if I wanted to provide a more fully-functional version, I would have done so myself.
 
 If you need help, please see the [Frequently Asked Questions](https://github.com/DougTheDruid/SoT-ESP-Framework/blob/main/FAQ.md)
-and if none of those apply or help, reach out to me on Discord: DougTheDruid#2784
+and if none of those apply or help, reach out to me on Discord: dougthedruid
 
 ### Providing updates to this code base
 If you are interested in helping maintain this code base, first off, thank you! My only asks are as follows:

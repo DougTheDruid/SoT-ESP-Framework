@@ -63,8 +63,8 @@ ReadProcessMemory.argtypes = [ctypes.wintypes.HANDLE, ctypes.wintypes.LPCVOID,
 ReadProcessMemory.restype = ctypes.wintypes.BOOL
 
 UWORLDPATTERN = "48 8B 05 ? ? ? ? 48 8B 88 ? ? ? ? 48 85 C9 74 06 48 8B 49 70"
-GOBJECTPATTERN = "89 0D ? ? ? ? 48 8B DF 48 89 5C 24"
-GNAMEPATTERN = "48 8B 1D ? ? ? ? 48 85 DB 75 ? B9 08 04 00 00"
+GOBJECTPATTERN = "48 8B 0D ? ? ? ? 81 4C D1 ? ? ? ? ? 48 8D 4D D8"
+GNAMEPATTERN = "48 89 3D ? ? ? ? 41 8B 75 00"
 
 
 def convert_pattern_to_regex(pattern: str) -> bytes:

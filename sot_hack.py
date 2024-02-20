@@ -50,9 +50,9 @@ class SoTMemoryReader:
         self.g_name = self.rm.read_ptr(g_name)
 
         g_objects_offset = self.rm.read_ulong(
-            base_address + self.rm.g_object_base + 2
+            base_address + self.rm.g_object_base + 3
         )
-        g_objects = base_address + self.rm.g_object_base + g_objects_offset + 22
+        g_objects = base_address + self.rm.g_object_base + g_objects_offset + 7
         logging.info(f"SoT gObject Address: {hex(g_objects)}")
         self.g_objects = self.rm.read_ptr(g_objects)
 

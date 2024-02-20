@@ -1,10 +1,10 @@
 {
   "Actor.actorId": 24,
-  "CrewService.Crews": 1184,
-  "Crew.Players": 32,
-  "Crew.Size": 152,
   "Actor.rootComponent": 360,
   "CameraCacheEntry.MinimalViewInfo": 16,
+  "Crew.Players": 32,
+  "Crew.Size": 160,
+  "CrewService.Crews": 1184,
   "GameInstance.LocalPlayers": 56,
   "LocalPlayer.PlayerController": 48,
   "PlayerCameraManager.CameraCache": 1088,

@@ -1,4 +1,18 @@
 # Doug's Python SoT ESP Framework
+:warning: :warning: :warning:
+
+This framework was designed _prior_ to the addition of EAC to SoT. That being said, much of this code is still functional
+if you can bypass EAC. If you are looking to get this framework working on Linux, you will need to update the drawing engine
+away from pyglet, and update the memory reading logic to utilize `/proc/<pid>/mem` & `/proc/<pid>/maps`. https://github.com/XRadius/project-tanya
+is a great resources for understanding linux-based hacks. Other hardware attacks can be effective when using
+a modified version of this framework to update things like an external radar.
+
+If you are looking for a mechanism to bypass EAC, please do not reach out. If you _have a working bypass mechanism_ and
+need help understanding options to utilize this framework, I'm happy to bounce ideas around. The remainder of this readme
+is semi-deprecated pending that bypass.
+
+:warning: :warning: :warning:
+
 Hello all! This is a framework to develop an SoT ESP Hack, all utilizing Python. This is a trimmed down version 
 of a personal creation I utilize actively. This project is a great foundation for someone who is looking to get started in 
 ESP hacks for SoT, other UE4 games, or games in general! The code is loaded with comments to help you grasp the "how" and "why" of basic 

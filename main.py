@@ -9,8 +9,7 @@ from pyglet.text import Label
 from pyglet.gl import Config
 from helpers import SOT_WINDOW, SOT_WINDOW_H, SOT_WINDOW_W, main_batch, \
     version, logger, initialize_window
-from sot_hack import SoTMemoryReader
-
+from sot_hack import SoTMemoryReader, MemoryReaderError  # Importing MemoryReaderError for handling
 
 # The FPS __Target__ for the program.
 FPS_TARGET = 60
@@ -21,15 +20,16 @@ DEBUG = False
 # Pyglet clock used to track time via FPS
 clock = pyglet.clock.Clock()
 
-
 def generate_all(_):
     """
     Triggers an entire read_actors call in our SoT Memory Reader. Will
     re-populate all of the display objects if something entered the screen
     or render distance.
     """
-    smr.read_actors()
-
+    try:
+        smr.read_actors()
+    except MemoryReaderError as e:  # Catching specific memory reader errors
+        logger.error(f"Memory reader error: {str(e)}")  # Logging error
 
 def update_graphics(_):
     """
@@ -53,10 +53,9 @@ def update_graphics(_):
         if actor.to_delete:
             to_remove.append(actor)
 
-    # Clean up any items which arent valid anymore
+    # Clean up any items which aren't valid anymore
     for removable in to_remove:
         smr.display_objects.remove(removable)
-
 
 if __name__ == '__main__':
     logger.info(
@@ -65,7 +64,11 @@ if __name__ == '__main__':
     logger.info(f"Hack Version: {version}")
 
     # Initialize our SoT Hack object, and do a first run of reading actors
-    smr = SoTMemoryReader()
+    try:
+        smr = SoTMemoryReader()  # Attempt to initialize the memory reader
+    except MemoryReaderError as e:  # Catching initialization errors
+        logger.error(f"Failed to initialize SoTMemoryReader: {str(e)}")
+        exit(1)  # Exit if initialization fails
 
     # Custom Debug mode for using a literal python interpreter debugger
     # to validate our fields. Does not generate a GUI.
@@ -107,7 +110,7 @@ if __name__ == '__main__':
     # Initializing the window for writing
     init = initialize_window()
 
-    # We schedule an "update all" to scan all actors every 5seconds
+    # We schedule an "update all" to scan all actors every 5 seconds
     pyglet.clock.schedule_interval(generate_all, 5)
 
     # We schedule a check to make sure the game is still running every 3 seconds

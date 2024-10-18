@@ -53,19 +53,25 @@ def update_graphics(_):
         if actor.to_delete:
             to_remove.append(actor)
 
-    # Clean up any items which arent valid anymore
+    # Clean up any items which aren't valid anymore
     for removable in to_remove:
         smr.display_objects.remove(removable)
 
 
 if __name__ == '__main__':
     logger.info(
-        b64decode("RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yayBTdGFydGluZw==").decode("utf-8")
+        b64decode("RG91Z1RoZURydWlkJ3MgRVNQIEZFrYW1ld29yayBTdGFydGluZw==").decode("utf-8")
     )
     logger.info(f"Hack Version: {version}")
 
-    # Initialize our SoT Hack object, and do a first run of reading actors
-    smr = SoTMemoryReader()
+    # Initialize our SoT Hack object with error handling
+    try:
+        smr = SoTMemoryReader()
+        if not smr.is_initialized:  # Check if the reader initialized correctly
+            raise Exception("Memory reader failed to initialize. Please check the target process.")
+    except Exception as e:
+        logger.error(f"Error initializing SoTMemoryReader: {e}")
+        exit(1)  # Exit the program if initialization fails
 
     # Custom Debug mode for using a literal python interpreter debugger
     # to validate our fields. Does not generate a GUI.
@@ -107,7 +113,7 @@ if __name__ == '__main__':
     # Initializing the window for writing
     init = initialize_window()
 
-    # We schedule an "update all" to scan all actors every 5seconds
+    # We schedule an "update all" to scan all actors every 5 seconds
     pyglet.clock.schedule_interval(generate_all, 5)
 
     # We schedule a check to make sure the game is still running every 3 seconds
@@ -132,11 +138,11 @@ if __name__ == '__main__':
     # This purely INITIALIZES it does not inherently update automatically
     if False:  # pylint: disable=using-constant-test
         crew_list = Label("", x=SOT_WINDOW_W * 0.85,
-                          y=(SOT_WINDOW_H-25) * 0.9, batch=main_batch, width=300,
+                          y=(SOT_WINDOW_H - 25) * 0.9, batch=main_batch, width=300,
                           multiline=True)
         # Note: The width of 300 is the max pixel width of a single line
         # before auto-wrapping the text to the next line. Updated in on_draw()
 
     # Runs our application, targeting a specific refresh rate (1/60 = 60fps)
-    pyglet.app.run(interval=1/FPS_TARGET)
+    pyglet.app.run(interval=1 / FPS_TARGET)
     # Note - ***Nothing past here will execute as app.run() is a loop***

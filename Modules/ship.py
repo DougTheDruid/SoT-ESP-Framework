@@ -2,6 +2,14 @@
 @Author https://github.com/DougTheDruid
 @Source https://github.com/DougTheDruid/SoT-ESP-Framework
 """
+import sys
+import os
+
+# Add the project root directory to the system path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Now, import helpers
+from helpers import OFFSETS
 
 from pyglet.text import Label
 from pyglet.shapes import Circle

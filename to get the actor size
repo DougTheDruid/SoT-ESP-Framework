@@ -1,0 +1,49 @@
+#include "PlayerCharacter.h" // Replace with your actual actor class header
+#include "DrawDebugHelpers.h"
+#include "Engine/Engine.h" // For GEngine
+
+// Function to draw a square around the actor
+void APlayerCharacter::DrawActorSquare()
+{
+    FVector Origin;
+    FVector BoxExtent;
+    
+    // Get the actor's bounding box
+    GetActorBounds(false, Origin, BoxExtent);
+
+    // Calculate the full width and height
+    float Width = BoxExtent.X * 2;
+    float Height = BoxExtent.Z * 2;
+
+    // Define the square's corners
+    FVector TopLeft = Origin + FVector(-Width / 2, -Width / 2, 0);
+    FVector TopRight = Origin + FVector(Width / 2, -Width / 2, 0);
+    FVector BottomLeft = Origin + FVector(-Width / 2, Width / 2, 0);
+    FVector BottomRight = Origin + FVector(Width / 2, Width / 2, 0);
+
+    // Draw the square
+    DrawDebugLine(GetWorld(), TopLeft, TopRight, FColor::Red, false, -1, 0, 5);
+    DrawDebugLine(GetWorld(), TopRight, BottomRight, FColor::Red, false, -1, 0, 5);
+    DrawDebugLine(GetWorld(), BottomRight, BottomLeft, FColor::Red, false, -1, 0, 5);
+    DrawDebugLine(GetWorld(), BottomLeft, TopLeft, FColor::Red, false, -1, 0, 5);
+
+    // Output the coordinates of the square corners to the console
+    if (GEngine)
+    {
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, 
+            FString::Printf(TEXT("Top Left: %s"), *TopLeft.ToString()));
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, 
+            FString::Printf(TEXT("Top Right: %s"), *TopRight.ToString()));
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, 
+            FString::Printf(TEXT("Bottom Left: %s"), *BottomLeft.ToString()));
+        GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::White, 
+            FString::Printf(TEXT("Bottom Right: %s"), *BottomRight.ToString()));
+    }
+}
+
+// Call this function in your Tick function or any event
+void APlayerCharacter::Tick(float DeltaTime)
+{
+    Super::Tick(DeltaTime);
+    DrawActorSquare();
+}

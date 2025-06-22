@@ -3,13 +3,15 @@
 
 This framework was designed _prior_ to the addition of EAC to SoT. That being said, much of this code is still functional
 if you can bypass EAC. If you are looking to get this framework working on Linux, you will need to update the drawing engine
-away from pyglet, and update the memory reading logic to utilize `/proc/<pid>/mem` & `/proc/<pid>/maps`. https://github.com/XRadius/project-tanya
-is a great resources for understanding linux-based hacks. Other hardware attacks can be effective when using
-a modified version of this framework to update things like an external radar.
+away from pyglet (or wait until they add better linux/transparency support), and update the memory reading logic to 
+utilize `/proc/<pid>/mem` & `/proc/<pid>/maps`. https://github.com/XRadius/project-tanya
+is a great resources for understanding linux-based hacks; step 1 and 2 will work excellent for a flatpak steam 
+environment, step 3 will break EAC for linux as far as I can tell. Other hardware attacks can be effective if you modify
+the framework to create/update something like an external radar (DMA).
 
 If you are looking for a mechanism to bypass EAC, please do not reach out. If you _have a working bypass mechanism_ and
-need help understanding options to utilize this framework, I'm happy to bounce ideas around. Theit p remainder of this readme
-is semi-deprecated pending that bypass.
+need help understanding options to utilize this framework, I'm happy to bounce ideas around. The remainder of this readme
+is semi-deprecated pending a workaround.
 
 :warning: :warning: :warning:
 

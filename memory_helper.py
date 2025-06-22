@@ -62,9 +62,10 @@ ReadProcessMemory.argtypes = [ctypes.wintypes.HANDLE, ctypes.wintypes.LPCVOID,
                               ctypes.POINTER(ctypes.c_size_t)]
 ReadProcessMemory.restype = ctypes.wintypes.BOOL
 
-UWORLDPATTERN = "48 8B 05 ? ? ? ? 48 8B 88 ? ? ? ? 48 85 C9 74 06 48 8B 49 70"
-GOBJECTPATTERN = "48 8B 0D ? ? ? ? 81 4C D1 ? ? ? ? ? 48 8D 4D D8"
-GNAMEPATTERN = "48 89 3D ? ? ? ? 41 8B 75 00"
+
+UWORLDPATTERN = "48 8B 18 48 8B 3D ? ? ? ? 48 8D 0D ? ? ? ? 48 8D 0D"  # todo: Broken :( see 'Pending Pattern Fix' below
+GNAMEPATTERN = "48 89 1D ? ? ? ? 48 8B 5C 24 20 48 83 C4 28 C3"
+GOBJECTPATTERN = "48 8B 05 ? ? ? ? 81 4C C8 08 00 00 00 40"
 
 
 def convert_pattern_to_regex(pattern: str) -> bytes:
@@ -125,14 +126,26 @@ class ReadMemory:
             # There is definitely a better way to get lots of base memory data, but
             # this is v1 of automated pattern searching
             bulk_scan = self.read_bytes(self.base_address, 1000000000)
-            self.u_world_base = search_data_for_pattern(bulk_scan, UWORLDPATTERN)
+
+            # @todo: Pending pattern Fix
+            self.u_world_base = 0x8A19E30  # search_data_for_pattern(bulk_scan, UWORLDPATTERN)
             self.g_object_base = search_data_for_pattern(bulk_scan, GOBJECTPATTERN)
             self.g_name_base = search_data_for_pattern(bulk_scan, GNAMEPATTERN)
             del bulk_scan
 
+            # @todo Pending pattern Fix
+            # u_world_offset = self.read_ulong(self.base_address + self.u_world_base + 3)
+            # u_world = self.base_address + self.u_world_base + u_world_offset + 7
+            # self.world_address = self.read_ptr(u_world)
+            self.world_address = self.read_ptr(self.base_address + self.u_world_base)
+
             g_name_offset = self.read_ulong(self.base_address + self.g_name_base + 3)
             g_name_ptr = self.base_address + self.g_name_base + g_name_offset + 7
             self.g_name_start_address = self.read_ptr(g_name_ptr)
+
+            g_objects_offset = self.read_ulong(self.base_address + self.g_object_base + 3)
+            g_objects = self.base_address + self.g_object_base + g_objects_offset + 7
+            self.g_objects = self.read_ptr(g_objects)
 
             logger.info(f"gObject offset: {hex(self.g_object_base)}")
             logger.info(f"uWorld offset: {hex(self.u_world_base)}")

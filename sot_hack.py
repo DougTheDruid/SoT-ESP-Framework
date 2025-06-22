@@ -33,28 +33,11 @@ class SoTMemoryReader:
         basic information
         """
         self.rm = ReadMemory("SoTGame.exe")
-        base_address = self.rm.base_address
         logging.info(f"Process ID: {self.rm.pid}")
 
-        u_world_offset = self.rm.read_ulong(
-            base_address + self.rm.u_world_base + 3
-        )
-        u_world = base_address + self.rm.u_world_base + u_world_offset + 7
-        self.world_address = self.rm.read_ptr(u_world)
-
-        g_name_offset = self.rm.read_ulong(
-            base_address + self.rm.g_name_base + 3
-        )
-        g_name = base_address + self.rm.g_name_base + g_name_offset + 7
-        logging.info(f"SoT gName Address: {hex(g_name)}")
-        self.g_name = self.rm.read_ptr(g_name)
-
-        g_objects_offset = self.rm.read_ulong(
-            base_address + self.rm.g_object_base + 3
-        )
-        g_objects = base_address + self.rm.g_object_base + g_objects_offset + 7
-        logging.info(f"SoT gObject Address: {hex(g_objects)}")
-        self.g_objects = self.rm.read_ptr(g_objects)
+        self.g_name = self.rm.g_name_start_address
+        self.world_address = self.rm.world_address
+        self.g_objects = self.rm.g_objects
 
         self.u_level = self.rm.read_ptr(self.world_address +
                                         OFFSETS.get('World.PersistentLevel'))
@@ -64,8 +47,8 @@ class SoTMemoryReader:
             self.u_local_player + OFFSETS.get('LocalPlayer.PlayerController')
         )
 
-        self.my_coords = self._coord_builder(self.u_local_player)
-        self.my_coords['fov'] = 90
+        self.my_coords = {}
+        self.update_my_coords()
 
         self.actor_name_map = {}
         self.server_players = []

@@ -20,7 +20,7 @@ CONFIG = {
 # Used to track unique crews
 crew_tracker = {}
 
-version = "1.6.0"
+version = "2.0.0"
 
 # Config specification for logging file
 logging.basicConfig(filename='DougsESP.log', level=logging.DEBUG,
@@ -184,6 +184,6 @@ def initialize_window():
     Initializes our window with a given label
     """
     b_label = Label(b64decode('RG91Z1RoZURydWlkJ3MgRVNQIEZyYW1ld29yaw==').decode("utf-8"),
-                    x=SOT_WINDOW_W - 537, y=10, font_size=24, bold=True,
+                    x=SOT_WINDOW_W - 537, y=10, font_size=24,
                     color=(127, 127, 127, 65), batch=main_batch)
     return b_label

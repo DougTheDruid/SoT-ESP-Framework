@@ -8,7 +8,7 @@ is a great resources for understanding linux-based hacks. Other hardware attacks
 a modified version of this framework to update things like an external radar.
 
 If you are looking for a mechanism to bypass EAC, please do not reach out. If you _have a working bypass mechanism_ and
-need help understanding options to utilize this framework, I'm happy to bounce ideas around. The remainder of this readme
+need help understanding options to utilize this framework, I'm happy to bounce ideas around. Theit p remainder of this readme
 is semi-deprecated pending that bypass.
 
 :warning: :warning: :warning:

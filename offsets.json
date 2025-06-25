@@ -10,7 +10,7 @@
   "PlayerCameraManager.CameraCache": 1040,
   "PlayerController.CameraManager": 1072,
   "PlayerState.PlayerName": 936,
-  "SceneComponent.ActorCoordinates": 300,
+  "SceneComponent.ActorCoordinates": 284,
   "World.OwningGameInstance": 592,
   "World.PersistentLevel": 96
 }
